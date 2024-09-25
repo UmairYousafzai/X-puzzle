@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../models/remote/style_card_model.dart';
-import 'components/home_screen_card_design.dart';
+import 'home_screen_stateful.dart';
+
 
 class HomeScreenWidget extends StatelessWidget {
   const HomeScreenWidget({super.key});
@@ -44,7 +43,7 @@ class HomeScreenWidget extends StatelessWidget {
                               image: AssetImage(
                                   "assets/images/place_holder_profile.png"),
                               fit: BoxFit.fill)),
-                      child: Text(""),
+                      child: const Text(""),
                     )
                   ],
                 ),
@@ -52,7 +51,7 @@ class HomeScreenWidget extends StatelessWidget {
                   height: MediaQuery.of(context).size.height * 0.01,
                 ),
                 Padding(
-                  padding: EdgeInsets.only(left: 20),
+                  padding: const EdgeInsets.only(left: 20),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -66,7 +65,7 @@ class HomeScreenWidget extends StatelessWidget {
                         "Let's Start",
                         style: Theme.of(context).textTheme.titleLarge!,
                       ),
-                      Text(
+                      const Text(
                         "Please select the session you'd like to begin",
                         style: TextStyle(color: Colors.grey),
                       ),
@@ -76,7 +75,7 @@ class HomeScreenWidget extends StatelessWidget {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.03,
                 ),
-                HomeScreenConsumerWidget()
+                const HomeScreenConsumerWidget()
               ],
             ),
           ),
@@ -88,57 +87,3 @@ class HomeScreenWidget extends StatelessWidget {
   }
 }
 
-class HomeScreenConsumerWidget extends ConsumerStatefulWidget {
-  const HomeScreenConsumerWidget({super.key});
-
-  @override
-  ConsumerState<ConsumerStatefulWidget> createState() {
-    return HomeScreenConsumerState();
-  }
-}
-
-class HomeScreenConsumerState extends ConsumerState<HomeScreenConsumerWidget> {
-  @override
-  Widget build(BuildContext context) {
-    final List<StyleCardItemModel> cards = [
-      StyleCardItemModel(
-          style: Styles.style1,
-          product: "Positive product",
-          sum: "Positive sum",
-          styleName: "Style1",
-          imageSrc: "assets/images/style_1.png"),
-      StyleCardItemModel(
-          style: Styles.style2,
-          product: "Positive product",
-          sum: "Negative sum",
-          styleName: "Style2",
-          imageSrc: "assets/images/style_2.png"),
-      StyleCardItemModel(
-          style: Styles.style3,
-          product: "Negative product",
-          sum: "Positive sum",
-          styleName: "Style3",
-          imageSrc: "assets/images/style_3.png"),
-      StyleCardItemModel(
-          style: Styles.style4,
-          product: "Negative product",
-          sum: "Negative sum",
-          styleName: "Style4",
-          imageSrc: "assets/images/style_4.png")
-    ];
-
-    return SizedBox(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height * 0.715,
-        child: GridView.builder(
-          gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-            crossAxisCount: 2,
-            childAspectRatio: 0.75,
-          ),
-          itemCount: 4,
-          itemBuilder: (BuildContext context, int index) {
-            return StyleCard(item: cards[index]);
-          },
-        ));
-  }
-}

@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:xpuzzle/screens/home_screen_widget.dart';
+import 'package:xpuzzle/screens/home_screen/home_screen.dart';
 import 'package:xpuzzle/theme/app_theme.dart';
 
 void main() {
