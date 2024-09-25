@@ -40,6 +40,9 @@ final ThemeData theme = ThemeData(
     bodyMedium: GoogleFonts.balooDa2(
         color: Colors.black
     ),
+    bodySmall: GoogleFonts.balooDa2(
+        color: Colors.black
+    ),
 
     displaySmall: GoogleFonts.balooDa2(
         color: Colors.black

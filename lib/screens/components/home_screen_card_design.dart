@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:xpuzzle/theme/colors.dart';
 
 import '../../models/remote/style_card_model.dart';
 
@@ -27,7 +28,9 @@ class StyleCard extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Text(item.styleName, style: Theme.of(context).textTheme.titleMedium!),
+          Text(item.styleName, style: Theme.of(context).textTheme.titleMedium?.copyWith(
+           color: MColors().colorSecondaryBlueLight
+          )),
           SizedBox(height: 8),
           Image.asset(item.imageSrc),
           SizedBox(height: 10),

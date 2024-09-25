@@ -58,7 +58,9 @@ class HomeScreenWidget extends StatelessWidget {
                     children: [
                       Text(
                         "Hii, Name",
-                        style: Theme.of(context).textTheme.titleSmall,
+                        style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                          fontSize: 20,
+                        ),
                       ),
                       Text(
                         "Let's Start",
@@ -66,6 +68,7 @@ class HomeScreenWidget extends StatelessWidget {
                       ),
                       Text(
                         "Please select the session you'd like to begin",
+                        style: TextStyle(color: Colors.grey),
                       ),
                     ],
                   ),
@@ -126,7 +129,7 @@ class HomeScreenConsumerState extends ConsumerState<HomeScreenConsumerWidget> {
 
     return SizedBox(
         width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height * 0.73,
+        height: MediaQuery.of(context).size.height * 0.715,
         child: GridView.builder(
           gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
             crossAxisCount: 2,
