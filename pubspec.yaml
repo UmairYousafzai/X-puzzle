@@ -40,11 +40,29 @@ dependencies:
   flutter_riverpod: ^2.5.1
   google_fonts: ^6.2.1
   flutter_svg: ^2.0.10+1
+  gap: ^3.0.1
+
+
 
 
 dev_dependencies:
   flutter_test:
     sdk: flutter
+
+  flutter_native_splash: ^2.2.16
+
+flutter_native_splash:
+  background_image: assets/splash.png
+  fullscreen: true
+  android: true
+  ios: true
+  android_12:
+    image: assets/splash.png
+    icon_background_color: "#0FD5F8"
+
+
+
+
 
   # The "flutter_lints" package below contains a set of recommended lints to
   # encourage good coding practices. The lint set provided by the package is
@@ -69,7 +87,8 @@ flutter:
     - assets/
     - assets/images/
     - assets/icons/
-  #   - images/a_dot_burr.jpeg
+    - assets/logos/
+    - assets/splash.png
   #   - images/a_dot_ham.jpeg
 
   # An image asset can refer to one or more resolution-specific "variants", see
