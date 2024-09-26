@@ -5,6 +5,8 @@ import 'package:xpuzzle/screens/widgets/dropdown_field_widget.dart';
 import 'package:xpuzzle/screens/widgets/primaryButton.dart';
 import 'package:xpuzzle/utils/constants.dart';
 
+import 'home_screen/home_screen.dart';
+
 
 class LandingScreen extends StatefulWidget {
   const LandingScreen({super.key});
@@ -35,7 +37,12 @@ class _LandingScreenState extends State<LandingScreen> {
           Gap(scHeight(context) * 0.13),
           DropdownFieldWidget(),
           Gap(scHeight(context) * 0.04),
-          Primarybutton(onPressed: (){}, text: 'Continue')
+          Primarybutton(onPressed: (){
+            Navigator.push(
+              context,
+              MaterialPageRoute(builder: (context) => const HomeScreenWidget()),
+            );
+          }, text: 'Continue')
         ],
       ),
     ));
