@@ -1,9 +1,14 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
+import 'package:xpuzzle/utils/constants.dart';
+import '../../theme/colors.dart';
+import '../widgets/buttons/buttons.dart';
+import 'home_screen2_stateful.dart';
 import 'home_screen_stateful.dart';
 
 
-class HomeScreen extends StatelessWidget {
-  const HomeScreen({super.key});
+class HomeScreen2 extends StatelessWidget {
+  const HomeScreen2({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -11,9 +16,9 @@ class HomeScreen extends StatelessWidget {
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
             image: DecorationImage(
-                image: new AssetImage("assets/images/background_1.jpeg"),
+                image: AssetImage("assets/images/background_1.jpeg"),
                 fit: BoxFit.fill)),
         child: SafeArea(
           child: Padding(
@@ -64,23 +69,25 @@ class HomeScreen extends StatelessWidget {
                         "Let's Start",
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w700),
                       ),
-                      const Text(
+                       Text(
                         "Please select the session you'd like to begin",
-                        style: TextStyle(color: Colors.grey),
+                        style: TextStyle(color: MColors().grey),
                       ),
+                      const Gap(20),
+                      levelButton(() {}, 'Level 4',context)
                     ],
                   ),
                 ),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.03,
-                ),
-                const HomeScreenConsumerWidget()
+                Gap(scHeight(context)*0.02),
+
+               const Expanded(child: HomeScreen2ConsumerWidget())
               ],
             ),
           ),
         ),
       ),
 
+      // const HomeScreenConsumerWidget(),
     );
   }
 }

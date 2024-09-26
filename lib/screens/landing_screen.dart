@@ -1,12 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:xpuzzle/screens/home_screen/home_screen.dart';
 import 'package:xpuzzle/screens/widgets/background_image_container.dart';
+import 'package:xpuzzle/screens/widgets/buttons/buttons.dart';
+import 'package:xpuzzle/screens/widgets/custom_badge.dart';
 import 'package:xpuzzle/screens/widgets/dropdown_field_widget.dart';
-import 'package:xpuzzle/screens/widgets/primaryButton.dart';
 import 'package:xpuzzle/utils/constants.dart';
-
-import 'home_screen/home_screen.dart';
-
 
 class LandingScreen extends StatefulWidget {
   const LandingScreen({super.key});
@@ -35,14 +34,15 @@ class _LandingScreenState extends State<LandingScreen> {
                   fontWeight: FontWeight.w700,
                   fontSize: 22)),
           Gap(scHeight(context) * 0.13),
-          DropdownFieldWidget(),
+          const DropdownFieldWidget(),
           Gap(scHeight(context) * 0.04),
-          Primarybutton(onPressed: (){
-            Navigator.push(
-              context,
-              MaterialPageRoute(builder: (context) => const HomeScreenWidget()),
-            );
-          }, text: 'Continue')
+          // primaryButton(
+          //     onPress: () {
+          //       Navigator.push(context,
+          //           MaterialPageRoute(builder: (ctx) => const HomeScreen()));
+          //     },
+          //     text: 'Continue'),
+
         ],
       ),
     ));

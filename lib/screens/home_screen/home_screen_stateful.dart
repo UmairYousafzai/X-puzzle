@@ -44,5 +44,4 @@ class HomeScreenConsumerState extends ConsumerState<HomeScreenConsumerWidget> {
       ),
     );
   }
-
 }
