@@ -1,9 +1,9 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../models/remote/style_card_model.dart';
+import '../../../models/remote/style_card_model.dart';
 import 'package:flutter/material.dart';
 
-import '../widgets/home_screen_card_design.dart';
+import 'home_screen_card_design.dart';
 
 class HomeScreenConsumerWidget extends ConsumerStatefulWidget {
   const HomeScreenConsumerWidget({super.key});
