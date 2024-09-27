@@ -4,9 +4,9 @@ import 'package:xpuzzle/theme/colors.dart';
 import '../../models/remote/style_card_model.dart';
 
 class StyleCard extends StatelessWidget {
-  final StyleCardItemModel item;
+  final StyleCardItemModel styleItemModel;
 
-  const StyleCard({Key? key, required this.item}) : super(key: key);
+  const StyleCard({Key? key, required this.styleItemModel}) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
@@ -28,21 +28,21 @@ class StyleCard extends StatelessWidget {
       child: Column(
         mainAxisAlignment: MainAxisAlignment.center,
         children: <Widget>[
-          Text(item.styleName, style: Theme.of(context).textTheme.titleMedium?.copyWith(
+          Text(styleItemModel.styleName, style: Theme.of(context).textTheme.titleMedium?.copyWith(
            color: MColors().colorSecondaryBlueLight
           )),
           SizedBox(height: 8),
-          Image.asset(item.imageSrc),
+          Image.asset(styleItemModel.imageSrc),
           SizedBox(height: 10),
           Text(
-            item.product,
+            styleItemModel.product,
             style: Theme.of(context)
                 .textTheme
                 .bodySmall!
                 .apply(color: Colors.black87),
           ),
           Text(
-            item.sum,
+            styleItemModel.sum,
             style: Theme.of(context)
                 .textTheme
                 .bodySmall!

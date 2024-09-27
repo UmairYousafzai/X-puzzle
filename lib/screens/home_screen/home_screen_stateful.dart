@@ -3,7 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
 
 import '../../providers/home_screen_providers.dart';
-import '../widgets/home_screen_card_design.dart';
+import 'home_screen_card_design.dart';
 
 class HomeScreenConsumerWidget extends ConsumerStatefulWidget {
   const HomeScreenConsumerWidget({super.key});
@@ -37,7 +37,7 @@ class HomeScreenConsumerState extends ConsumerState<HomeScreenConsumerWidget> {
         itemBuilder: (BuildContext context, int index) {
           return Column(
             children: [
-              StyleCard(item: cards[index]),
+              StyleCard(styleItemModel: cards[index]),
             ],
           );
         },

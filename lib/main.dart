@@ -5,6 +5,10 @@ import 'package:xpuzzle/screens/home_screen/home_screen.dart';
 import 'package:xpuzzle/screens/home_screen/home_screen2.dart';
 import 'package:xpuzzle/screens/landing_screen.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:xpuzzle/screens/quiz_compeltion_screen.dart';
+import 'package:xpuzzle/screens/results_screen.dart';
+import 'package:xpuzzle/screens/widgets/custom_badge.dart';
+import 'package:xpuzzle/theme/app_theme.dart';
 
 void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -22,11 +26,11 @@ class MyApp extends StatelessWidget {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
     ));
-    return MaterialApp(
+    return  MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-      // theme: theme,
-      home: HomeScreen2(),
+       theme: theme,
+      home: QuizCompeltionScreen(),
     );
   }
 }

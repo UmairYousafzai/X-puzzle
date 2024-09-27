@@ -2,7 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:xpuzzle/utils/constants.dart';
 import '../../theme/colors.dart';
-import '../widgets/buttons/buttons.dart';
 import 'home_screen2_stateful.dart';
 import 'home_screen_stateful.dart';
 
@@ -74,8 +73,7 @@ class HomeScreen2 extends StatelessWidget {
                         style: TextStyle(color: MColors().grey),
                       ),
                       const Gap(20),
-                      levelButton(() {}, 'Level 4',context)
-                    ],
+                     ],
                   ),
                 ),
                 Gap(scHeight(context)*0.02),

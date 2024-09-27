@@ -63,8 +63,9 @@ class HomeScreen2CardDesign extends StatelessWidget {
                       item.sum,
                       style: Theme.of(context).textTheme.bodySmall!.apply(color: Colors.black87),
                     ),
-                     Gap(scWidth(context)*0.04),
-                    startButton(() {}, context)
+                    startButton(() {
+
+                    }, context)
                   ],
                 ),
 
