@@ -14,17 +14,17 @@ class HomeScreen2CardDesign extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(6),
+      //margin: const EdgeInsets.all(6),
       padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
+            color: Colors.grey.withOpacity(0.3),
             spreadRadius: 1,
-            blurRadius: 5,
-            offset: const Offset(0, 3),
+            blurRadius: 2,
+            offset: const Offset(0, 1),
           ),
         ],
       ),
@@ -48,22 +48,21 @@ class HomeScreen2CardDesign extends StatelessWidget {
                 Text(
                   item.styleName,
                   style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: MColors().colorSecondaryOrangeDark,
+                    color: MColors().colorOrangeDark,
                   ),
                 ),
                 const SizedBox(height: 4),
-                Row(
+                Row(mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     Text(
                       item.product,
-                      style: Theme.of(context).textTheme.bodySmall!.apply(color: Colors.black87),
+                      style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Colors.black87,fontSize: 10),
                     ),
-                    const Gap(10),
                     Text(
                       item.sum,
-                      style: Theme.of(context).textTheme.bodySmall!.apply(color: Colors.black87),
+                      style: Theme.of(context).textTheme.bodySmall!.copyWith(color: Colors.black87,fontSize: 10),
                     ),
-                     Gap(scWidth(context)*0.04),
+
                     startButton(() {}, context)
                   ],
                 ),

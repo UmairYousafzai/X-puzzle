@@ -1,9 +1,10 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'package:flutter/material.dart';
+import 'package:xpuzzle/screens/home_screen/home_screen2.dart';
 
 import '../../providers/home_screen_providers.dart';
-import '../widgets/home_screen_card_design.dart';
+import 'home_screen_card_design.dart';
 
 class HomeScreenConsumerWidget extends ConsumerStatefulWidget {
   const HomeScreenConsumerWidget({super.key});
@@ -31,14 +32,13 @@ class HomeScreenConsumerState extends ConsumerState<HomeScreenConsumerWidget> {
       child: GridView.builder(
         gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: 2,
-          childAspectRatio: 0.75,
+          childAspectRatio: 0.70,
         ),
         itemCount: cards.length,
         itemBuilder: (BuildContext context, int index) {
-          return Column(
-            children: [
-              StyleCard(item: cards[index]),
-            ],
+          return InkWell(
+              child: StyleCard(item: cards[index]),
+            onTap: (){Navigator.push(context, MaterialPageRoute(builder: (ctx)=>const HomeScreen2()));},
           );
         },
       ),

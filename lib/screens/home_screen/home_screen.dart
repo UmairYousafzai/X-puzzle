@@ -1,4 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:gap/gap.dart';
+import '../widgets/buttons/buttons.dart';
+import 'home_screen2.dart';
 import 'home_screen_stateful.dart';
 
 
@@ -11,9 +14,9 @@ class HomeScreen extends StatelessWidget {
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
             image: DecorationImage(
-                image: new AssetImage("assets/images/background_1.jpeg"),
+                image: AssetImage("assets/images/background_1.jpeg"),
                 fit: BoxFit.fill)),
         child: SafeArea(
           child: Padding(
@@ -74,7 +77,7 @@ class HomeScreen extends StatelessWidget {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.03,
                 ),
-                const HomeScreenConsumerWidget()
+                const Expanded(child: HomeScreenConsumerWidget()),
               ],
             ),
           ),

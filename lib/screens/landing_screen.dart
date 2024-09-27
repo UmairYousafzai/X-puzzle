@@ -3,7 +3,6 @@ import 'package:gap/gap.dart';
 import 'package:xpuzzle/screens/home_screen/home_screen.dart';
 import 'package:xpuzzle/screens/widgets/background_image_container.dart';
 import 'package:xpuzzle/screens/widgets/buttons/buttons.dart';
-import 'package:xpuzzle/screens/widgets/custom_badge.dart';
 import 'package:xpuzzle/screens/widgets/dropdown_field_widget.dart';
 import 'package:xpuzzle/utils/constants.dart';
 
@@ -21,7 +20,6 @@ class _LandingScreenState extends State<LandingScreen> {
         widget: Padding(
       padding: const EdgeInsets.all(20.0),
       child: Column(
-        //mainAxisAlignment: MainAxisAlignment.center,
         children: [
           Gap(scHeight(context) * 0.1),
           Image.asset(
@@ -36,13 +34,9 @@ class _LandingScreenState extends State<LandingScreen> {
           Gap(scHeight(context) * 0.13),
           const DropdownFieldWidget(),
           Gap(scHeight(context) * 0.04),
-          // primaryButton(
-          //     onPress: () {
-          //       Navigator.push(context,
-          //           MaterialPageRoute(builder: (ctx) => const HomeScreen()));
-          //     },
-          //     text: 'Continue'),
-
+          primaryButton(() {
+            Navigator.push(context, MaterialPageRoute(builder: (ctx)=>const HomeScreen()));
+          }, 'Continue')
         ],
       ),
     ));

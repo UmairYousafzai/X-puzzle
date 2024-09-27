@@ -7,7 +7,6 @@ final ThemeData theme = ThemeData(
 
   colorScheme: ColorScheme.fromSeed(
     seedColor: MColors().colorPrimary,
-    brightness: Brightness.dark,
   ),
 
   textTheme: TextTheme(
