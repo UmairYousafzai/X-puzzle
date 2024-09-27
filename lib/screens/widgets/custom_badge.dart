@@ -8,15 +8,15 @@ class CustomBadge extends StatelessWidget {
       children: [
         // The "Correct Answer" label on top of the container
         Container(
-          padding: EdgeInsets.symmetric(vertical: 4, horizontal: 12),
-          decoration: BoxDecoration(
+          padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 12),
+          decoration:const  BoxDecoration(
             color: Colors.orange,
             borderRadius: BorderRadius.only(
               topRight: Radius.circular(15),
               topLeft: Radius.circular(15),
             ),
           ),
-          child: Text(
+          child: const Text(
             'Correct Answer',
             style: TextStyle(
               color: Colors.white,
@@ -38,7 +38,7 @@ class CustomBadge extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.spaceAround,
                 children: [
                   // Left side: Level 4
-                  Text(
+                  const Text(
                     'Level 4',
                     style: TextStyle(
                       color: Colors.black54,
@@ -48,7 +48,7 @@ class CustomBadge extends StatelessWidget {
                   ),
 
                   // Center Trapezoid for "12/8"
-                  Container(
+                   Container(
                     width: 130,
                     child: CustomPaint(
                       painter: TrapezoidPainter(),
