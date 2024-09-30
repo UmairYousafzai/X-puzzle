@@ -1,18 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
-import 'package:xpuzzle/providers/level_provider.dart';
 import 'package:xpuzzle/utils/constants.dart';
 import '../../theme/colors.dart';
 import '../widgets/buttons/buttons.dart';
 import 'home_screen2_stateful.dart';
+import 'home_screen_stateful.dart';
 
-class HomeScreen2 extends ConsumerWidget {
+
+class HomeScreen2 extends StatelessWidget {
   const HomeScreen2({super.key});
 
   @override
-  Widget build(BuildContext context,WidgetRef ref) {
-    final level=ref.read(levelProvider);
+  Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         width: MediaQuery.of(context).size.width,
@@ -63,28 +62,25 @@ class HomeScreen2 extends ConsumerWidget {
                       Text(
                         "Hii, Name",
                         style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                              fontSize: 20,
-                            ),
+                          fontSize: 20,
+                        ),
                       ),
                       Text(
                         "Let's Start",
-                        style: Theme.of(context)
-                            .textTheme
-                            .titleLarge!
-                            .copyWith(fontWeight: FontWeight.w700),
+                        style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w700),
                       ),
-                      Text(
+                       Text(
                         "Please select the session you'd like to begin",
                         style: TextStyle(color: MColors().grey),
                       ),
                       const Gap(20),
-                      levelButton(() {}, level ?? 'Level 4', context)
+                      levelButton(() {}, 'Level 4',context)
                     ],
                   ),
                 ),
-                Gap(scHeight(context) * 0.02),
-                const Expanded(child: HomeScreen2ConsumerWidget()),
+                Gap(context.screenHeight *0.02),
 
+               const Expanded(child: HomeScreen2ConsumerWidget())
               ],
             ),
           ),
@@ -95,3 +91,4 @@ class HomeScreen2 extends ConsumerWidget {
     );
   }
 }
+

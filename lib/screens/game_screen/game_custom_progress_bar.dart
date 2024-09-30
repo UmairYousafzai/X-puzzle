@@ -14,14 +14,14 @@ class CustomProgressBar extends StatelessWidget {
         height: 6, // Height of the progress bar
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10), // Rounded corners for the track
-         color: MColors().tealPrimary
+         color: MColors().colorSecondaryBlueDark
         ),
         child: Stack(
           children: [
             Container(
               // Background container for the track
               decoration: BoxDecoration(
-                color: MColors().colorBeigeLight, // Track background color
+                color: MColors().colorPrimary, // Track background color
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
@@ -30,7 +30,7 @@ class CustomProgressBar extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                 color: MColors().tealPrimary
+                 color: MColors().colorSecondaryBlueDark
                 ),
               ),
             ),

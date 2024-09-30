@@ -16,11 +16,11 @@ class GameNumberButtonsWidget extends ConsumerWidget {
     final selecedtNumber=ref.watch(gameNumberProvider);
 
     return Container(
-      height: scHeight(context) * 0.2,
-      width: scWidth(context) * 0.9,
+      height: context.screenHeight * 0.2,
+      width: context.screenWidth * 0.9,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(25),
-        color: MColors().colorBeigeLight,
+        color: MColors().colorPrimary,
       ),
       child: Padding(
         padding: const EdgeInsets.all(20.0),
@@ -35,7 +35,7 @@ class GameNumberButtonsWidget extends ConsumerWidget {
                   () {
                     ref.read(gameNumberProvider.notifier).state=number;
                   }, // Define the onPressed callback for each button
-             selecedtNumber==number? MColors().tealPrimary: MColors().white,
+             selecedtNumber==number? MColors().colorPrimary: MColors().white,
               number,
               context,
               15,

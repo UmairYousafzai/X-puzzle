@@ -47,7 +47,7 @@ class GameScreen extends ConsumerWidget {
                   const Gap(50),
                 ],
               ),
-              Gap(scHeight(context) * 0.02),
+              Gap(context.screenHeight * 0.02),
               Row(
                 children: [
                   const GameTimeWidget(
@@ -55,13 +55,13 @@ class GameScreen extends ConsumerWidget {
                   ),
                   const Spacer(),
                   gameStartResetButton(() {}, 'assets/images/play.png',
-                      MColors().colorBeigeLight),
+                      MColors().colorPrimary),
                   const Gap(20),
                   gameStartResetButton(
-                      () {}, 'assets/images/reset.png', MColors().tealPrimary),
+                      () {}, 'assets/images/reset.png', MColors().colorSecondaryBlueDark),
                 ],
               ),
-              Gap(scHeight(context) * 0.04),
+              Gap(context.screenHeight * 0.04),
               const CustomProgressBar(
                 progress: 0.7,
               ),

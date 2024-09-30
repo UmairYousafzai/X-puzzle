@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:xpuzzle/screens/game_screen/game_screen.dart';
-import 'package:xpuzzle/screens/home_screen/home_screen.dart';
-import 'package:xpuzzle/screens/home_screen/home_screen2.dart';
 import 'package:xpuzzle/screens/landing_screen.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:xpuzzle/theme/app_theme.dart';
@@ -12,7 +9,6 @@ void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);  runApp(ProviderScope(child: const MyApp()));
   FlutterNativeSplash.remove();
-
 }
 
 class MyApp extends StatelessWidget {
@@ -21,14 +17,14 @@ class MyApp extends StatelessWidget {
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
-    SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
+    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,
     ));
     return MaterialApp(
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
-     //  theme: theme,
-      home: LandingScreen(),
+       theme: theme,
+      home: const LandingScreen(),
     );
   }
 }

@@ -20,8 +20,9 @@ class _LandingScreenState extends State<LandingScreen> {
         widget: Padding(
       padding: const EdgeInsets.all(20.0),
       child: Column(
+        //mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Gap(scHeight(context) * 0.1),
+          Gap(context.screenHeight  * 0.1),
           Image.asset(
             'assets/logos/X-Puzzles-logo.png',
           ),
@@ -31,12 +32,13 @@ class _LandingScreenState extends State<LandingScreen> {
                   color: const Color(0xFF1E2D7C),
                   fontWeight: FontWeight.w700,
                   fontSize: 22)),
-          Gap(scHeight(context) * 0.13),
+          Gap(context.screenHeight * 0.13),
           const DropdownFieldWidget(),
-          Gap(scHeight(context) * 0.04),
+          Gap(context.screenHeight * 0.04),
           primaryButton(() {
-            Navigator.push(context, MaterialPageRoute(builder: (ctx)=>const HomeScreen()));
-          }, 'Continue')
+            Navigator.push(context,
+                MaterialPageRoute(builder: (ctx) => const HomeScreen()));
+          }, 'Continue',context)
         ],
       ),
     ));

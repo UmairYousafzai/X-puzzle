@@ -30,7 +30,7 @@ class HomeScreen2ConsumerState extends ConsumerState<HomeScreen2ConsumerWidget> 
           return InkWell(
             onTap: (){
               Navigator.push(context,
-                  MaterialPageRoute(builder: (ctx) =>  GameScreen()));
+                  MaterialPageRoute(builder: (ctx) =>  const GameScreen()));
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),

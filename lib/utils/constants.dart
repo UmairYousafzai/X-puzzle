@@ -1,13 +1,9 @@
 import 'package:flutter/material.dart';
 
-
-   double scWidth(BuildContext context) {
-    return MediaQuery.of(context).size.width;
-  }
-
-   double scHeight(BuildContext context) {
-    return MediaQuery.of(context).size.height;
-  }
+extension ScreenSize on BuildContext {
+  double get screenWidth => MediaQuery.of(this).size.width;
+  double get screenHeight => MediaQuery.of(this).size.height;
+}
 
 
 

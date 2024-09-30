@@ -7,6 +7,7 @@ final ThemeData theme = ThemeData(
 
   colorScheme: ColorScheme.fromSeed(
     seedColor: MColors().colorPrimary,
+   // brightness: Brightness.dark,
   ),
 
   textTheme: TextTheme(
@@ -45,7 +46,6 @@ final ThemeData theme = ThemeData(
 
     displaySmall: GoogleFonts.balooDa2(
         color: Colors.black
-
     ),
 
   ),

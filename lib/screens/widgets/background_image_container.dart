@@ -2,9 +2,9 @@ import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class BackgroundImageContainer extends StatelessWidget {
-  BackgroundImageContainer({super.key, required this.child});
+  BackgroundImageContainer({super.key, required this.widget});
 
-  Widget child;
+  Widget widget;
 
   @override
   Widget build(BuildContext context) {
@@ -16,7 +16,7 @@ class BackgroundImageContainer extends StatelessWidget {
               image: DecorationImage(
                   image: new AssetImage("assets/images/background_1.jpeg"),
                   fit: BoxFit.fill)),
-          child: SafeArea(child: child)),
+          child: SafeArea(child: widget)),
     );
   }
 }

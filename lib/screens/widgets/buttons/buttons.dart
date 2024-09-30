@@ -15,10 +15,8 @@ levelButton(VoidCallback onPress, String level, BuildContext context) {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
         child: Text(level,
-            style: Theme.of(context)
-                .textTheme
-                .titleMedium!
-                .copyWith(color: MColors().colorOrangeDark, fontSize: 14)),
+            style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                color: MColors().colorSecondaryOrangeDark, fontSize: 14)),
       ),
     ),
   );
@@ -35,7 +33,7 @@ startButton(VoidCallback onPress, BuildContext context) {
               end: Alignment.bottomRight,
               colors: [Color(0xFF38E8F3), Color(0xFF09D3F8)])),
       child: Padding(
-        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 12),
+        padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
         child: Text('Start',
             style: Theme.of(context)
                 .textTheme
@@ -46,31 +44,28 @@ startButton(VoidCallback onPress, BuildContext context) {
   );
 }
 
-primaryButton(VoidCallback onPressed, String text) {
-  return Container(
-    height: 54,
-    decoration: BoxDecoration(
-      gradient: const LinearGradient(
-        colors: [
-          Color(0xFF38E8F3),
-          Color(0xFF09D3F8),
-        ],
-        begin: Alignment.topLeft,
-        end: Alignment.bottomRight,
+primaryButton(VoidCallback onPressed, String text, BuildContext context) {
+  return InkWell(
+    onTap: onPressed,
+    child: Container(
+      width: double.infinity,
+      height: 54,
+      decoration: BoxDecoration(
+        gradient: const LinearGradient(
+          colors: [
+            Color(0xFF38E8F3),
+            Color(0xFF09D3F8),
+          ],
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+        ),
+        borderRadius: BorderRadius.circular(15),
       ),
-      borderRadius: BorderRadius.circular(15),
-    ),
-    child: ElevatedButton(
-      onPressed: onPressed,
-      style: ElevatedButton.styleFrom(
-        backgroundColor: Colors.transparent,
-        shadowColor: Colors.transparent,
-        shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(15)),
-        minimumSize: const Size(double.infinity, 40),
-      ),
-      child: Text(
-        text,
-        style: const TextStyle(color: Colors.black),
+      child: Center(
+        child: Text(
+          text,
+          style: Theme.of(context).textTheme.displaySmall!.copyWith(fontWeight: FontWeight.w500, fontSize: 18),
+        ),
       ),
     ),
   );
@@ -100,8 +95,8 @@ gameNumberButton(VoidCallback onPressed, Color backgroundColor, String text,
   return InkWell(
     onTap: onPressed,
     child: Container(
-      height: scHeight(context) * 0.06,
-      width: scHeight(context) * 0.06,
+      height: context.screenHeight  * 0.06,
+      width: context.screenWidth * 0.06,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(6),
         color: backgroundColor,
@@ -114,7 +109,7 @@ gameNumberButton(VoidCallback onPressed, Color backgroundColor, String text,
         child: Text(
           text,
           style: Theme.of(context).textTheme.titleSmall!.copyWith(
-              color: black ? Colors.black : MColors().tealPrimary,
+              color: black ? Colors.black : MColors().colorSecondaryBlueDark,
               fontSize: fontSize),
         ),
       ),
@@ -126,9 +121,9 @@ gameDoneButton(VoidCallback onPressed, BuildContext context) {
   return Container(
     // padding: EdgeInsets.symmetric(vertical: scHeight(context)*0.02, horizontal:70),
     decoration: BoxDecoration(
-      color: MColors().colorBeigeLight, // #FFFBF3
+      color: MColors().colorPrimary, // #FFFBF3
       border: Border.all(
-        color: MColors().colorOrangeDark, // #0CD4F8 with 50% opacity
+        color: MColors().colorSecondaryOrangeDark, // #0CD4F8 with 50% opacity
         width: 1, // You can adjust the border width as needed
       ),
       borderRadius: BorderRadius.circular(30),
@@ -140,85 +135,94 @@ gameDoneButton(VoidCallback onPressed, BuildContext context) {
         style: Theme.of(context)
             .textTheme
             .titleMedium!
-            .copyWith(color: MColors().colorOrangeDark, fontSize: 13),
+            .copyWith(color: MColors().colorSecondaryOrangeDark, fontSize: 13),
       ),
     ),
   );
 }
 
-gameBacknNextButton(BuildContext context,VoidCallback onPressed, bool isNext) {
+gameBacknNextButton(BuildContext context, VoidCallback onPressed, bool isNext) {
   return GestureDetector(
     onTap: onPressed,
     child: Container(
       padding: EdgeInsets.symmetric(
         vertical: 7,
-        horizontal: scWidth(context) * 0.04,
+        horizontal:context.screenWidth  * 0.04,
       ),
       decoration: BoxDecoration(
-        color: MColors().colorBeigeLight, // #FFFBF3
+        color: MColors().colorPrimary, // #FFFBF3
         gradient: const LinearGradient(colors: [
           Color(0xFF38E8F3),
           Color(0xFF09D3F8),
         ]),
         borderRadius: BorderRadius.circular(30),
       ),
-      child: isNext? Row(
-        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-        mainAxisSize: MainAxisSize.min, // Adjust the size to the content
-        children: [
-           Text(
-            'Next', // The text inside the button
-            style: Theme.of(context).textTheme.titleSmall!.copyWith(fontWeight: FontWeight.w500, fontSize: 16),
-          ),
-          const Gap(15),
-          // Gap between the text and the arrow icon
-          Container(
-            padding: const EdgeInsets.all(8), // Padding for the icon
-            decoration: const BoxDecoration(
-                shape: BoxShape.circle, // Circular background for the icon
-                color: Colors.yellow,
-                gradient:
-                    LinearGradient(colors: [Color(0xFFFBDF0D),Color(0xFFF78F0C), ])
-                // Yellow background color
+      child: isNext
+          ? Row(
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              mainAxisSize: MainAxisSize.min, // Adjust the size to the content
+              children: [
+                Text(
+                  'Next', // The text inside the button
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleSmall!
+                      .copyWith(fontWeight: FontWeight.w500, fontSize: 16),
                 ),
-            child: const Icon(
-              Icons.arrow_forward, // Arrow icon pointing forward
-              color: Colors.white, // Icon color
-              size: 18, // Icon size
+                const Gap(15),
+                // Gap between the text and the arrow icon
+                Container(
+                  padding: const EdgeInsets.all(8), // Padding for the icon
+                  decoration: const BoxDecoration(
+                      shape:
+                          BoxShape.circle, // Circular background for the icon
+                      color: Colors.yellow,
+                      gradient: LinearGradient(colors: [
+                        Color(0xFFFBDF0D),
+                        Color(0xFFF78F0C),
+                      ])
+                      // Yellow background color
+                      ),
+                  child: const Icon(
+                    Icons.arrow_forward, // Arrow icon pointing forward
+                    color: Colors.white, // Icon color
+                    size: 18, // Icon size
+                  ),
+                ),
+              ],
+            )
+          : Row(
+              mainAxisSize: MainAxisSize.min, // Adjust the size to the content
+              children: [
+                // Gap between the text and the arrow icon
+                Container(
+                  padding: const EdgeInsets.all(8), // Padding for the icon
+                  decoration: const BoxDecoration(
+                      shape:
+                          BoxShape.circle, // Circular background for the icon
+                      color: Colors.yellow,
+                      gradient: LinearGradient(colors: [
+                        Color(0xFFFBDF0D),
+                        Color(0xFFF78F0C),
+                      ])
+                      // Yellow background color
+                      ),
+                  child: const Icon(
+                    Icons.arrow_back, // Arrow icon pointing forward
+                    color: Colors.white, // Icon color
+                    size: 18, // Icon size
+                  ),
+                ),
+                const Gap(15),
+                Text(
+                  'Back', // The text inside the button
+                  style: Theme.of(context)
+                      .textTheme
+                      .titleSmall!
+                      .copyWith(fontWeight: FontWeight.w500, fontSize: 16),
+                ),
+              ],
             ),
-          ),
-
-        ],
-      )
-:
-      Row(
-        mainAxisSize: MainAxisSize.min, // Adjust the size to the content
-        children: [
-
-          // Gap between the text and the arrow icon
-          Container(
-            padding: const EdgeInsets.all(8), // Padding for the icon
-            decoration: const BoxDecoration(
-                shape: BoxShape.circle, // Circular background for the icon
-                color: Colors.yellow,
-                gradient:
-                LinearGradient(colors: [Color(0xFFFBDF0D),Color(0xFFF78F0C), ])
-              // Yellow background color
-            ),
-            child: const Icon(
-              Icons.arrow_back, // Arrow icon pointing forward
-              color: Colors.white, // Icon color
-              size: 18, // Icon size
-            ),
-          ),
-          const Gap(15),
-              Text(
-            'Back', // The text inside the button
-            style: Theme.of(context).textTheme.titleSmall!.copyWith(fontWeight: FontWeight.w500, fontSize: 16),
-          ),
-
-        ],
-      ),
     ),
   );
 }
