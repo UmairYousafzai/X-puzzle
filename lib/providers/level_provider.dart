@@ -1,7 +1,7 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 final levelProvider = StateProvider<String?>((ref) { //StateProvider for managing state
-  return null;
+  return 'Level 1';
 });
 
 

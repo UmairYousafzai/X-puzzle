@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:xpuzzle/screens/widgets/levels_header.dart';
+import 'package:xpuzzle/screens/widgets/levels_header.dart';
 
 import '../models/remote/style_card_model.dart';
 import '../utils/constants.dart';
@@ -42,8 +43,8 @@ class QuizCompeltionScreen extends StatelessWidget {
                     
 
                       Container(
-                        width: scWidth(context),
-                        height: scHeight(context)*0.7,
+                        width: context.screenWidth,
+                        height: context.screenHeight*0.7,
                         decoration:  BoxDecoration(
                             borderRadius:  BorderRadius.only(topLeft: Radius.circular(30),topRight: Radius.circular(30)),
                             image: DecorationImage(

@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:xpuzzle/providers/level_provider.dart';
 import 'package:xpuzzle/utils/constants.dart';
 import '../../theme/colors.dart';
 import '../widgets/buttons/buttons.dart';
@@ -7,11 +9,12 @@ import 'home_screen2_stateful.dart';
 import 'home_screen_stateful.dart';
 
 
-class HomeScreen2 extends StatelessWidget {
+class HomeScreen2 extends ConsumerWidget {
   const HomeScreen2({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context,WidgetRef ref) {
+    final level=ref.read(levelProvider);
     return Scaffold(
       body: Container(
         width: MediaQuery.of(context).size.width,
@@ -74,7 +77,7 @@ class HomeScreen2 extends StatelessWidget {
                         style: TextStyle(color: MColors().grey),
                       ),
                       const Gap(20),
-                      levelButton(() {}, 'Level 4',context)
+                      levelButton(() {}, level!,context)
                     ],
                   ),
                 ),
