@@ -40,40 +40,37 @@ class HomeScreen2CardDesign extends StatelessWidget {
           const SizedBox(width: 10), // Space between image and text
 
           // Column for text information
-          Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: <Widget>[
-              Text(
-                item.styleName,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: MColors().colorSecondaryOrangeDark,
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: <Widget>[
+                Text(
+                  item.styleName,
+                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                    color: MColors().colorSecondaryOrangeDark,
+                  ),
+                ),
+                const SizedBox(height: 4),
+                Row(
+                  children: [
+                    Text(
+                      item.product,
+                      style: Theme.of(context).textTheme.bodySmall!.apply(color: Colors.black87),
                     ),
-              ),
-              const Gap(4),
-              Row(
-                mainAxisAlignment: MainAxisAlignment.start,
-                children: [
-                  Text(
-                    item.product,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall!
-                        .apply(color: Colors.black87),
-                  ),
-                  const Gap(10),
-                  Text(
-                    item.sum,
-                    style: Theme.of(context)
-                        .textTheme
-                        .bodySmall!
-                        .apply(color: Colors.black87),
-                  ),
-                  Gap(context.screenWidth  * 0.04),
-                  startButton(() {}, context)
-                ],
-              ),
-            ],
+                    const Gap(10),
+                    Text(
+                      item.sum,
+                      style: Theme.of(context).textTheme.bodySmall!.apply(color: Colors.black87),
+                    ),
+                    startButton(() {
+
+                    }, context)
+                  ],
+                ),
+
+              ],
+            ),
           ),
         ],
       ),
