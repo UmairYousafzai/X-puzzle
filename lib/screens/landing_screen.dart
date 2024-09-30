@@ -17,7 +17,7 @@ class _LandingScreenState extends State<LandingScreen> {
   @override
   Widget build(BuildContext context) {
     return BackgroundImageContainer(
-        widget: Padding(
+        child: Padding(
       padding: const EdgeInsets.all(20.0),
       child: Column(
         //mainAxisAlignment: MainAxisAlignment.center,
