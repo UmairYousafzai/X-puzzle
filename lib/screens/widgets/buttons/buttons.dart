@@ -64,7 +64,10 @@ primaryButton(VoidCallback onPressed, String text, BuildContext context) {
       child: Center(
         child: Text(
           text,
-          style: Theme.of(context).textTheme.displaySmall!.copyWith(fontWeight: FontWeight.w500, fontSize: 18),
+          style: Theme.of(context)
+              .textTheme
+              .displaySmall!
+              .copyWith(fontWeight: FontWeight.w500, fontSize: 18),
         ),
       ),
     ),
@@ -95,7 +98,7 @@ gameNumberButton(VoidCallback onPressed, Color backgroundColor, String text,
   return InkWell(
     onTap: onPressed,
     child: Container(
-      height: context.screenHeight  * 0.06,
+      height: context.screenHeight * 0.06,
       width: context.screenWidth * 0.06,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(6),
@@ -147,7 +150,7 @@ gameBacknNextButton(BuildContext context, VoidCallback onPressed, bool isNext) {
     child: Container(
       padding: EdgeInsets.symmetric(
         vertical: 7,
-        horizontal:context.screenWidth  * 0.04,
+        horizontal: context.screenWidth * 0.04,
       ),
       decoration: BoxDecoration(
         color: MColors().colorPrimary, // #FFFBF3
@@ -223,6 +226,30 @@ gameBacknNextButton(BuildContext context, VoidCallback onPressed, bool isNext) {
                 ),
               ],
             ),
+    ),
+  );
+}
+
+viewCompleteResultsButton(VoidCallback onPressed, BuildContext context) {
+  return InkWell(
+    onTap: onPressed,
+    child: Container(
+      width: double.infinity,
+      height: 54,
+      decoration: BoxDecoration(
+        border: Border.all(color: MColors().colorSecondaryOrangeDark),
+        color: Colors.transparent,
+        borderRadius: BorderRadius.circular(15),
+      ),
+      child: Center(
+        child: Text(
+          'View Complete Results',
+          style: Theme.of(context).textTheme.titleSmall!.copyWith(
+              fontWeight: FontWeight.w600,
+              fontSize: 18,
+              color: MColors().colorSecondaryOrangeDark),
+        ),
+      ),
     ),
   );
 }
