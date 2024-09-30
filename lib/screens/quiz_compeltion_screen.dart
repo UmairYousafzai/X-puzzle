@@ -1,9 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:gap/gap.dart';
 import 'package:xpuzzle/screens/widgets/levels_header.dart';
-import 'package:xpuzzle/screens/widgets/levels_header.dart';
-
 import '../models/remote/style_card_model.dart';
 import '../utils/constants.dart';
 
