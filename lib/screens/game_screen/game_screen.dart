@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
-import 'package:xpuzzle/screens/widgets/buttons/buttons.dart';
 import 'package:xpuzzle/screens/game_screen/game_custom_progress_bar.dart';
+import 'package:xpuzzle/screens/quiz_completion_screen.dart';
+import 'package:xpuzzle/screens/widgets/buttons/buttons.dart';
 import 'package:xpuzzle/theme/colors.dart';
 import 'package:xpuzzle/utils/constants.dart';
 
+import '../../providers/game_provider.dart';
 import '../../providers/level_provider.dart';
 import 'game_number_buttons_widget.dart';
 import 'game_time_widget.dart';
@@ -18,6 +20,8 @@ class GameScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final level = ref.watch(levelProvider);
     final levelList = ref.read(levelListProvider);
+    final gameState = ref.watch(gameProvider);
+    final gameNotifier = ref.read(gameProvider.notifier);
 
     return Scaffold(
       body: SafeArea(
@@ -36,7 +40,7 @@ class GameScreen extends ConsumerWidget {
                   Expanded(
                     child: Center(
                       child: Text(
-                        level??'Select Level',
+                        level ?? 'Select Level',
                         style: Theme.of(context).textTheme.titleLarge!.copyWith(
                               color: const Color(0xFF1E2D7C),
                               fontWeight: FontWeight.w700,
@@ -50,15 +54,26 @@ class GameScreen extends ConsumerWidget {
               Gap(context.screenHeight * 0.02),
               Row(
                 children: [
-                  const GameTimeWidget(
-                    time: '04:25',
+                  GameTimeWidget(
+                    time:
+                        '${gameState.minutes.toString().padLeft(2, '0')}:${gameState.seconds.toString().padLeft(2, '0')}',
                   ),
                   const Spacer(),
-                  gameStartResetButton(() {}, 'assets/images/play.png',
-                      MColors().colorPrimary),
+
+                  gameState.isTimerRunning?
+                  gameStartResetButton(() {                                     // Button to pause timer
+                    gameNotifier.pauseTimer();
+                  }, 'assets/icons/pause-button.png', MColors().colorPrimary):
+                  gameStartResetButton(() {
+                    gameNotifier.playTimer();                                  // Button to start timer
+                  }, 'assets/images/play.png', MColors().colorPrimary)
+
+                  ,
                   const Gap(20),
-                  gameStartResetButton(
-                      () {}, 'assets/images/reset.png', MColors().colorSecondaryBlueDark),
+                  gameStartResetButton(() {
+                    gameNotifier.resetTimer();                                  // Button to reset timer
+                  }, 'assets/images/reset.png',
+                      MColors().colorSecondaryBlueDark),
                 ],
               ),
               Gap(context.screenHeight * 0.04),
@@ -77,7 +92,7 @@ class GameScreen extends ConsumerWidget {
                     int currentIndex = levelList.indexOf(level!);
                     if (currentIndex > 0) {
                       ref.read(levelProvider.notifier).state =
-                      levelList[currentIndex - 1];
+                          levelList[currentIndex - 1];
                     } else {
                       Navigator.pop(context);
                     }
@@ -87,13 +102,17 @@ class GameScreen extends ConsumerWidget {
                     int currentIndex = levelList.indexOf(level!);
                     if (currentIndex < levelList.length - 1) {
                       ref.read(levelProvider.notifier).state =
-                      levelList[currentIndex + 1];
-                    }
-                    else{
+                          levelList[currentIndex + 1];
+                    } else {
+                      Navigator.push(
+                          context,
+                          MaterialPageRoute(
+                              builder: (ctx) => QuizCompeltionScreen()));
                     }
                   }, true), // Next Button
                 ],
               ),
+              Gap(context.screenHeight * 0.01)
             ],
           ),
         ),

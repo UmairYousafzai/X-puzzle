@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/material.dart';
 
 class GameTimeWidget extends StatelessWidget {
   const GameTimeWidget({super.key, required this.time});
@@ -15,7 +16,8 @@ final String time;
         ),
         borderRadius: BorderRadius.circular(30),
       ),
-      child: Text(time),
+      child: Text(time,style: TextStyle(fontSize: 14, color: Colors.black),
+      ),
     );
   }
 }

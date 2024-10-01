@@ -44,7 +44,7 @@ startButton(VoidCallback onPress, BuildContext context) {
   );
 }
 
-primaryButton(VoidCallback onPressed, String text, BuildContext context) {
+primaryButton(VoidCallback onPressed, String text, Color textColor,BuildContext context) {
   return InkWell(
     onTap: onPressed,
     child: Container(
@@ -67,7 +67,7 @@ primaryButton(VoidCallback onPressed, String text, BuildContext context) {
           style: Theme.of(context)
               .textTheme
               .displaySmall!
-              .copyWith(fontWeight: FontWeight.w500, fontSize: 18),
+              .copyWith(fontWeight: FontWeight.w500, fontSize: 18,color:textColor ),
         ),
       ),
     ),
@@ -76,7 +76,7 @@ primaryButton(VoidCallback onPressed, String text, BuildContext context) {
 
 gameStartResetButton(
     VoidCallback onPressed, String image, Color backgroundColor) {
-  return InkWell(
+  return GestureDetector(
     onTap: onPressed,
     child: Container(
       padding: const EdgeInsets.all(12),
@@ -88,7 +88,7 @@ gameStartResetButton(
           width: 1, // You can adjust the border width as needed
         ),
       ),
-      child: Image.asset(image),
+      child: Image.asset(image,width: 20,),
     ),
   );
 }
@@ -99,7 +99,7 @@ gameNumberButton(VoidCallback onPressed, Color backgroundColor, String text,
     onTap: onPressed,
     child: Container(
       height: context.screenHeight * 0.06,
-      width: context.screenWidth * 0.06,
+      width: context.screenWidth * 0.12,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(6),
         color: backgroundColor,

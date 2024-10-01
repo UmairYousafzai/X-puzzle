@@ -18,13 +18,13 @@ class ResultsScreen extends StatelessWidget {
                 fit: BoxFit.fill)),
         child: SafeArea(
           child: Padding(
-            padding: const EdgeInsets.only(left: 8, right: 8),
+            padding: const EdgeInsets.symmetric(horizontal: 8),
             child:
             Column(crossAxisAlignment: CrossAxisAlignment.start, children: [
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  const Icon(Icons.arrow_back,size: 40),
+                   IconButton( onPressed: () {Navigator.pop(context);  }, icon: const Icon(Icons.arrow_back),),
                   Text(
                     "Home",
                     style: Theme.of(context).textTheme.titleLarge,
@@ -54,19 +54,21 @@ class ResultsScreen extends StatelessWidget {
                 correct: 8,
               ),
               Gap(context.screenHeight*0.02),
-              SizedBox(
-                height: context.screenHeight*0.8,
-                child:
-                GridView.builder(
-                  gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-                    crossAxisCount: 3,
-                    childAspectRatio: 0.75,
+              Expanded(
+                child: SizedBox(
+                  height: context.screenHeight*0.8,
+                  child:
+                  GridView.builder(
+                    gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+                      crossAxisCount: 3,
+                      childAspectRatio: 0.75,
+                    ),
+                    itemCount: 30,
+                    itemBuilder: (BuildContext context, int index) {
+                      return ResultSingleCard
+                        (isCorrect: false);
+                    },
                   ),
-                  itemCount: 30,
-                  itemBuilder: (BuildContext context, int index) {
-                    return ResultSingleCard
-                      (isCorrect: false);
-                  },
                 ),
               )
 

@@ -3,7 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:xpuzzle/screens/landing_screen.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:xpuzzle/screens/quiz_compeltion_screen.dart';
+import 'package:xpuzzle/screens/quiz_completion_screen.dart';
 import 'package:xpuzzle/theme/app_theme.dart';
 
 void main() {
@@ -25,7 +25,7 @@ class MyApp extends StatelessWidget {
       debugShowCheckedModeBanner: false,
       title: 'Flutter Demo',
        theme: theme,
-      home:  QuizCompeltionScreen(),
+      home:  LandingScreen(),
     );
   }
 }

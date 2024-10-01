@@ -7,4 +7,10 @@ extension ScreenSize on BuildContext {
 
 
 
+//Strings
+String quizCompletedLabel="Congratulation you've Completed this Quiz!";
+String playMoreQuizLabel="Let's keep testing your knowledge by playing more quizzes!";
+
+
+
 
