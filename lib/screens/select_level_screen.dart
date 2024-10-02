@@ -6,14 +6,14 @@ import 'package:xpuzzle/screens/widgets/buttons/buttons.dart';
 import 'package:xpuzzle/screens/widgets/custom_fields/dropdown_field_widget.dart';
 import 'package:xpuzzle/utils/constants.dart';
 
-class LandingScreen extends StatefulWidget {
-  const LandingScreen({super.key});
+class SelectLevelScreen extends StatefulWidget {
+  const SelectLevelScreen({super.key});
 
   @override
-  State<LandingScreen> createState() => _LandingScreenState();
+  State<SelectLevelScreen> createState() => _SelectLevelScreenState();
 }
 
-class _LandingScreenState extends State<LandingScreen> {
+class _SelectLevelScreenState extends State<SelectLevelScreen> {
   @override
   Widget build(BuildContext context) {
     return BackgroundImageContainer(

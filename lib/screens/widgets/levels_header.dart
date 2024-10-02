@@ -10,7 +10,7 @@ class LevelsHeader extends StatelessWidget{
   final Styles style;
   final int totalQuestions;
   final int correct;
-  LevelsHeader({super.key, required this.level,required this.totalQuestions, required this.style, required this.correct});
+  const LevelsHeader({super.key, required this.level,required this.totalQuestions, required this.style, required this.correct});
   @override
   Widget build(BuildContext context) {
     return Stack(

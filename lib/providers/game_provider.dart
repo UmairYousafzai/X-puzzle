@@ -5,6 +5,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 class GameState {
   final String firstNumber;
   final String secondNumber;
+   String selectedNumber;
   final int timerSeconds;
   final int minutes;
   final int seconds;
@@ -13,6 +14,7 @@ class GameState {
   GameState({
     this.firstNumber = '',
     this.secondNumber = '',
+    this.selectedNumber = '',
     this.timerSeconds = 0,
     this.minutes = 5,
     this.seconds = 0,
@@ -22,6 +24,7 @@ class GameState {
   GameState copyWith({
     String? firstNumber,
     String? secondNumber,
+    String? selectedNumber,
     int? timerSeconds,
     int? minutes,
     int? seconds,
@@ -30,6 +33,7 @@ class GameState {
     return GameState(
       firstNumber: firstNumber ?? this.firstNumber,
       secondNumber: secondNumber ?? this.secondNumber,
+      selectedNumber: selectedNumber ?? this.selectedNumber,
       timerSeconds: timerSeconds ?? this.timerSeconds,
       minutes: minutes ?? this.minutes,
       seconds: seconds ?? this.seconds,
@@ -49,6 +53,9 @@ class GameNotifier extends StateNotifier<GameState> {
 
   void updateSecondNumber(String value) {
     state = state.copyWith(secondNumber: value);
+  }
+  void updateSelectedNumber(String value) {
+    state = state.copyWith(selectedNumber: value);
   }
 
   void updateTimer(int seconds) {

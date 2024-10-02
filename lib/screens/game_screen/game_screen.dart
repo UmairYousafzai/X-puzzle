@@ -4,6 +4,7 @@ import 'package:gap/gap.dart';
 import 'package:xpuzzle/screens/game_screen/game_custom_progress_bar.dart';
 import 'package:xpuzzle/screens/quiz_completion_screen.dart';
 import 'package:xpuzzle/screens/widgets/buttons/buttons.dart';
+import 'package:xpuzzle/screens/widgets/custom_app_bar.dart';
 import 'package:xpuzzle/theme/colors.dart';
 import 'package:xpuzzle/utils/constants.dart';
 
@@ -22,35 +23,23 @@ class GameScreen extends ConsumerWidget {
     final levelList = ref.read(levelListProvider);
     final gameState = ref.watch(gameProvider);
     final gameNotifier = ref.read(gameProvider.notifier);
-
     return Scaffold(
-      body: SafeArea(
-          child: Padding(
-        padding: const EdgeInsets.all(10),
-        child: SingleChildScrollView(
+        appBar: customAppBar(
+            context,
+            level ?? 'Select Level',
+            Image.asset(
+              "assets/icons/drawer_icon.png",
+              width: 50,
+              height: 40,
+            ),
+            () {}),
+        body: Padding(
+          padding: EdgeInsets.all(
+              MediaQuery.of(context).size.height > smallDeviceThreshold
+                  ? 10
+                  : 5),
           child: Column(
             children: [
-              Row(
-                children: [
-                  Image.asset(
-                    "assets/icons/drawer_icon.png",
-                    width: 50,
-                    height: 40,
-                  ),
-                  Expanded(
-                    child: Center(
-                      child: Text(
-                        level ?? 'Select Level',
-                        style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                              color: const Color(0xFF1E2D7C),
-                              fontWeight: FontWeight.w700,
-                            ),
-                      ),
-                    ),
-                  ),
-                  const Gap(50),
-                ],
-              ),
               Gap(context.screenHeight * 0.02),
               Row(
                 children: [
@@ -59,32 +48,44 @@ class GameScreen extends ConsumerWidget {
                         '${gameState.minutes.toString().padLeft(2, '0')}:${gameState.seconds.toString().padLeft(2, '0')}',
                   ),
                   const Spacer(),
-
-                  gameState.isTimerRunning?
-                  gameStartResetButton(() {                                     // Button to pause timer
-                    gameNotifier.pauseTimer();
-                  }, 'assets/icons/pause-button.png', MColors().colorPrimary):
-                  gameStartResetButton(() {
-                    gameNotifier.playTimer();                                  // Button to start timer
-                  }, 'assets/images/play.png', MColors().colorPrimary)
-
-                  ,
-                  const Gap(20),
-                  gameStartResetButton(() {
-                    gameNotifier.resetTimer();                                  // Button to reset timer
+                  gameState.isTimerRunning
+                      ? gameStartResetButton(context,() {
+                          // Button to pause timer
+                          gameNotifier.pauseTimer();
+                        }, 'assets/icons/pause-button.png',
+                          MColors().colorPrimary)
+                      : gameStartResetButton(context,() {
+                          gameNotifier.playTimer(); // Button to start timer
+                        }, 'assets/images/play.png', MColors().colorPrimary),
+                  Gap(MediaQuery.of(context).size.height > smallDeviceThreshold
+                      ? 20
+                      : 10),
+                  gameStartResetButton(context,() {
+                    gameNotifier.resetTimer(); // Button to reset timer
                   }, 'assets/images/reset.png',
                       MColors().colorSecondaryBlueDark),
                 ],
               ),
-              Gap(context.screenHeight * 0.04),
+              Gap(
+                  MediaQuery.of(context).size.height > smallDeviceThreshold
+                      ? context.screenHeight * 0.04
+                      : context.screenHeight * 0.02
+                  ),
               const CustomProgressBar(
                 progress: 0.7,
               ),
-              const Gap(20),
+               Gap(
+                  MediaQuery.of(context).size.height > smallDeviceThreshold
+                      ? 20
+                      : 10),
               const GameWidget(),
-              const Gap(10),
+               Gap(MediaQuery.of(context).size.height > smallDeviceThreshold
+                  ? 10
+                  : 5),
               const GameNumberButtonsWidget(),
-              const Gap(10),
+               Gap(MediaQuery.of(context).size.height > smallDeviceThreshold
+                  ? 10
+                  : 5),
               Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
@@ -97,7 +98,9 @@ class GameScreen extends ConsumerWidget {
                       Navigator.pop(context);
                     }
                   }, false), // Back button
-                  const Gap(50),
+                   Gap(MediaQuery.of(context).size.height > smallDeviceThreshold
+                      ? 50
+                      : 25),
                   gameBacknNextButton(context, () {
                     int currentIndex = levelList.indexOf(level!);
                     if (currentIndex < levelList.length - 1) {
@@ -107,7 +110,7 @@ class GameScreen extends ConsumerWidget {
                       Navigator.push(
                           context,
                           MaterialPageRoute(
-                              builder: (ctx) => QuizCompeltionScreen()));
+                              builder: (ctx) => QuizCompletionScreen()));
                     }
                   }, true), // Next Button
                 ],
@@ -115,8 +118,6 @@ class GameScreen extends ConsumerWidget {
               Gap(context.screenHeight * 0.01)
             ],
           ),
-        ),
-      )),
-    );
+        ));
   }
 }

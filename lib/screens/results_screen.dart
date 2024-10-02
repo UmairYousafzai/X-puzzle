@@ -6,15 +6,17 @@ import 'package:xpuzzle/screens/widgets/result_single_card.dart';
 import 'package:xpuzzle/utils/constants.dart';
 
 class ResultsScreen extends StatelessWidget {
+  const ResultsScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
-        decoration: BoxDecoration(
+        decoration: const BoxDecoration(
             image: DecorationImage(
-                image: new AssetImage("assets/images/background_1.jpeg"),
+                image: AssetImage("assets/images/background_1.jpeg"),
                 fit: BoxFit.fill)),
         child: SafeArea(
           child: Padding(
