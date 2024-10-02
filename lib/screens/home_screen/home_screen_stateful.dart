@@ -1,8 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-
+import 'package:xpuzzle/screens/game_screen/game_screen.dart';
 import '../../providers/home_screen_providers.dart';
-import 'home_screen2.dart';
 import 'home_screen_card_design.dart';
 
 class HomeScreenConsumerWidget extends ConsumerStatefulWidget {
@@ -33,7 +32,7 @@ class HomeScreenConsumerState extends ConsumerState<HomeScreenConsumerWidget> {
                   Navigator.push(
                       context,
                       MaterialPageRoute(
-                          builder: (ctx) => const HomeScreen2()));
+                          builder: (ctx) => const GameScreen()));
                 },
                 child: StyleCard(styleItemModel: cards[index])),
           ],

@@ -13,7 +13,7 @@ class StyleCard extends StatelessWidget {
   Widget build(BuildContext context) {
     return Container(
       width: context.screenWidth*0.43,
-      height: context.screenHeight*0.3,
+      height: context.screenHeight*0.28,
       margin: const EdgeInsets.all(6),
       padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
@@ -34,9 +34,9 @@ class StyleCard extends StatelessWidget {
           Text(styleItemModel.styleName, style: Theme.of(context).textTheme.titleMedium?.copyWith(
            color: MColors().colorSecondaryBlueLight
           )),
-          SizedBox(height: 8),
+          const SizedBox(height: 8),
           Image.asset(styleItemModel.imageSrc),
-          SizedBox(height: 10),
+          const SizedBox(height: 10),
           Text(
             styleItemModel.product,
             style: Theme.of(context)

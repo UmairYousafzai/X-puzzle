@@ -4,7 +4,7 @@ import 'package:xpuzzle/theme/colors.dart';
 class CustomProgressBar extends StatelessWidget {
   final double progress; // Value between 0 and 1
 
-  const CustomProgressBar({Key? key, required this.progress}) : super(key: key);
+  const CustomProgressBar({super.key, required this.progress});
 
   @override
   Widget build(BuildContext context) {
