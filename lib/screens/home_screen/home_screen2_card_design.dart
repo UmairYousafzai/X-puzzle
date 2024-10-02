@@ -14,7 +14,6 @@ class HomeScreen2CardDesign extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      margin: const EdgeInsets.all(6),
       padding: const EdgeInsets.all(15),
       decoration: BoxDecoration(
         color: Colors.white,
@@ -23,7 +22,7 @@ class HomeScreen2CardDesign extends StatelessWidget {
           BoxShadow(
             color: Colors.grey.withOpacity(0.5),
             spreadRadius: 1,
-            blurRadius: 5,
+            blurRadius: 2,
             offset: const Offset(0, 3),
           ),
         ],
@@ -37,40 +36,40 @@ class HomeScreen2CardDesign extends StatelessWidget {
             height: 60, // Adjust size as needed
             fit: BoxFit.cover,
           ),
-          const SizedBox(width: 10), // Space between image and text
 
+          const Gap(5),
           // Column for text information
-          Expanded(
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: <Widget>[
-                Text(
-                  item.styleName,
-                  style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                    color: MColors().colorSecondaryOrangeDark,
+          Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              Text(
+                item.styleName,
+                style: Theme.of(context).textTheme.titleMedium?.copyWith(
+                  color: MColors().colorSecondaryOrangeDark,
+                ),
+              ),
+              const SizedBox(height: 4),
+              Row(
+                children: [
+                  Text(
+                    item.product,
+                    style: Theme.of(context).textTheme.bodySmall!.apply(color: Colors.black87),
                   ),
-                ),
-                const SizedBox(height: 4),
-                Row(
-                  children: [
-                    Text(
-                      item.product,
-                      style: Theme.of(context).textTheme.bodySmall!.apply(color: Colors.black87),
-                    ),
-                    const Gap(10),
-                    Text(
-                      item.sum,
-                      style: Theme.of(context).textTheme.bodySmall!.apply(color: Colors.black87),
-                    ),
-                    startButton(() {
+                  const Gap(5),
+                  Text(
+                    item.sum,
+                    style: Theme.of(context).textTheme.bodySmall!.apply(color: Colors.black87),
+                  ),
+                  const Gap(10),
 
-                    }, context)
-                  ],
-                ),
+                  startButton(() {
 
-              ],
-            ),
+                  }, context)
+                ],
+              ),
+
+            ],
           ),
         ],
       ),
