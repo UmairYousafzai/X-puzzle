@@ -1,4 +1,3 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
 class GameTimeWidget extends StatelessWidget {
@@ -7,7 +6,7 @@ final String time;
   @override
   Widget build(BuildContext context) {
     return Container(
-      padding: EdgeInsets.symmetric(vertical:10,horizontal: 35 ),
+      padding: const EdgeInsets.symmetric(vertical:10,horizontal: 35 ),
       decoration: BoxDecoration(
         color: const Color(0xFFFFFBF3), // #FFFBF3
         border: Border.all(
@@ -16,7 +15,7 @@ final String time;
         ),
         borderRadius: BorderRadius.circular(30),
       ),
-      child: Text(time,style: TextStyle(fontSize: 14, color: Colors.black),
+      child: Text(time,style: const TextStyle(fontSize: 14, color: Colors.black),
       ),
     );
   }

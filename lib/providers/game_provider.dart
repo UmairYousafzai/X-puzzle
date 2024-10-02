@@ -55,11 +55,10 @@ class GameNotifier extends StateNotifier<GameState> {
     state = state.copyWith(timerSeconds: seconds);
   }
 
-  // Play Timer (Starts the timer if not already running)
   void playTimer() {
-    if (state.isTimerRunning) return; // Prevent multiple timers
+    if (state.isTimerRunning) return;
     state = state.copyWith(isTimerRunning: true);
-    _timer = Timer.periodic(Duration(seconds: 1), (timer) {
+    _timer = Timer.periodic(const Duration(seconds: 1), (timer) {
       if (state.minutes > 0 || state.seconds > 0) {
         _tick(); // Update the timer every second
       } else {
@@ -83,17 +82,14 @@ class GameNotifier extends StateNotifier<GameState> {
       newSeconds = 0;
       _timer?.cancel();
     }
-
     state = state.copyWith(minutes: newMinutes, seconds: newSeconds);
   }
 
-  // Pause Timer
   void pauseTimer() {
     _timer?.cancel();
     state = state.copyWith(isTimerRunning: false);
   }
 
-  // Reset Timer to 5 minutes
   void resetTimer() {
     _timer?.cancel();
     state = state.copyWith(minutes: 5, seconds: 0, isTimerRunning: false);

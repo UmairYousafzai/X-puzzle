@@ -26,9 +26,7 @@ Widget gameNumberTextField({
         ),
       ),
       child: TextField(
-    //     onTapOutside: (event) {
-    // FocusManager.instance.primaryFocus?.unfocus();
-    // },
+
         enableInteractiveSelection: false,
         cursorColor: MColors().colorSecondaryBlueDark,
 
