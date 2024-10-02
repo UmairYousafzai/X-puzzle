@@ -4,7 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../../../providers/level_provider.dart';
 
 class DropdownFieldWidget extends ConsumerWidget {
-  const DropdownFieldWidget({Key? key}) : super(key: key);
+  const DropdownFieldWidget({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -26,7 +26,7 @@ class DropdownFieldWidget extends ConsumerWidget {
       }).toList(),
       dropdownColor: const Color(0xFFFFFBF3),
       decoration: InputDecoration(
-        fillColor: Color(0xFFFFFBF3),
+        fillColor: const Color(0xFFFFFBF3),
         filled: true,
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(15),

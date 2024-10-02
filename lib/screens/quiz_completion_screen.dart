@@ -7,7 +7,9 @@ import 'package:xpuzzle/screens/widgets/levels_header.dart';
 import '../models/remote/style_card_model.dart';
 import '../utils/constants.dart';
 
-class QuizCompeltionScreen extends StatelessWidget {
+class QuizCompletionScreen extends StatelessWidget {
+  const QuizCompletionScreen({super.key});
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
@@ -29,7 +31,7 @@ class QuizCompeltionScreen extends StatelessWidget {
                               onPressed: () {
                                 Navigator.pop(context);
                               },
-                              icon: Icon(Icons.close)),
+                              icon: const Icon(Icons.close)),
                         ),
                         Expanded(
                           child: Center(
@@ -43,7 +45,7 @@ class QuizCompeltionScreen extends StatelessWidget {
                             onPressed: () {
                               Navigator.pop(context);
                             },
-                            icon: Icon(Icons.close)),
+                            icon: const Icon(Icons.close)),
                         //SvgPicture.asset("assets/images/svgs/cancel_icon.svg"),
                       ],
                     ),
@@ -63,7 +65,7 @@ class QuizCompeltionScreen extends StatelessWidget {
                 height: context.screenHeight * 0.8,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
-                    image: DecorationImage(
+                    image: const DecorationImage(
                         image: AssetImage(
                             "assets/images/background_congratulations.png"),
                         fit: BoxFit.cover)),

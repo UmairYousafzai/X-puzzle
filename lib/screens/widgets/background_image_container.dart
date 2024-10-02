@@ -1,22 +1,26 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 
-class BackgroundImageContainer extends StatelessWidget {
-  BackgroundImageContainer({super.key, required this.child});
+class BackgroundImageContainer extends StatefulWidget {
+  const BackgroundImageContainer({super.key, required this.child});
 
-  Widget child;
+  final Widget child;
 
+  @override
+  State<BackgroundImageContainer> createState() => _BackgroundImageContainerState();
+}
+
+class _BackgroundImageContainerState extends State<BackgroundImageContainer> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       body:  Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
-          decoration: BoxDecoration(
+          decoration: const BoxDecoration(
               image: DecorationImage(
-                  image: new AssetImage("assets/images/background_1.jpeg"),
+                  image: AssetImage("assets/images/background_1.jpeg"),
                   fit: BoxFit.fill)),
-          child: SafeArea(child: child)),
+          child: SafeArea(child: widget.child)),
     );
   }
 }

@@ -5,6 +5,10 @@ extension ScreenSize on BuildContext {
   double get screenHeight => MediaQuery.of(this).size.height;
 }
 
+//UI
+int smallDeviceThreshold = 700;
+
+
 
 
 //Strings

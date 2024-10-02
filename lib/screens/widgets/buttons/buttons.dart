@@ -75,11 +75,14 @@ primaryButton(VoidCallback onPressed, String text, Color textColor,BuildContext 
 }
 
 gameStartResetButton(
+    BuildContext context,
     VoidCallback onPressed, String image, Color backgroundColor) {
   return GestureDetector(
     onTap: onPressed,
     child: Container(
-      padding: const EdgeInsets.all(12),
+      padding:  EdgeInsets.all(MediaQuery.of(context).size.height > smallDeviceThreshold
+          ? 12
+          : 6),
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(12),
         color: backgroundColor,
@@ -98,8 +101,10 @@ gameNumberButton(VoidCallback onPressed, Color backgroundColor, String text,
   return InkWell(
     onTap: onPressed,
     child: Container(
-      height: context.screenHeight * 0.06,
-      width: context.screenWidth * 0.12,
+      height:MediaQuery.of(context).size.height > smallDeviceThreshold
+          ? context.screenHeight * 0.06
+          :  context.screenHeight * 0.01,
+      width: context.screenWidth * 0.1,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(6),
         color: backgroundColor,
@@ -113,7 +118,9 @@ gameNumberButton(VoidCallback onPressed, Color backgroundColor, String text,
           text,
           style: Theme.of(context).textTheme.titleSmall!.copyWith(
               color: black ? Colors.black : MColors().colorSecondaryBlueDark,
-              fontSize: fontSize),
+              fontSize: MediaQuery.of(context).size.height > smallDeviceThreshold
+                  ?fontSize
+                  :  fontSize-2),
         ),
       ),
     ),
@@ -132,7 +139,9 @@ gameDoneButton(VoidCallback onPressed, BuildContext context) {
       borderRadius: BorderRadius.circular(30),
     ),
     child: Padding(
-      padding: EdgeInsets.symmetric(horizontal: 60, vertical: 12),
+      padding: EdgeInsets.symmetric(horizontal: 60, vertical: MediaQuery.of(context).size.height > smallDeviceThreshold
+          ? 12
+          :  6),
       child: Text(
         'Mark Done',
         style: Theme.of(context)
@@ -149,7 +158,9 @@ gameBacknNextButton(BuildContext context, VoidCallback onPressed, bool isNext) {
     onTap: onPressed,
     child: Container(
       padding: EdgeInsets.symmetric(
-        vertical: 7,
+        vertical: MediaQuery.of(context).size.height > smallDeviceThreshold
+            ? 7
+            : 3,
         horizontal: context.screenWidth * 0.04,
       ),
       decoration: BoxDecoration(

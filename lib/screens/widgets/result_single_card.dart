@@ -8,7 +8,7 @@ import 'package:xpuzzle/utils/constants.dart';
 
 class ResultSingleCard extends StatelessWidget{
   final bool isCorrect;
-  ResultSingleCard({super.key, required this.isCorrect});
+  const ResultSingleCard({super.key, required this.isCorrect});
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -74,7 +74,7 @@ class ResultSingleCard extends StatelessWidget{
                               ),),
                             ),
                           ),
-                          Gap(10),
+                          const Gap(10),
                           Container(
                             decoration: BoxDecoration(
                                 borderRadius: BorderRadius.circular(7),
@@ -91,7 +91,7 @@ class ResultSingleCard extends StatelessWidget{
 
                         ],
                       ),
-                      Row(
+                      const Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
                           Text("10",style: TextStyle(fontWeight: FontWeight.bold),)
