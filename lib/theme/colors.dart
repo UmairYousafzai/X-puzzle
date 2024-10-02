@@ -6,6 +6,7 @@ class MColors {
   var colorSecondaryBlueLight = const Color.fromRGBO(56, 232, 243, 1);
   var colorSecondaryBlueLighter = const Color.fromRGBO(182, 239, 245, 1);
   var colorSecondaryOrangeDark = const Color(0xFFF78C0C);
+  var beigeColor=const Color(0xFFFFFBF3);
 
   var white = Colors.white;
   var grey = Colors.grey;

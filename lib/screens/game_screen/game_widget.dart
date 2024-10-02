@@ -1,21 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
-import 'package:xpuzzle/providers/game_number_provider.dart';
 import 'package:xpuzzle/screens/widgets/buttons/buttons.dart';
+import 'package:xpuzzle/screens/widgets/custom_fields/game_number_field_widget.dart';
 import 'package:xpuzzle/theme/colors.dart';
 import 'package:xpuzzle/utils/constants.dart';
 
+import '../../providers/game_provider.dart';
+
+// Providers for focus nodes
+final firstNumberFocusProvider = Provider((ref) => FocusNode());
+final secondNumberFocusProvider = Provider((ref) => FocusNode());
+
 class GameWidget extends ConsumerWidget {
-  const GameWidget({super.key});
+  const GameWidget({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
-    final selectedNumber = ref.watch(gameNumberProvider);
+    final gameState = ref.watch(gameProvider);
+    final gameNotifier = ref.read(gameProvider.notifier);
+
+    // Get focus nodes from providers
+    final firstNumberFocus = ref.watch(firstNumberFocusProvider);
+    final secondNumberFocus = ref.watch(secondNumberFocusProvider);
+
 
     return Container(
-      width:context.screenWidth * 0.9,
-      height: context.screenHeight  * 0.44,
+      width: context.screenWidth * 0.9,
+      height: context.screenHeight * 0.44,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(25),
         color: MColors().colorPrimary,
@@ -23,18 +35,15 @@ class GameWidget extends ConsumerWidget {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          // Cross image positioned relative to the screen size
           FractionallySizedBox(
-            widthFactor: 0.5, // 50% of the container width
+            widthFactor: 0.5,
             child: Image.asset(
               'assets/images/purple_cross.png',
               fit: BoxFit.contain,
             ),
           ),
-
-          // Main content (texts, buttons, etc.)
           Positioned(
-            top: context.screenHeight * 0.03, // Adjust top spacing proportionally
+            top: context.screenHeight * 0.03,
             left: 0,
             right: 0,
             child: Padding(
@@ -68,10 +77,21 @@ class GameWidget extends ConsumerWidget {
                   Row(
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
-                      gameNumberButton(() {}, MColors().colorSecondaryBlueDark.withOpacity(0.3),
-                          selectedNumber ?? '1', context, 24, false),
-                      gameNumberButton(() {}, MColors().colorSecondaryBlueDark.withOpacity(0.3),
-                          '', context, 24, false),
+                      gameNumberTextField(
+                        value: gameState.firstNumber,
+                        context: context,
+                        fontSize: 22,
+                        onChanged: gameNotifier.updateFirstNumber,
+                        focusNode: firstNumberFocus,
+                      ),
+                      const Gap(10),
+                      gameNumberTextField(
+                        value: gameState.secondNumber,
+                        context: context,
+                        fontSize: 22,
+                        onChanged: gameNotifier.updateSecondNumber,
+                        focusNode: secondNumberFocus,
+                      ),
                     ],
                   ),
                   const Gap(5),
@@ -82,8 +102,13 @@ class GameWidget extends ConsumerWidget {
                         fontWeight: FontWeight.w700,
                         color: Colors.black),
                   ),
-                  Gap(context.screenHeight  * 0.05),
-                  gameDoneButton(() {}, context),
+                  Gap(context.screenHeight * 0.05),
+                  gameDoneButton(() {
+                    // Handle game completion logic here
+                    print('Game completed with numbers: ${gameState.firstNumber} and ${gameState.secondNumber}');
+                    gameNotifier.resetGame();
+                  }, context),
+
                 ],
               ),
             ),

@@ -1,12 +1,9 @@
-
-
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:xpuzzle/models/remote/StylesModel.dart';
-import 'package:flutter/material.dart';
+
 import '../models/remote/style_card_model.dart';
 
-final homeScreenStylesProvider= Provider<List<StyleCardItemModel>>((ref) {
-  return  [
+final homeScreenStylesProvider = Provider<List<StyleCardItemModel>>((ref) {
+  return [
     StyleCardItemModel(
         style: Styles.style1,
         product: "Positive product",
@@ -34,3 +31,23 @@ final homeScreenStylesProvider= Provider<List<StyleCardItemModel>>((ref) {
   ];
 });
 
+
+
+enum ViewType { list, grid }
+
+class HomeScreenViewNotifier extends StateNotifier<ViewType> {
+  HomeScreenViewNotifier() : super(ViewType.list);
+
+  void toggleView() {
+    if (state == ViewType.list) {
+      state = ViewType.grid;
+    } else {
+      state = ViewType.list;
+    }
+  }
+}
+
+final homeViewTypeProvider =
+    StateNotifierProvider<HomeScreenViewNotifier, ViewType>(
+  (ref) => HomeScreenViewNotifier(),
+);

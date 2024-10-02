@@ -3,7 +3,7 @@ import 'package:gap/gap.dart';
 import 'package:xpuzzle/screens/home_screen/home_screen.dart';
 import 'package:xpuzzle/screens/widgets/background_image_container.dart';
 import 'package:xpuzzle/screens/widgets/buttons/buttons.dart';
-import 'package:xpuzzle/screens/widgets/dropdown_field_widget.dart';
+import 'package:xpuzzle/screens/widgets/custom_fields/dropdown_field_widget.dart';
 import 'package:xpuzzle/utils/constants.dart';
 
 class LandingScreen extends StatefulWidget {
@@ -38,7 +38,7 @@ class _LandingScreenState extends State<LandingScreen> {
           primaryButton(() {
             Navigator.push(context,
                 MaterialPageRoute(builder: (ctx) => const HomeScreen()));
-          }, 'Continue',context)
+          }, 'Continue',Colors.black,context)
         ],
       ),
     ));

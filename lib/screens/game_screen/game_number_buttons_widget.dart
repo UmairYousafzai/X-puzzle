@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:gap/gap.dart';
 import 'package:xpuzzle/providers/game_number_provider.dart';
 import 'package:xpuzzle/screens/widgets/buttons/buttons.dart';
 import 'package:xpuzzle/utils/constants.dart';
@@ -33,9 +32,9 @@ class GameNumberButtonsWidget extends ConsumerWidget {
           children: numbers.map<Widget>((number) {
             return gameNumberButton(
                   () {
-                    ref.read(gameNumberProvider.notifier).state=number;
+                  //  ref.read(gameNumberProvider.notifier).state=number;
                   }, // Define the onPressed callback for each button
-             selecedtNumber==number? MColors().colorPrimary: MColors().white,
+             selecedtNumber==number? MColors().colorSecondaryBlueDark: MColors().white,
               number,
               context,
               15,

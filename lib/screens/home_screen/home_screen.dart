@@ -1,15 +1,17 @@
 import 'package:flutter/material.dart';
-import 'package:gap/gap.dart';
-import '../widgets/buttons/buttons.dart';
-import 'home_screen2.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:xpuzzle/providers/home_screen_providers.dart';
+
+import 'home_screen2_stateful.dart';
 import 'home_screen_stateful.dart';
 
-
-class HomeScreen extends StatelessWidget {
+class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
+    final viewType = ref.watch(homeViewTypeProvider);
+    final viewNotifier = ref.read(homeViewTypeProvider.notifier);
     return Scaffold(
       body: Container(
         width: MediaQuery.of(context).size.width,
@@ -60,12 +62,27 @@ class HomeScreen extends StatelessWidget {
                       Text(
                         "Hii, Name",
                         style: Theme.of(context).textTheme.titleSmall?.copyWith(
-                          fontSize: 20,
-                        ),
+                              fontSize: 20,
+                            ),
                       ),
-                      Text(
-                        "Let's Start",
-                        style: Theme.of(context).textTheme.titleLarge!.copyWith(fontWeight: FontWeight.w700),
+                      Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                        children: [
+                          Text(
+                            "Let's Start",
+                            style: Theme.of(context)
+                                .textTheme
+                                .titleLarge!
+                                .copyWith(fontWeight: FontWeight.w700),
+                          ),
+                          IconButton(
+                              onPressed: () {
+                                viewNotifier.toggleView();
+                              },
+                              icon: Icon(viewType == ViewType.list
+                                  ? Icons.grid_view
+                                  : Icons.list))
+                        ],
                       ),
                       const Text(
                         "Please select the session you'd like to begin",
@@ -77,14 +94,13 @@ class HomeScreen extends StatelessWidget {
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.03,
                 ),
-                const Expanded(child: HomeScreenConsumerWidget()),
+                 viewType==ViewType.list?
+                 const Expanded(child: HomeScreenConsumerWidget()) : const Expanded(child: HomeScreen2ConsumerWidget()),
               ],
             ),
           ),
         ),
       ),
-
     );
   }
 }
-

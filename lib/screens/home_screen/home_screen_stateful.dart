@@ -1,9 +1,7 @@
-import 'package:flutter_riverpod/flutter_riverpod.dart';
-
 import 'package:flutter/material.dart';
-
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:xpuzzle/screens/game_screen/game_screen.dart';
 import '../../providers/home_screen_providers.dart';
-import 'home_screen2.dart';
 import 'home_screen_card_design.dart';
 
 class HomeScreenConsumerWidget extends ConsumerStatefulWidget {
@@ -16,36 +14,30 @@ class HomeScreenConsumerWidget extends ConsumerStatefulWidget {
 }
 
 class HomeScreenConsumerState extends ConsumerState<HomeScreenConsumerWidget> {
-
   @override
   Widget build(BuildContext context) {
     final cards = ref.watch(homeScreenStylesProvider);
-    return SizedBox(
-      width: MediaQuery
-          .of(context)
-          .size
-          .width,
-      height: MediaQuery
-          .of(context)
-          .size
-          .height * 0.715,
-      child: GridView.builder(
-        gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-          crossAxisCount: 2,
-          childAspectRatio: 0.75,
-        ),
-        itemCount: cards.length,
-        itemBuilder: (BuildContext context, int index) {
-          return Column(
-            children: [
-              GestureDetector(
-                onTap: (){  Navigator.push(context,
-                    MaterialPageRoute(builder: (ctx) => const HomeScreen2()));},
-                  child: StyleCard(styleItemModel: cards[index])),
-            ],
-          );
-        },
+    return GridView.builder(
+      gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+        crossAxisCount: 2,
+        childAspectRatio:0.7,
+
       ),
+      itemCount: cards.length,
+      itemBuilder: (BuildContext context, int index) {
+        return Column(
+          children: [
+            GestureDetector(
+                onTap: () {
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (ctx) => const GameScreen()));
+                },
+                child: StyleCard(styleItemModel: cards[index])),
+          ],
+        );
+      },
     );
   }
 }

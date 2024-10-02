@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
-import '../../providers/level_provider.dart';
+import '../../../providers/level_provider.dart';
 
 class DropdownFieldWidget extends ConsumerWidget {
   const DropdownFieldWidget({Key? key}) : super(key: key);
