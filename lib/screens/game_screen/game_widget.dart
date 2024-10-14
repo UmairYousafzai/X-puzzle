@@ -20,7 +20,6 @@ class GameWidget extends ConsumerWidget {
     final gameState = ref.watch(gameProvider);
     final gameNotifier = ref.read(gameProvider.notifier);
 
-    // Get focus nodes from providers
     final firstNumberFocus = ref.watch(firstNumberFocusProvider);
     final secondNumberFocus = ref.watch(secondNumberFocusProvider);
 

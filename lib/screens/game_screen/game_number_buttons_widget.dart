@@ -36,6 +36,7 @@ class GameNumberButtonsWidget extends ConsumerWidget {
             return gameNumberButton(
               () {
                 ref.read(gameProvider.notifier).updateSelectedNumber(number);
+
               },
               selectedNumber == number
                   ? MColors().colorSecondaryBlueDark

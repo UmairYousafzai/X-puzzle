@@ -4,7 +4,6 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:xpuzzle/screens/select_level_screen.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:xpuzzle/screens/quiz_completion_screen.dart';
 import 'package:xpuzzle/theme/app_theme.dart';
 
 void main() {
