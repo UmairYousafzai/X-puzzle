@@ -102,6 +102,7 @@ class HomeScreenConsumerState extends ConsumerState<HomeScreenConsumerWidget> {
     final getQuestionUseCase = ref.watch(getQuestionUseCaseProvider);
     var questionNotifier = ref.read(questionProvider.notifier);
     final navigator = Navigator.of(context);
+    final ctxt= context;
     final cards = ref.watch(homeScreenStylesProvider);
     return screenState["is_loading"]
         ? Center(
@@ -142,8 +143,9 @@ class HomeScreenConsumerState extends ConsumerState<HomeScreenConsumerWidget> {
                               await isNPAndNSQuestionUseCase.execute();
                         }
                         if (isQuestionsExist && questions.isEmpty) {
+                          screenStateNotifier.setLoading(false);
                           showErrorSnackBar(
-                              context, "This style already attempted.");
+                              ctxt, "This style already attempted.");
                         } else {
                           if (questions.isEmpty) {
                             await generateAndStoreQuestion(

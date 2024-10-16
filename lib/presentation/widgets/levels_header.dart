@@ -1,14 +1,11 @@
-import 'dart:ffi';
-
 import 'package:flutter/cupertino.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:xpuzzle/utils/constants.dart';
-
 import '../../data/models/remote/style_card_model.dart';
 
 class LevelsHeader extends StatelessWidget{
   final String level;
-  final Styles style;
+  final String style;
   final int totalQuestions;
   final int correct;
   const LevelsHeader({super.key, required this.level,required this.totalQuestions, required this.style, required this.correct});
@@ -26,7 +23,7 @@ class LevelsHeader extends StatelessWidget{
             children: [
               Text(level),
               Text("$totalQuestions/$correct",style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
-              Text(style.name)
+              Text(style)
             ],
 
           ),

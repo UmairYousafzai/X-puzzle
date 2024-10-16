@@ -42,10 +42,10 @@ class QuestionProviderNotifier extends StateNotifier<QuestionState> {
       bool isNPAndPS = false,
       bool isNPAndNS = false}) async {
     var newQuestions = await getQuestionsUseCase.execute(
-        isPPAndPS: true,
-        isPPAndNS: state.isPPAndNS,
-        isNPAndPS: state.isNPAndPS,
-        isNPAndNS: state.isNPAndNS,
+        isPPAndPS: isPPAndPS,
+        isPPAndNS: isPPAndNS,
+        isNPAndPS: isNPAndPS,
+        isNPAndNS: isNPAndNS,
         isComplete: true);
 
     state = state.copyWith(

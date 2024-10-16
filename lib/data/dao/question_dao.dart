@@ -25,8 +25,8 @@ class QuestionDao {
           whereArgs: [
             isPPAndPS ? 1 : 0,
             isPPAndNS ? 1 : 0,
-            isNPAndPS ? 1 : 0,
             isNPAndNS ? 1 : 0,
+            isNPAndPS ? 1 : 0,
             isComplete ? 1 : 0
           ]);
       if (kDebugMode) {

@@ -1,18 +1,76 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:xpuzzle/presentation/providers/result_provider.dart';
 import 'package:xpuzzle/presentation/screens/results_screen.dart';
 
 import '../../data/models/remote/style_card_model.dart';
+import '../../domain/entities/question.dart';
 import '../../utils/constants.dart';
+import '../providers/level_provider.dart';
+import '../providers/question/question_provider.dart';
 import '../widgets/buttons/buttons.dart';
 import '../widgets/levels_header.dart';
 
-
-class QuizCompletionScreen extends StatelessWidget {
+class QuizCompletionScreen extends ConsumerStatefulWidget {
   const QuizCompletionScreen({super.key});
 
   @override
+  _QuizCompletionScreen createState() {
+    return _QuizCompletionScreen();
+  }
+}
+
+class _QuizCompletionScreen extends ConsumerState<QuizCompletionScreen> {
+  @override
+  void initState() {
+    super.initState();
+
+    Future(() {
+      fetchQuestions();
+    });
+  }
+
+  Future<void> fetchQuestions() async {
+    var resultState = ref.watch(resultProvider);
+
+    await ref.watch(questionProvider.notifier).fetchQuestion(
+        isPPAndPS: resultState["isPPAndPS"],
+        isPPAndNS: resultState["isPPAndNS"],
+        isNPAndPS: resultState["isNPAndPS"],
+        isNPAndNS: resultState["isNPAndNS"]);
+  }
+
+  int totalCorrectAns(List<Question> questions) {
+    int totalCorrect = 0;
+    for (Question question in questions) {
+      if (question.isCorrect) {
+        totalCorrect++;
+      }
+    }
+    return totalCorrect;
+  }
+
+  String getStyle(Map<String, dynamic> state) {
+    if (state["isPPAndPS"]) {
+      return "Style 1";
+    } else if (state["isPPAndNS"]) {
+      return "Style 2";
+    } else if (state["isNPAndPS"]) {
+      return "Style 3";
+    } else if (state["isNPAndNS"]) {
+      return "Style 4";
+    } else {
+      return "";
+    }
+  }
+
+  @override
   Widget build(BuildContext context) {
+    var resultScreen = ref.watch(resultProvider);
+    final level = ref.read(levelProvider);
+
+    final questions = ref.watch(questionProvider).questions;
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -54,12 +112,28 @@ class QuizCompletionScreen extends StatelessWidget {
                 ],
               ),
               Gap(context.screenHeight * 0.03),
-              const LevelsHeader(
-                level: "Level 1",
-                style: Styles.style2,
-                totalQuestions: 12,
-                correct: 8,
-              ),
+              level.when(data: (data) {
+                return LevelsHeader(
+                  level: data,
+                  style: getStyle(resultScreen),
+                  totalQuestions: questions.length,
+                  correct: totalCorrectAns(questions),
+                );
+              }, error: (err, stack) {
+                return LevelsHeader(
+                  level: "",
+                  style: getStyle(resultScreen),
+                  totalQuestions: questions.length,
+                  correct: totalCorrectAns(questions),
+                );
+              }, loading: () {
+                return LevelsHeader(
+                  level: "Loading....",
+                  style: getStyle(resultScreen),
+                  totalQuestions: questions.length,
+                  correct: totalCorrectAns(questions),
+                );
+              }),
               const Gap(10),
               Container(
                 width: context.screenWidth * 0.95,
@@ -113,10 +187,9 @@ class QuizCompletionScreen extends StatelessWidget {
                                 builder: (ctx) => const ResultsScreen()));
                       }, context),
                       const Gap(15),
-                      primaryButton(
-                          () {
-                            Navigator.pop(context);
-                          }, 'Explore More', Colors.white, context),
+                      primaryButton(() {
+                        Navigator.pop(context);
+                      }, 'Explore More', Colors.white, context),
                     ],
                   ),
                 ),
