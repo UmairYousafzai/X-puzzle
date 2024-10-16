@@ -2,13 +2,14 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:xpuzzle/domain/entities/question.dart';
 import 'package:xpuzzle/utils/constants.dart';
 
 import '../theme/colors.dart';
 
 class ResultSingleCard extends StatelessWidget{
-  final bool isCorrect;
-  const ResultSingleCard({super.key, required this.isCorrect});
+  final Question question;
+  const ResultSingleCard({super.key, required this.question});
   @override
   Widget build(BuildContext context) {
     return Padding(
@@ -30,8 +31,8 @@ class ResultSingleCard extends StatelessWidget{
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
-            Text(isCorrect?"Correct":"wrong",style:Theme.of(context).textTheme.titleMedium!.copyWith(
-                color: isCorrect?MColors().colorSecondaryBlueDark:MColors().colorSecondaryOrangeDark,
+            Text(question.isCorrect?"Correct":"wrong",style:Theme.of(context).textTheme.titleMedium!.copyWith(
+                color: question.isCorrect?MColors().colorSecondaryBlueDark:MColors().colorSecondaryOrangeDark,
                 fontWeight: FontWeight.bold
             )),
             Padding(
@@ -53,7 +54,7 @@ class ResultSingleCard extends StatelessWidget{
                                   color: MColors().colorSecondaryOrangeDark,
                                   fontWeight: FontWeight.bold
                               )),
-                              Text("10",style: TextStyle(fontWeight: FontWeight.bold),)
+                              Text(question.topNum,style: TextStyle(fontWeight: FontWeight.bold),)
                             ],
                           )
                         ],
@@ -68,7 +69,7 @@ class ResultSingleCard extends StatelessWidget{
                             ),
                             child: Padding(
                               padding: const EdgeInsets.only(left: 5.0,top: 3,right: 5,bottom: 3),
-                              child: Text("84",style: TextStyle(
+                              child: Text(question.numOne,style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: MColors().colorSecondaryBlueDark
                               ),),
@@ -82,7 +83,7 @@ class ResultSingleCard extends StatelessWidget{
                             ),
                             child: Padding(
                               padding: const EdgeInsets.only(left: 5.0,top: 3,right: 5,bottom: 3),
-                              child: Text("85",style: TextStyle(
+                              child: Text(question.numTwo,style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: MColors().colorSecondaryBlueDark
                               ),),
@@ -91,10 +92,10 @@ class ResultSingleCard extends StatelessWidget{
 
                         ],
                       ),
-                      const Row(
+                       Row(
                         mainAxisAlignment: MainAxisAlignment.center,
                         children: [
-                          Text("10",style: TextStyle(fontWeight: FontWeight.bold),)
+                          Text(question.bottomNum,style: TextStyle(fontWeight: FontWeight.bold),)
                         ],
                       )
                     ],

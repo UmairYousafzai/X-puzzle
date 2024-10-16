@@ -4,7 +4,6 @@ import 'package:xpuzzle/domain/entities/question.dart';
 import 'package:xpuzzle/domain/repositories/question_repository.dart';
 
 import '../dao/question_dao.dart';
-import '../data_source/local/database_helper.dart';
 
 class QuestionRepositoryImpl extends QuestionRepository {
   final QuestionDao _questionDao;
@@ -26,16 +25,19 @@ class QuestionRepositoryImpl extends QuestionRepository {
   }
 
   @override
-  Future<List<Question>> getQuestion(
-      {bool isPPAndPS = false,
-      bool isPPAndNS = false,
-      bool isNPAndPS = false,
-      bool isNPAndNS = false}) async {
+  Future<List<Question>> getQuestion({
+    bool isPPAndPS = false,
+    bool isPPAndNS = false,
+    bool isNPAndPS = false,
+    bool isNPAndNS = false,
+    bool isComplete = false,
+  }) async {
     return await _questionDao.getAllQuestions(
         isPPAndPS: isPPAndPS,
         isPPAndNS: isPPAndNS,
         isNPAndPS: isNPAndPS,
-        isNPAndNS: isNPAndNS);
+        isNPAndNS: isNPAndNS,
+        isComplete: isComplete);
   }
 
   @override
@@ -45,12 +47,11 @@ class QuestionRepositoryImpl extends QuestionRepository {
 
   @override
   Future<bool> checkIfIsPPAndPSExists() {
-   return _questionDao.checkIfIsPPAndPSExists();
+    return _questionDao.checkIfIsPPAndPSExists();
   }
 
   @override
   Future<bool> checkIfIsPPAndNSExists() {
     return _questionDao.checkIfIsPPAndNSExists();
-
   }
 }

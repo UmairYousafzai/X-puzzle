@@ -15,6 +15,7 @@ class QuestionDao {
     bool isPPAndNS = false,
     bool isNPAndPS = false,
     bool isNPAndNS = false,
+    bool isComplete = false,
   }) async {
     try {
       final db = await _databaseHelper.database;
@@ -26,7 +27,7 @@ class QuestionDao {
             isPPAndNS ? 1 : 0,
             isNPAndPS ? 1 : 0,
             isNPAndNS ? 1 : 0,
-            0
+            isComplete ? 1 : 0
           ]);
       if (kDebugMode) {
         print("saves question values==============> ${result.toString()}");
@@ -62,7 +63,8 @@ class QuestionDao {
   Future<void> setQuestionCorrectStatus(Question question) async {
     QuestionModel questionModel = QuestionModel.copy(question);
     if (kDebugMode) {
-      print("setQuestionCorrectStatus==============> ${questionModel.toJson()}");
+      print(
+          "setQuestionCorrectStatus==============> ${questionModel.toJson()}");
     }
     try {
       final db = await _databaseHelper.database;
@@ -87,6 +89,7 @@ class QuestionDao {
 
     return result?.isNotEmpty ?? false;
   }
+
   Future<bool> checkIfIsPPAndNSExists() async {
     final db = await _databaseHelper.database;
     var result = await db?.query(DatabaseHelper.TABLE_QUESTION,
