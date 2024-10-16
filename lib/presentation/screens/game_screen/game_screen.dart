@@ -111,7 +111,11 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         loading: () {});
   }
 
-  void onMarkDone(GameNotifier gameNotifier, GameState gameState) async {
+  void onMarkDone(
+      GameNotifier gameNotifier,
+      GameState gameState,
+      QuestionState questionState,
+      QuestionProviderNotifier questionNotifier) async {
     if (gameState.isTimerRunning) {
       if (gameState.firstNumber.isNotEmpty &&
           gameState.secondNumber.isNotEmpty) {
@@ -123,7 +127,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         var question = gameState.question;
 
         if (question != null) {
-          ref.watch(questionProvider.notifier).removeQuestion(question);
+          questionNotifier.removeQuestion(question);
 
           question.isCorrect = isCorrect;
           question.isComplete = true;
@@ -137,15 +141,17 @@ class _GameScreenState extends ConsumerState<GameScreen> {
             isPPAndNS: gameState.question?.isPPAndNS ?? false,
             isNPAndPS: gameState.question?.isNPAndPS ?? false,
             isNPAndNS: gameState.question?.isNPAndNS ?? false);
-        gameNotifier.updateQuestion(
-            ref.watch(questionProvider).questions[questionIndex]);
-
-        if (kDebugMode) {
-          print(
-              "question index : $questionIndex==============>>>> questions length ${ref.read(questionProvider).questions.length}");
+        if (questionState.questions.isNotEmpty) {
+          gameNotifier.updateQuestion(
+              ref.watch(questionProvider).questions[questionIndex]);
+          if (kDebugMode) {
+            print(
+                "question index : $questionIndex==============>>>> questions length ${ref.read(questionProvider).questions.length}");
+          }
         }
-        if (ref.read(questionProvider).questions.isEmpty) {
-          ref.read(gameProvider.notifier).resetGame();
+
+        if (questionState.questions.isEmpty) {
+          gameNotifier.resetGame();
           Navigator.pushAndRemoveUntil(
             context,
             MaterialPageRoute(
@@ -175,7 +181,8 @@ class _GameScreenState extends ConsumerState<GameScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final questions = ref.watch(questionProvider);
+    final questionsState = ref.watch(questionProvider);
+    final questionsProvider = ref.watch(questionProvider.notifier);
     final gameState = ref.watch(gameProvider);
     final gameNotifier = ref.read(gameProvider.notifier);
     final level = ref.read(levelProvider);
@@ -236,7 +243,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                         ? 20
                         : 10),
                     gameStartResetButton(context, () {
-                      switchQuestion(questions, gameState, gameNotifier);
+                      switchQuestion(questionsState, gameState, gameNotifier);
                     }, 'assets/images/reset.png',
                         MColors().colorSecondaryBlueDark),
                   ],
@@ -255,7 +262,8 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
                     GameWidget(onMarkDonePressed: () {
-                      onMarkDone(gameNotifier, gameState);
+                      onMarkDone(gameNotifier, gameState, questionsState,
+                          questionsProvider);
                     }),
                     Gap(MediaQuery.of(context).size.height >
                             smallDeviceThreshold
@@ -284,7 +292,8 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                             ? 50
                             : 25),
                         gameBacknNextButton(context, () {
-                          onMarkDone(gameNotifier, gameState);
+                          onMarkDone(gameNotifier, gameState, questionsState,
+                              questionsProvider);
                           // if (questionIndex <= questions.questions.length - 1) {
                           //   if (mounted) {
                           //     questionIndex++;

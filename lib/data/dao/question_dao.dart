@@ -87,4 +87,11 @@ class QuestionDao {
 
     return result?.isNotEmpty ?? false;
   }
+  Future<bool> checkIfIsPPAndNSExists() async {
+    final db = await _databaseHelper.database;
+    var result = await db?.query(DatabaseHelper.TABLE_QUESTION,
+        where: 'is_pp_and_ns = ?', whereArgs: [1], limit: 1);
+
+    return result?.isNotEmpty ?? false;
+  }
 }

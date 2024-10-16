@@ -3,12 +3,24 @@ import 'dart:math';
 import 'package:flutter/foundation.dart';
 import 'package:xpuzzle/domain/entities/question.dart';
 
-List<Question> generatePositiveMultipleAndPositiveInteger(
-    {int numberOfQuestion = 0}) {
+List<Question> generatePositiveMultipleAndPositiveInteger({
+  int numberOfQuestion = 0,
+  bool isPPAndPS = false,
+  bool isPPAndNS = false,
+  bool isNPAndPS = false,
+  bool isNPAndNS = false,
+}) {
   List<Question> questions = [];
   for (int i = 0; i < numberOfQuestion; i++) {
-    final left = Random().nextInt(20) + 1;
-    final right = Random().nextInt(20) + 1;
+    int left = 0;
+    int right = 0;
+    if (isPPAndPS) {
+      left = Random().nextInt(20) + 1;
+      right = Random().nextInt(20) + 1;
+    } else if (isPPAndNS) {
+      left = -(Random().nextInt(20) + 1);
+      right = -Random().nextInt(20) + 1;
+    }
 
     final sum = left + right;
     final product = left * right;
@@ -21,10 +33,10 @@ List<Question> generatePositiveMultipleAndPositiveInteger(
       bottomNum: sum.toString(),
       isComplete: false,
       isCorrect: false,
-      isPPAndNS: false,
-      isPPAndPS: true,
-      isNPAndPS: false,
-      isNPAndNS: false,
+      isPPAndPS: isPPAndPS,
+      isPPAndNS: isPPAndNS,
+      isNPAndPS: isNPAndPS,
+      isNPAndNS: isNPAndNS,
     ));
   }
   if (kDebugMode) {

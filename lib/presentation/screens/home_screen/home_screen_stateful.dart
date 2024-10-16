@@ -24,7 +24,7 @@ class HomeScreenConsumerWidget extends ConsumerStatefulWidget {
 
 class HomeScreenConsumerState extends ConsumerState<HomeScreenConsumerWidget> {
   Future<void> generateAndStoreQuestion({
-    required GetQuestions getQuestions,
+    required GetQuestions getQuestionsUseCase,
     required StoreQuestions storeQuestions,
     required QuestionProviderNotifier questionNotifier,
     bool isPPAndPS = false,
@@ -32,18 +32,16 @@ class HomeScreenConsumerState extends ConsumerState<HomeScreenConsumerWidget> {
     bool isNPAndPS = false,
     bool isNPAndNS = false,
   }) async {
-    List<Question> questions =
-        generatePositiveMultipleAndPositiveInteger(numberOfQuestion: 10);
+    List<Question> questions = generatePositiveMultipleAndPositiveInteger(
+        numberOfQuestion: 10,
+        isPPAndPS: isPPAndPS,
+        isPPAndNS: isPPAndNS,
+        isNPAndPS: isNPAndPS,
+        isNPAndNS: isNPAndNS);
 
     await storeQuestions.execute(questions);
     if (questions.isNotEmpty) {
-      var storeQuestions = await getQuestions.execute(
-          isPPAndPS: isPPAndPS,
-          isPPAndNS: isPPAndNS,
-          isNPAndPS: isNPAndPS,
-          isNPAndNS: isNPAndNS);
-      questionNotifier.addQuestion(
-          questions: storeQuestions,
+      await getQuestions(getQuestionsUseCase, questionNotifier,
           isPPAndPS: isPPAndPS,
           isPPAndNS: isPPAndNS,
           isNPAndPS: isNPAndPS,
@@ -74,6 +72,7 @@ class HomeScreenConsumerState extends ConsumerState<HomeScreenConsumerWidget> {
           isNPAndNS: isNPAndNS);
     }
 
+    await Future.delayed(const Duration(milliseconds: 1000));
     return questions;
   }
 
@@ -94,6 +93,7 @@ class HomeScreenConsumerState extends ConsumerState<HomeScreenConsumerWidget> {
   Widget build(BuildContext context) {
     final storeQuestionsUseCase = ref.watch(storeQuestionUseCaseProvider);
     final isPPAndPSQuestionUseCase = ref.watch(isPPAndPSUseCaseProvider);
+    final isPPAndNSQuestionUseCase = ref.watch(isPPAndNSUseCaseProvider);
     final getQuestionUseCase = ref.watch(getQuestionUseCaseProvider);
     var questionNotifier = ref.read(questionProvider.notifier);
     final navigator = Navigator.of(context);
@@ -115,14 +115,18 @@ class HomeScreenConsumerState extends ConsumerState<HomeScreenConsumerWidget> {
                       isPPAndNS: index == 1,
                       isNPAndPS: index == 2,
                       isNPAndNS: index == 3);
-                  var isQuestionsExist =
-                      await isPPAndPSQuestionUseCase.execute();
+                  var isQuestionsExist = false;
+                  if (index == 0) {
+                    isQuestionsExist = await isPPAndPSQuestionUseCase.execute();
+                  } else if (index == 1) {
+                    isQuestionsExist = await isPPAndNSQuestionUseCase.execute();
+                  }
                   if (isQuestionsExist && questions.isEmpty) {
                     showErrorSnackBar(context, "This style already attempted.");
                   } else {
                     if (questions.isEmpty) {
-                      generateAndStoreQuestion(
-                          getQuestions: getQuestionUseCase,
+                      await generateAndStoreQuestion(
+                          getQuestionsUseCase: getQuestionUseCase,
                           storeQuestions: storeQuestionsUseCase,
                           questionNotifier: questionNotifier,
                           isPPAndPS: index == 0,
