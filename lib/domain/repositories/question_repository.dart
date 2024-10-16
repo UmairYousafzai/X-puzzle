@@ -5,6 +5,8 @@ abstract class QuestionRepository {
   Future<void> updateQuestion(Question question);
   Future<bool> checkIfIsPPAndPSExists();
   Future<bool> checkIfIsPPAndNSExists();
+  Future<bool> checkIfIsNPAndPSExists();
+  Future<bool> checkIfIsNPAndNSExists();
 
   Future<List<Question>> getQuestion({
     bool isPPAndPS = false,

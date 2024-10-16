@@ -20,6 +20,12 @@ List<Question> generatePositiveMultipleAndPositiveInteger({
     } else if (isPPAndNS) {
       left = -(Random().nextInt(20) + 1);
       right = -Random().nextInt(20) + 1;
+    } else if (isNPAndPS) {
+      left = Random().nextInt(19) + 2;
+      right = -(Random().nextInt(left - 1) + 1);
+    } else if (isNPAndNS) {
+      left = Random().nextInt(10) + 1;
+      right = -(Random().nextInt(10) + left + 1);
     }
 
     final sum = left + right;

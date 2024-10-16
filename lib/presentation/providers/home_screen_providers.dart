@@ -31,23 +31,28 @@ final homeScreenStylesProvider = Provider<List<StyleCardItemModel>>((ref) {
   ];
 });
 
-
-
 enum ViewType { list, grid }
 
-class HomeScreenViewNotifier extends StateNotifier<ViewType> {
-  HomeScreenViewNotifier() : super(ViewType.list);
+class HomeScreenViewNotifier extends StateNotifier<Map<String, dynamic>> {
+  HomeScreenViewNotifier()
+      : super({"view_type": ViewType.list, "is_loading": false});
 
   void toggleView() {
-    if (state == ViewType.list) {
-      state = ViewType.grid;
+    if (state["view_type"] == ViewType.list) {
+      state = {...state, "view_type": ViewType.grid};
     } else {
-      state = ViewType.list;
+      state = {...state, "view_type": ViewType.list};
     }
   }
+
+  void setLoading(bool isLoading) {
+    state = {...state, "is_loading": isLoading};
+  }
+
+
 }
 
 final homeViewTypeProvider =
-    StateNotifierProvider<HomeScreenViewNotifier, ViewType>(
+    StateNotifierProvider<HomeScreenViewNotifier, Map<String, dynamic>>(
   (ref) => HomeScreenViewNotifier(),
 );

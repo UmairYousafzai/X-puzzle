@@ -24,8 +24,8 @@ class QuestionDao {
           whereArgs: [
             isPPAndPS ? 1 : 0,
             isPPAndNS ? 1 : 0,
-            isNPAndPS ? 1 : 0,
             isNPAndNS ? 1 : 0,
+            isNPAndPS ? 1 : 0,
             0
           ]);
       if (kDebugMode) {
@@ -91,6 +91,20 @@ class QuestionDao {
     final db = await _databaseHelper.database;
     var result = await db?.query(DatabaseHelper.TABLE_QUESTION,
         where: 'is_pp_and_ns = ?', whereArgs: [1], limit: 1);
+
+    return result?.isNotEmpty ?? false;
+  }
+  Future<bool> checkIfIsNPAndPSExists() async {
+    final db = await _databaseHelper.database;
+    var result = await db?.query(DatabaseHelper.TABLE_QUESTION,
+        where: 'is_np_and_ps = ?', whereArgs: [1], limit: 1);
+
+    return result?.isNotEmpty ?? false;
+  }
+  Future<bool> checkIfIsNPAndNSExists() async {
+    final db = await _databaseHelper.database;
+    var result = await db?.query(DatabaseHelper.TABLE_QUESTION,
+        where: 'is_np_and_ns = ?', whereArgs: [1], limit: 1);
 
     return result?.isNotEmpty ?? false;
   }

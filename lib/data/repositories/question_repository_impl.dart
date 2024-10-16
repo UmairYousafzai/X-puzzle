@@ -45,12 +45,20 @@ class QuestionRepositoryImpl extends QuestionRepository {
 
   @override
   Future<bool> checkIfIsPPAndPSExists() {
-   return _questionDao.checkIfIsPPAndPSExists();
+    return _questionDao.checkIfIsPPAndPSExists();
   }
 
   @override
   Future<bool> checkIfIsPPAndNSExists() {
     return _questionDao.checkIfIsPPAndNSExists();
+  }
 
+  @override
+  Future<bool> checkIfIsNPAndPSExists() {
+    return _questionDao.checkIfIsNPAndPSExists();
+  }
+  @override
+  Future<bool> checkIfIsNPAndNSExists() {
+    return _questionDao.checkIfIsNPAndPSExists();
   }
 }
