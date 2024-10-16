@@ -26,16 +26,19 @@ class QuestionRepositoryImpl extends QuestionRepository {
   }
 
   @override
-  Future<List<Question>> getQuestion(
-      {bool isPPAndPS = false,
-      bool isPPAndNS = false,
-      bool isNPAndPS = false,
-      bool isNPAndNS = false}) async {
+  Future<List<Question>> getQuestion({
+    bool isPPAndPS = false,
+    bool isPPAndNS = false,
+    bool isNPAndPS = false,
+    bool isNPAndNS = false,
+    bool isComplete = false,
+  }) async {
     return await _questionDao.getAllQuestions(
         isPPAndPS: isPPAndPS,
         isPPAndNS: isPPAndNS,
         isNPAndPS: isNPAndPS,
-        isNPAndNS: isNPAndNS);
+        isNPAndNS: isNPAndNS,
+        isComplete: isComplete);
   }
 
   @override

@@ -13,5 +13,7 @@ abstract class QuestionRepository {
     bool isPPAndNS = false,
     bool isNPAndPS = false,
     bool isNPAndNS = false,
+    bool isComplete = false,
+
   });
 }

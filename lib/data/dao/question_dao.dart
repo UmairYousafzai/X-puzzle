@@ -15,6 +15,7 @@ class QuestionDao {
     bool isPPAndNS = false,
     bool isNPAndPS = false,
     bool isNPAndNS = false,
+    bool isComplete = false,
   }) async {
     try {
       final db = await _databaseHelper.database;
@@ -24,9 +25,9 @@ class QuestionDao {
           whereArgs: [
             isPPAndPS ? 1 : 0,
             isPPAndNS ? 1 : 0,
-            isNPAndNS ? 1 : 0,
             isNPAndPS ? 1 : 0,
-            0
+            isNPAndNS ? 1 : 0,
+            isComplete ? 1 : 0
           ]);
       if (kDebugMode) {
         print("saves question values==============> ${result.toString()}");
