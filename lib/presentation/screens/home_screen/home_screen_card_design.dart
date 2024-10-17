@@ -1,4 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:xpuzzle/utils/constants.dart';
 
 import '../../../data/models/remote/style_card_model.dart';
@@ -35,7 +37,7 @@ class StyleCard extends StatelessWidget {
            color: MColors().colorSecondaryBlueLight
           )),
           const SizedBox(height: 8),
-          Image.asset(styleItemModel.imageSrc),
+          SvgPicture.asset(styleItemModel.imageSrc),
           const SizedBox(height: 10),
           Text(
             styleItemModel.product,

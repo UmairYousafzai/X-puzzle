@@ -22,7 +22,7 @@ class CustomProgressBar extends StatelessWidget {
             Container(
               // Background container for the track
               decoration: BoxDecoration(
-                color: MColors().colorPrimary, // Track background color
+                color: MColors().white, // Track background color
                 borderRadius: BorderRadius.circular(10),
               ),
             ),

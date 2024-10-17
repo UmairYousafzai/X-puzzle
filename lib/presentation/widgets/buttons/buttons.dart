@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:xpuzzle/utils/constants.dart';
 
@@ -65,7 +66,7 @@ primaryButton(VoidCallback onPressed, String text, Color textColor,
       child: Center(
         child: Text(
           text,
-          style: Theme.of(context).textTheme.displaySmall!.copyWith(
+          style: Theme.of(context).textTheme.displayMedium!.copyWith(
               fontWeight: FontWeight.w500, fontSize: 18, color: textColor),
         ),
       ),
@@ -88,7 +89,7 @@ gameStartResetButton(BuildContext context, VoidCallback onPressed, String image,
           width: 1, // You can adjust the border width as needed
         ),
       ),
-      child: Image.asset(
+      child: SvgPicture.asset(
         image,
         width: 20,
       ),

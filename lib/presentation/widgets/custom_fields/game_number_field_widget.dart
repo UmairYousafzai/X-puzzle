@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:xpuzzle/presentation/widgets/custom_number_input_formatter.dart';
 import 'package:xpuzzle/utils/constants.dart';
 
 import '../../theme/colors.dart';
@@ -33,10 +34,10 @@ Widget gameNumberTextField({
 
         focusNode: focusNode,
         inputFormatters: [
-          FilteringTextInputFormatter.digitsOnly,
-          LengthLimitingTextInputFormatter(4),
+          CustomNumberInputFormatter(),
+          LengthLimitingTextInputFormatter(5),
         ],
-        keyboardType: TextInputType.number,
+        keyboardType: TextInputType.text,
         controller: TextEditingController.fromValue(
           TextEditingValue(
             text: value,
