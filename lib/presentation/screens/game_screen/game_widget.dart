@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 
 import 'package:xpuzzle/utils/constants.dart';
@@ -35,8 +36,8 @@ class GameWidget extends ConsumerWidget {
         children: [
           FractionallySizedBox(
             widthFactor: 0.5,
-            child: Image.asset(
-              'assets/images/purple_cross.png',
+            child: SvgPicture.asset(
+              'assets/icons/svg/purple_cross.svg',
               fit: BoxFit.contain,
             ),
           ),

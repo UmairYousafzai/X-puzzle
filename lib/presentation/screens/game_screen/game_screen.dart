@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:xpuzzle/data/models/local/question_time_model.dart';
 import 'package:xpuzzle/presentation/providers/question/question_provider.dart';
@@ -45,9 +46,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
   }
 
   void setGameState() {
-    var questions = ref
-        .read(questionProvider)
-        .questions;
+    var questions = ref.read(questionProvider).questions;
     var index = 0;
     for (int i = 0; i < questions.length; i++) {
       if (!questions[i].isComplete) {
@@ -60,9 +59,31 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     gameNotifier.updateQuestion(question);
     gameNotifier.updateQuestionIndex(index);
     getQuestionsTime(question, gameNotifier);
-    questionIndex = ref
-        .watch(gameProvider)
-        .questionIndex;
+    questionIndex = ref.watch(gameProvider).questionIndex;
+    getQuestionProgress(
+        isPPAndPS: question.isPPAndPS,
+        isPPAndNS: question.isPPAndNS,
+        isNPAndPS: question.isNPAndPS,
+        isNPAndNS: question.isNPAndNS);
+  }
+
+  void getQuestionProgress(
+      {bool isPPAndPS = false,
+      bool isPPAndNS = false,
+      bool isNPAndPS = false,
+      bool isNPAndNS = false}) async {
+    ref.watch(sharedPreferencesProvider).when(
+        data: (sharedPreference) {
+          var progress = sharedPreference.getQuestionProgress(
+              isPPAndPS: isPPAndPS,
+              isPPAndNS: isPPAndNS,
+              isNPAndPS: isNPAndPS,
+              isNPAndNS: isNPAndNS);
+
+          ref.read(gameProvider.notifier).setQuestionProgress(progress ?? 0);
+        },
+        error: (err, stack) {},
+        loading: () {});
   }
 
   void getQuestionsTime(Question question, GameNotifier gameNotifier) async {
@@ -75,8 +96,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     if (time != null) {
       if (kDebugMode) {
         print(
-            "question time=============> ${QuestionTimeModel.copy(time)
-                .toJson()}");
+            "question time=============> ${QuestionTimeModel.copy(time).toJson()}");
       }
 
       gameNotifier.setTime(time.minutes, time.seconds, time.id);
@@ -98,11 +118,12 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     return percentage;
   }
 
-  void setProgressOfQuestions({required int currentProgress,
-    bool isPPAndPS = false,
-    bool isPPAndNS = false,
-    bool isNPAndPS = false,
-    bool isNPAndNS = false}) async {
+  void setProgressOfQuestions(
+      {required int currentProgress,
+      bool isPPAndPS = false,
+      bool isPPAndNS = false,
+      bool isNPAndPS = false,
+      bool isNPAndNS = false}) async {
     ref.watch(sharedPreferencesProvider).when(
         data: (sharedPreference) {
           sharedPreference.saveQuestionProgress(
@@ -116,7 +137,8 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         loading: () {});
   }
 
-  void onMarkDone(GameNotifier gameNotifier,
+  void onMarkDone(
+      GameNotifier gameNotifier,
       GameState gameState,
       QuestionState questionState,
       QuestionProviderNotifier questionNotifier) async {
@@ -124,7 +146,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       if (gameState.firstNumber.isNotEmpty &&
           gameState.secondNumber.isNotEmpty) {
         var isCorrect = (gameState.firstNumber == gameState.question?.numOne ||
-            gameState.firstNumber == gameState.question?.numTwo) &&
+                gameState.firstNumber == gameState.question?.numTwo) &&
             (gameState.secondNumber == gameState.question?.numOne ||
                 gameState.secondNumber == gameState.question?.numTwo);
 
@@ -147,15 +169,10 @@ class _GameScreenState extends ConsumerState<GameScreen> {
             isNPAndNS: gameState.question?.isNPAndNS ?? false);
         if (questionState.questions.isNotEmpty) {
           gameNotifier.updateQuestion(
-              ref
-                  .watch(questionProvider)
-                  .questions[questionIndex]);
+              ref.watch(questionProvider).questions[questionIndex]);
           if (kDebugMode) {
             print(
-                "question index : $questionIndex==============>>>> questions length ${ref
-                    .read(questionProvider)
-                    .questions
-                    .length}");
+                "question index : $questionIndex==============>>>> questions length ${ref.read(questionProvider).questions.length}");
           }
         }
 
@@ -170,7 +187,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
             context,
             MaterialPageRoute(
                 builder: (context) => const QuizCompletionScreen()),
-                (Route<dynamic> route) {
+            (Route<dynamic> route) {
               if (kDebugMode) {
                 print("route name ${route.settings.name}");
               }
@@ -206,37 +223,33 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         gameNotifier.resetGame();
       },
       child: Scaffold(
+        backgroundColor: MColors().white,
         resizeToAvoidBottomInset: true,
         appBar: level.when(
           data: (level) {
             return customAppBar(
               context,
               level, // Pass the current level here
-              Image.asset(
-                "assets/icons/drawer_icon.png",
-                width: 50,
-                height: 40,
+              SvgPicture.asset(
+                "assets/icons/svg/hamburger_menu_icon.svg",
+                width: 40,
+                height: 25,
               ),
-                  () {},
+              null,
+              onPressedLeading: () {},
             );
           },
-          loading: () =>
-              AppBar(
-                title: const Text(
-                    'Loading...'), // Temporary AppBar while loading
-              ),
-          error: (error, stack) =>
-              AppBar(
-                title: Text('Error: $error'),
-              ),
+          loading: () => AppBar(
+            title: const Text('Loading...'), // Temporary AppBar while loading
+          ),
+          error: (error, stack) => AppBar(
+            title: Text('Error: $error'),
+          ),
         ),
         body: SingleChildScrollView(
           child: Padding(
             padding: EdgeInsets.all(
-                MediaQuery
-                    .of(context)
-                    .size
-                    .height > smallDeviceThreshold
+                MediaQuery.of(context).size.height > smallDeviceThreshold
                     ? 10
                     : 5),
             child: Column(
@@ -246,48 +259,38 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                   children: [
                     GameTimeWidget(
                       time:
-                      '${gameState.minutes.toString().padLeft(
-                          2, '0')}:${gameState.seconds.toString().padLeft(
-                          2, '0')}',
+                          '${gameState.minutes.toString().padLeft(2, '0')}:${gameState.seconds.toString().padLeft(2, '0')}',
                     ),
                     const Spacer(),
                     gameState.isTimerRunning
                         ? gameStartResetButton(context, () {
-                      // Button to pause timer
-                      gameNotifier.pauseTimer();
-                    }, 'assets/icons/pause-button.png',
-                        MColors().colorPrimary)
+                            // Button to pause timer
+                            gameNotifier.pauseTimer();
+                          }, 'assets/icons/svg/pause_icon.svg',
+                            MColors().colorPrimary)
                         : gameStartResetButton(context, () {
-                      gameNotifier.playTimer(); // Button to start timer
-                    }, 'assets/images/play.png', MColors().colorPrimary),
-                    Gap(MediaQuery
-                        .of(context)
-                        .size
-                        .height >
-                        smallDeviceThreshold
+                            gameNotifier.playTimer(); // Button to start timer
+                          }, 'assets/icons/svg/play_icon.svg', MColors().colorPrimary),
+                    Gap(MediaQuery.of(context).size.height >
+                            smallDeviceThreshold
                         ? 20
                         : 10),
                     gameStartResetButton(context, () {
                       switchQuestion(questionsState, gameState, gameNotifier);
-                    }, 'assets/images/reset.png',
+                    }, 'assets/icons/svg/reset_icon.svg',
                         MColors().colorSecondaryBlueDark),
                   ],
                 ),
-                Gap(MediaQuery
-                    .of(context)
-                    .size
-                    .height > smallDeviceThreshold
+                Gap(MediaQuery.of(context).size.height > smallDeviceThreshold
                     ? context.screenHeight * 0.03
                     : context.screenHeight * 0.02),
                 CustomProgressBar(
+
                   progress:
-                  calculateCompletionPercentage(gameState.questionProgress),
+                      calculateCompletionPercentage(gameState.questionProgress),
                 ),
-                Gap(MediaQuery
-                    .of(context)
-                    .size
-                    .height > smallDeviceThreshold
-                    ? 70
+                Gap(MediaQuery.of(context).size.height > smallDeviceThreshold
+                    ? 40
                     : 35),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
@@ -296,11 +299,8 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                       onMarkDone(gameNotifier, gameState, questionsState,
                           questionsProvider);
                     }),
-                    Gap(MediaQuery
-                        .of(context)
-                        .size
-                        .height >
-                        smallDeviceThreshold
+                    Gap(MediaQuery.of(context).size.height >
+                            smallDeviceThreshold
                         ? 70
                         : 35),
                     Row(
@@ -321,11 +321,8 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                           //   Navigator.pop(context);
                           // }
                         }, false, !gameState.isTimerRunning), // Back button
-                        Gap(MediaQuery
-                            .of(context)
-                            .size
-                            .height >
-                            smallDeviceThreshold
+                        Gap(MediaQuery.of(context).size.height >
+                                smallDeviceThreshold
                             ? 50
                             : 25),
                         gameBacknNextButton(context, () {

@@ -114,6 +114,11 @@ class GameNotifier extends StateNotifier<GameState> {
     state = state.copyWith(questionProgress: progress);
   }
 
+  void setQuestionProgress(int value) {
+    var progress = value;
+    state = state.copyWith(questionProgress: progress);
+  }
+
   void setTime(int minutes, int seconds, int? timeID) {
     state = state.copyWith(minutes: minutes, seconds: seconds, timeID: timeID);
   }

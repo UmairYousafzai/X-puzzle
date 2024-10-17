@@ -26,8 +26,9 @@ class TimeDao {
           whereArgs: [
             isPPAndPS ? 1 : 0,
             isPPAndNS ? 1 : 0,
-            isNPAndPS ? 1 : 0,
             isNPAndNS ? 1 : 0,
+            isNPAndPS ? 1 : 0,
+
           ]);
       if (kDebugMode) {
         print("saves time values==============> ${result.toString()}");

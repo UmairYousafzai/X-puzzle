@@ -1,8 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:xpuzzle/presentation/theme/colors.dart';
 
-AppBar customAppBar(BuildContext context, String title, Image leadingIcon,
-    Function() onPressed) {
+AppBar customAppBar(BuildContext context, String title, SvgPicture leadingIcon,
+    Image? actionIcon,
+    {Function()? onPressedLeading, Function()? onPressedAction}) {
   return AppBar(
+    backgroundColor: MColors().white,
     title: Text(
       title,
       style: Theme.of(context).textTheme.titleLarge!.copyWith(
@@ -12,8 +16,16 @@ AppBar customAppBar(BuildContext context, String title, Image leadingIcon,
     ),
     leading: IconButton(
       icon: leadingIcon,
-      onPressed: onPressed,
+      onPressed: onPressedLeading,
     ),
+    actions: [
+      actionIcon == null
+          ? Container()
+          : IconButton(
+              icon: actionIcon,
+              onPressed: onPressedAction,
+            )
+    ],
     centerTitle: true,
   );
 }
