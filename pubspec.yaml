@@ -41,6 +41,8 @@ dependencies:
   google_fonts: ^6.2.1
   flutter_svg: ^2.0.10+1
   gap: ^3.0.1
+  shared_preferences: ^2.3.2
+  sqflite: ^2.3.3+1
 
 
 
@@ -54,12 +56,13 @@ dev_dependencies:
 flutter_native_splash:
   background_image: assets/splash.png
   fullscreen: true
+  color: "#09D3F8"
   android: true
   ios: true
   android_12:
     image: assets/splash.png
     icon_background_color: "#0FD5F8"
-
+    resize: true
 
 
 
@@ -84,7 +87,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
-    - assets/
+    - assets/icons/svg/
     - assets/images/
     - assets/images/svgs/
     - assets/icons/

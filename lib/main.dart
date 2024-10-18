@@ -2,9 +2,10 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:xpuzzle/screens/select_level_screen.dart';
+import 'package:xpuzzle/presentation/screens/select_level_screen.dart';
+import 'package:xpuzzle/presentation/theme/app_theme.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
-import 'package:xpuzzle/theme/app_theme.dart';
+
 
 void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
