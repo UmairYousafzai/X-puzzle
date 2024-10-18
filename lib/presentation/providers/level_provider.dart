@@ -3,11 +3,11 @@ import 'package:xpuzzle/presentation/providers/shared_pref_provider.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 // Change from StateNotifier to AsyncNotifier to handle async initialization
-class LevelProviderNotifier extends AsyncNotifier<String> {
+class LevelProviderNotifier extends AsyncNotifier<String?> {
   @override
-  Future<String> build() async {
+  Future<String?> build() async {
     final sharedPreferencesHelper = ref.watch(sharedPreferencesProvider).value;
-    return sharedPreferencesHelper?.getLevel() ?? "Level 1"; // Default to "Level 1" if null
+    return sharedPreferencesHelper?.getLevel() ; // Default to "Level 1" if null
   }
 
   void updateLevel(String level) {
@@ -17,7 +17,7 @@ class LevelProviderNotifier extends AsyncNotifier<String> {
   }
 }
 
-final levelProvider = AsyncNotifierProvider<LevelProviderNotifier, String>(
+final levelProvider = AsyncNotifierProvider<LevelProviderNotifier, String?>(
       () => LevelProviderNotifier(),
 );
 

@@ -35,6 +35,8 @@ List<Question> generatePositiveMultipleAndPositiveInteger({
       id: null,
       numOne: left.toString(),
       numTwo: right.toString(),
+      inputNumOne: "",
+      inputNumTwo: "",
       topNum: product.toString(),
       bottomNum: sum.toString(),
       isComplete: false,

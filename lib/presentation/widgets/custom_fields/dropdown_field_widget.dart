@@ -44,7 +44,7 @@ class DropdownFieldWidget extends ConsumerWidget {
         labelStyle: const TextStyle(
           fontSize: 16,
           color: Colors.black,
-          fontWeight: FontWeight.w500,
+          fontWeight: FontWeight.w400,
         ),
         contentPadding:
             const EdgeInsets.symmetric(vertical: 16.0, horizontal: 20.0),

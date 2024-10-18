@@ -114,7 +114,7 @@ class _QuizCompletionScreen extends ConsumerState<QuizCompletionScreen> {
               Gap(context.screenHeight * 0.03),
               level.when(data: (data) {
                 return LevelsHeader(
-                  level: data,
+                  level: data ?? "",
                   style: getStyle(resultScreen),
                   totalQuestions: questions.length,
                   correct: totalCorrectAns(questions),
@@ -181,10 +181,15 @@ class _QuizCompletionScreen extends ConsumerState<QuizCompletionScreen> {
                       ),
                       const Gap(15),
                       viewCompleteResultsButton(() {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (ctx) => const ResultsScreen()));
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const ResultsScreen()),
+                              (Route<dynamic> route) {
+
+                            return route.isFirst;
+                          },
+                        );
                       }, context),
                       const Gap(15),
                       primaryButton(() {

@@ -18,12 +18,10 @@ class ResultsScreen extends ConsumerStatefulWidget {
 }
 
 class _ResultsScreenState extends ConsumerState<ResultsScreen> {
-
   @override
   void initState() {
     super.initState();
   }
-
 
   String getStyle(Map<String, dynamic> state) {
     if (state["isPPAndPS"]) {
@@ -41,12 +39,9 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
 
   @override
   Widget build(BuildContext context) {
-    final questions = ref
-        .watch(questionProvider)
-        .questions;
+    final questions = ref.watch(questionProvider).questions;
     final level = ref.read(levelProvider);
     var resultScreen = ref.watch(resultProvider);
-
 
     int totalCorrectAns() {
       int totalCorrect = 0;
@@ -58,17 +53,10 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
       return totalCorrect;
     }
 
-
     return Scaffold(
       body: Container(
-        width: MediaQuery
-            .of(context)
-            .size
-            .width,
-        height: MediaQuery
-            .of(context)
-            .size
-            .height,
+        width: MediaQuery.of(context).size.width,
+        height: MediaQuery.of(context).size.height,
         decoration: const BoxDecoration(
           image: DecorationImage(
             image: AssetImage("assets/images/background_1.jpeg"),
@@ -76,12 +64,12 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
           ),
         ),
         child: SafeArea(
-            child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 8),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                  Row(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 8),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Row(
                   mainAxisAlignment: MainAxisAlignment.spaceBetween,
                   children: [
                     IconButton(
@@ -92,10 +80,7 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
                     ),
                     Text(
                       "Home",
-                      style: Theme
-                          .of(context)
-                          .textTheme
-                          .titleLarge,
+                      style: Theme.of(context).textTheme.titleLarge,
                     ),
                     Container(
                       width: 40,
@@ -113,14 +98,11 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
                   ],
                 ),
                 SizedBox(
-                  height: MediaQuery
-                      .of(context)
-                      .size
-                      .height * 0.01,
+                  height: MediaQuery.of(context).size.height * 0.01,
                 ),
                 level.when(data: (data) {
                   return LevelsHeader(
-                    level: data,
+                    level: data ?? "",
                     style: getStyle(resultScreen),
                     totalQuestions: questions.length,
                     correct: totalCorrectAns(),
@@ -140,36 +122,31 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
                     correct: totalCorrectAns(),
                   );
                 }),
-                Gap(MediaQuery
-                .of(context)
-                .size
-                .height * 0.02),
-
-        Expanded(
-          child: questions.isEmpty
-              ? Center(
-            child: CircularProgressIndicator(
-                color: MColors().colorSecondaryBlueLight),
-          )
-              : GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
-              crossAxisCount: 3,
-              childAspectRatio: 0.75,
+                Gap(MediaQuery.of(context).size.height * 0.02),
+                Expanded(
+                  child: questions.isEmpty
+                      ? Center(
+                          child: CircularProgressIndicator(
+                              color: MColors().colorSecondaryBlueLight),
+                        )
+                      : GridView.builder(
+                          gridDelegate:
+                              const SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: 3,
+                            childAspectRatio: 0.75,
+                          ),
+                          itemCount: questions.length,
+                          itemBuilder: (BuildContext context, int index) {
+                            var question = questions[index];
+                            return ResultSingleCard(question: question);
+                          },
+                        ),
+                ),
+              ],
             ),
-            itemCount: questions.length,
-            itemBuilder: (BuildContext context, int index) {
-              var question = questions[index];
-              return ResultSingleCard(question: question);
-            },
           ),
         ),
-        ],
       ),
-    ),)
-    ,
-    )
-    ,
     );
   }
 }
-

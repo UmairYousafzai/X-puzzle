@@ -43,7 +43,7 @@ class QuestionRepositoryImpl extends QuestionRepository {
 
   @override
   Future<void> updateQuestion(Question question) async {
-    await _questionDao.setQuestionCorrectStatus(question);
+    await _questionDao.updateQuestion(question);
   }
 
   @override

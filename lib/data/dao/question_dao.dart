@@ -60,10 +60,10 @@ class QuestionDao {
     }
   }
 
-  Future<void> setQuestionCorrectStatus(Question question) async {
+  Future<void> updateQuestion(Question question) async {
     QuestionModel questionModel = QuestionModel.copy(question);
     if (kDebugMode) {
-      print("setQuestionCorrectStatus==============> ${questionModel.toJson()}");
+      print("updateQuestion==============> ${questionModel.toJson()}");
     }
     try {
       final db = await _databaseHelper.database;

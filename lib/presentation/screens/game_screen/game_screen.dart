@@ -157,6 +157,8 @@ class _GameScreenState extends ConsumerState<GameScreen> {
 
           question.isCorrect = isCorrect;
           question.isComplete = true;
+          question.inputNumOne = gameState.firstNumber;
+          question.inputNumTwo = gameState.secondNumber;
           await ref.watch(updateQuestionUseCaseProvider).execute(question);
         }
 
@@ -182,18 +184,28 @@ class _GameScreenState extends ConsumerState<GameScreen> {
               isPPAndNS: gameState.question?.isPPAndNS ?? false,
               isNPAndPS: gameState.question?.isNPAndPS ?? false,
               isNPAndNS: gameState.question?.isNPAndNS ?? false);
-          gameNotifier.resetGame();
-          Navigator.pushAndRemoveUntil(
-            context,
-            MaterialPageRoute(
-                builder: (context) => const QuizCompletionScreen()),
-            (Route<dynamic> route) {
-              if (kDebugMode) {
-                print("route name ${route.settings.name}");
-              }
-              return route.isFirst;
-            },
-          );
+          ref.watch(sharedPreferencesProvider).when(
+              data: (pref) {
+                pref.setStyleStatus(
+                    isPPAndPS: gameState.question?.isPPAndPS ?? false,
+                    isPPAndNS: gameState.question?.isPPAndNS ?? false,
+                    isNPAndPS: gameState.question?.isNPAndPS ?? false,
+                    isNPAndNS: gameState.question?.isNPAndNS ?? false);
+                gameNotifier.resetGame();
+                Navigator.pushAndRemoveUntil(
+                  context,
+                  MaterialPageRoute(
+                      builder: (context) => const QuizCompletionScreen()),
+                  (Route<dynamic> route) {
+                    if (kDebugMode) {
+                      print("route name ${route.settings.name}");
+                    }
+                    return route.isFirst;
+                  },
+                );
+              },
+              error: (err, stack) {},
+              loading: () {});
         }
       } else {
         showErrorSnackBar(context, "Please enter the answer.");
@@ -229,7 +241,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           data: (level) {
             return customAppBar(
               context,
-              level, // Pass the current level here
+              level ?? "", // Pass the current level here
               SvgPicture.asset(
                 "assets/icons/svg/hamburger_menu_icon.svg",
                 width: 40,
@@ -270,7 +282,8 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                             MColors().colorPrimary)
                         : gameStartResetButton(context, () {
                             gameNotifier.playTimer(); // Button to start timer
-                          }, 'assets/icons/svg/play_icon.svg', MColors().colorPrimary),
+                          }, 'assets/icons/svg/play_icon.svg',
+                            MColors().colorPrimary),
                     Gap(MediaQuery.of(context).size.height >
                             smallDeviceThreshold
                         ? 20
@@ -285,7 +298,6 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                     ? context.screenHeight * 0.03
                     : context.screenHeight * 0.02),
                 CustomProgressBar(
-
                   progress:
                       calculateCompletionPercentage(gameState.questionProgress),
                 ),
