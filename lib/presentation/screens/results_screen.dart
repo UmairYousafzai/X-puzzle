@@ -1,5 +1,7 @@
+import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:xpuzzle/domain/entities/question.dart';
 import 'package:xpuzzle/presentation/providers/result_provider.dart';
@@ -7,6 +9,7 @@ import '../../data/models/remote/style_card_model.dart';
 import '../providers/level_provider.dart';
 import '../providers/question/question_provider.dart';
 import '../theme/colors.dart';
+import '../widgets/custom_app_bar.dart';
 import '../widgets/levels_header.dart';
 import '../widgets/result_single_card.dart';
 
@@ -54,6 +57,17 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
     }
 
     return Scaffold(
+      appBar: customAppBar(
+          context,
+          "All Result", // Pass the current level here
+          SvgPicture.asset(
+            "assets/icons/svg/back_icon.svg",
+            width: 50,
+            height: 35,
+          ),
+          Image.asset("assets/images/print_icon.png"),
+          onPressedLeading: () {},
+          titleColor: Colors.black),
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
@@ -69,34 +83,7 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    IconButton(
-                      onPressed: () {
-                        Navigator.pop(context);
-                      },
-                      icon: const Icon(Icons.arrow_back),
-                    ),
-                    Text(
-                      "Home",
-                      style: Theme.of(context).textTheme.titleLarge,
-                    ),
-                    Container(
-                      width: 40,
-                      height: 40,
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(10),
-                        image: const DecorationImage(
-                          image: AssetImage(
-                              "assets/images/place_holder_profile.png"),
-                          fit: BoxFit.fill,
-                        ),
-                      ),
-                      child: const Text(""),
-                    ),
-                  ],
-                ),
+
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.01,
                 ),

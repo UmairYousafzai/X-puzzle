@@ -21,9 +21,9 @@ class LevelsHeader extends StatelessWidget{
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              Text(level),
+              Text(level,style: const TextStyle(fontWeight: FontWeight.w600),),
               Text("$totalQuestions/$correct",style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
-              Text(style)
+              Text(style,style: const TextStyle(fontWeight: FontWeight.w600))
             ],
 
           ),

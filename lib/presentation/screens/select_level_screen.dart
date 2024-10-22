@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:xpuzzle/presentation/widgets/snackBar_messages.dart';
 import 'package:xpuzzle/utils/constants.dart';
 import '../providers/level_provider.dart';
 import '../widgets/background_image_container.dart';
@@ -49,10 +50,15 @@ class _SelectLevelScreenState extends ConsumerState<SelectLevelScreen> {
           ),
           Gap(context.screenHeight * 0.04),
           primaryButton(() {
-            ref.read(levelProvider.notifier).updateLevel(selectedValue ?? "");
+            if (selectedValue.isNotEmpty) {
+              ref.read(levelProvider.notifier).updateLevel(selectedValue);
+              Navigator.push(context,
+                  MaterialPageRoute(builder: (ctx) => const HomeScreen()));
+            }else{
+              showErrorSnackBar(context, "Please select level");
+            }
 
-            Navigator.push(context,
-                MaterialPageRoute(builder: (ctx) => const HomeScreen()));
+
           }, 'Continue', Colors.black, context)
         ],
       ),

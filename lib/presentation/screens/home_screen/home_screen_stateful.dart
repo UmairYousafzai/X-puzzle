@@ -98,7 +98,7 @@ class HomeScreenConsumerState extends ConsumerState<HomeScreenConsumerWidget> {
     final isPPAndPSQuestionUseCase = ref.watch(isPPAndPSUseCaseProvider);
     final isPPAndNSQuestionUseCase = ref.watch(isPPAndNSUseCaseProvider);
     final isNPAndPSQuestionUseCase = ref.watch(isNPAndPSUseCaseProvider);
-    final isNPAndNSQuestionUseCase = ref.watch(isNPAndPSUseCaseProvider);
+    final isNPAndNSQuestionUseCase = ref.watch(isNPAndNSUseCaseProvider);
     final getQuestionUseCase = ref.watch(getQuestionUseCaseProvider);
     var questionNotifier = ref.read(questionProvider.notifier);
     final navigator = Navigator.of(context);

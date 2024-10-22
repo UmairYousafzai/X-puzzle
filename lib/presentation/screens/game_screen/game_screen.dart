@@ -133,7 +133,11 @@ class _GameScreenState extends ConsumerState<GameScreen> {
               isNPAndPS: isNPAndPS,
               isNPAndNS: isNPAndNS);
         },
-        error: (err, stack) {},
+        error: (err, stack) {
+          if (kDebugMode) {
+            print(err);
+          }
+        },
         loading: () {});
   }
 
@@ -141,78 +145,116 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       GameNotifier gameNotifier,
       GameState gameState,
       QuestionState questionState,
-      QuestionProviderNotifier questionNotifier) async {
-    if (gameState.isTimerRunning) {
-      if (gameState.firstNumber.isNotEmpty &&
-          gameState.secondNumber.isNotEmpty) {
-        var isCorrect = (gameState.firstNumber == gameState.question?.numOne ||
-                gameState.firstNumber == gameState.question?.numTwo) &&
-            (gameState.secondNumber == gameState.question?.numOne ||
-                gameState.secondNumber == gameState.question?.numTwo);
+      QuestionProviderNotifier questionNotifier,
+      bool shouldValidateData) async {
+    if (validateQuestion(gameState, shouldValidateData)) {
+      updateQuestion(gameState, questionState, questionNotifier, gameNotifier);
 
-        var question = gameState.question;
-
-        if (question != null) {
-          questionNotifier.removeQuestion(question);
-
-          question.isCorrect = isCorrect;
-          question.isComplete = true;
-          question.inputNumOne = gameState.firstNumber;
-          question.inputNumTwo = gameState.secondNumber;
-          await ref.watch(updateQuestionUseCaseProvider).execute(question);
-        }
-
-        gameNotifier.updateQuestionProgress();
-        setProgressOfQuestions(
-            currentProgress: gameState.questionProgress,
-            isPPAndPS: gameState.question?.isPPAndPS ?? false,
-            isPPAndNS: gameState.question?.isPPAndNS ?? false,
-            isNPAndPS: gameState.question?.isNPAndPS ?? false,
-            isNPAndNS: gameState.question?.isNPAndNS ?? false);
-        if (questionState.questions.isNotEmpty) {
-          gameNotifier.updateQuestion(
-              ref.watch(questionProvider).questions[questionIndex]);
-          if (kDebugMode) {
-            print(
-                "question index : $questionIndex==============>>>> questions length ${ref.read(questionProvider).questions.length}");
-          }
-        }
-
-        if (questionState.questions.isEmpty) {
-          ref.read(resultProvider.notifier).setQuestionType(
-              isPPAndPS: gameState.question?.isPPAndPS ?? false,
-              isPPAndNS: gameState.question?.isPPAndNS ?? false,
-              isNPAndPS: gameState.question?.isNPAndPS ?? false,
-              isNPAndNS: gameState.question?.isNPAndNS ?? false);
-          ref.watch(sharedPreferencesProvider).when(
-              data: (pref) {
-                pref.setStyleStatus(
-                    isPPAndPS: gameState.question?.isPPAndPS ?? false,
-                    isPPAndNS: gameState.question?.isPPAndNS ?? false,
-                    isNPAndPS: gameState.question?.isNPAndPS ?? false,
-                    isNPAndNS: gameState.question?.isNPAndNS ?? false);
-                gameNotifier.resetGame();
-                Navigator.pushAndRemoveUntil(
-                  context,
-                  MaterialPageRoute(
-                      builder: (context) => const QuizCompletionScreen()),
-                  (Route<dynamic> route) {
-                    if (kDebugMode) {
-                      print("route name ${route.settings.name}");
-                    }
-                    return route.isFirst;
-                  },
-                );
-              },
-              error: (err, stack) {},
-              loading: () {});
-        }
-      } else {
-        showErrorSnackBar(context, "Please enter the answer.");
-      }
-    } else {
-      showErrorSnackBar(context, "Please start the game.");
+      checkIfQuestionsCompleted(gameState, questionState, gameNotifier);
     }
+  }
+
+  void checkIfQuestionsCompleted(GameState gameState,
+      QuestionState questionState, GameNotifier gameNotifier) {
+    if (questionState.questions.isEmpty) {
+      setQuestionTypeForResults(gameState);
+
+      //setting status of the  style to pref
+      ref.watch(sharedPreferencesProvider).when(
+          data: (pref) {
+            pref.setStyleStatus(
+                isPPAndPS: gameState.question?.isPPAndPS ?? false,
+                isPPAndNS: gameState.question?.isPPAndNS ?? false,
+                isNPAndPS: gameState.question?.isNPAndPS ?? false,
+                isNPAndNS: gameState.question?.isNPAndNS ?? false);
+            gameNotifier.resetGame();
+            navigateToResult();
+          },
+          error: (err, stack) {
+            if (kDebugMode) {
+              print(err);
+            }
+          },
+          loading: () {});
+    }
+  }
+
+  void navigateToResult() {
+    Navigator.pushAndRemoveUntil(
+      context,
+      MaterialPageRoute(builder: (context) => const QuizCompletionScreen()),
+      (Route<dynamic> route) {
+        return route.isFirst;
+      },
+    );
+  }
+
+  void setQuestionTypeForResults(GameState gameState) {
+    ref.read(resultProvider.notifier).setQuestionType(
+        isPPAndPS: gameState.question?.isPPAndPS ?? false,
+        isPPAndNS: gameState.question?.isPPAndNS ?? false,
+        isNPAndPS: gameState.question?.isNPAndPS ?? false,
+        isNPAndNS: gameState.question?.isNPAndNS ?? false);
+  }
+
+  void updateQuestion(
+    GameState gameState,
+    QuestionState questionState,
+    QuestionProviderNotifier questionNotifier,
+    GameNotifier gameNotifier,
+  ) async {
+    var isCorrect = isCorrectQuestion(gameState);
+
+    var question = gameState.question;
+
+    if (question != null) {
+      questionNotifier.removeQuestion(question);
+
+      question.isCorrect = isCorrect;
+      question.isComplete = true;
+      question.inputNumOne =
+          gameState.firstNumber.isEmpty ? "0" : gameState.firstNumber;
+      question.inputNumTwo =
+          gameState.secondNumber.isEmpty ? "0" : gameState.secondNumber;
+      await ref.watch(updateQuestionUseCaseProvider).execute(question);
+    }
+
+    gameNotifier.updateQuestionProgress();
+    setProgressOfQuestions(
+        currentProgress: gameState.questionProgress,
+        isPPAndPS: gameState.question?.isPPAndPS ?? false,
+        isPPAndNS: gameState.question?.isPPAndNS ?? false,
+        isNPAndPS: gameState.question?.isNPAndPS ?? false,
+        isNPAndNS: gameState.question?.isNPAndNS ?? false);
+    if (questionState.questions.isNotEmpty) {
+      gameNotifier
+          .updateQuestion(ref.watch(questionProvider).questions[questionIndex]);
+      if (kDebugMode) {
+        print(
+            "question index : $questionIndex==============>>>> questions length ${ref.read(questionProvider).questions.length}");
+      }
+    }
+  }
+
+  bool isCorrectQuestion(GameState gameState) {
+    return (gameState.firstNumber == gameState.question?.numOne ||
+            gameState.firstNumber == gameState.question?.numTwo) &&
+        (gameState.secondNumber == gameState.question?.numOne ||
+            gameState.secondNumber == gameState.question?.numTwo);
+  }
+
+  bool validateQuestion(GameState gameState, bool shouldCheck) {
+    if (!shouldCheck) return true;
+    if (!gameState.isTimerRunning) {
+      showErrorSnackBar(context, "Please start the game.");
+      return false;
+    }
+    if (gameState.firstNumber.isEmpty && gameState.secondNumber.isEmpty) {
+      showErrorSnackBar(context, "Please enter the answer.");
+      return false;
+    }
+
+    return true;
   }
 
   void switchQuestion(QuestionState questionState, GameState gameState,
@@ -222,6 +264,20 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         .updateQuestion(questionState.questions[gameState.questionIndex]);
   }
 
+  void completeAllRemainingQuestions(
+      QuestionState questionState,
+      GameNotifier gameNotifier,
+      GameState gameState,
+      QuestionProviderNotifier questionNotifier) {
+    print("completeAllRemainingQuestions============  called");
+
+    var questions = questionState.questions;
+    for (int i = 0; i < questions.length ; i++) {
+      onMarkDone(
+          gameNotifier, gameState, questionState, questionNotifier, false);
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final questionsState = ref.watch(questionProvider);
@@ -229,6 +285,16 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     final gameState = ref.watch(gameProvider);
     final gameNotifier = ref.read(gameProvider.notifier);
     final level = ref.read(levelProvider);
+
+    ref.listen<GameState>(gameProvider, (prev, next) {
+      if (next.isTimerFinished) {
+        if (kDebugMode) {
+          print("isTimerFinished  ${next.isTimerFinished}");
+        }
+        completeAllRemainingQuestions(
+            questionsState, gameNotifier, gameState, questionsProvider);
+      }
+    });
 
     return PopScope(
       onPopInvoked: (canPop) {
@@ -275,11 +341,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                     ),
                     const Spacer(),
                     gameState.isTimerRunning
-                        ? gameStartResetButton(context, () {
-                            // Button to pause timer
-                            gameNotifier.pauseTimer();
-                          }, 'assets/icons/svg/pause_icon.svg',
-                            MColors().colorPrimary)
+                        ? Container()
                         : gameStartResetButton(context, () {
                             gameNotifier.playTimer(); // Button to start timer
                           }, 'assets/icons/svg/play_icon.svg',
@@ -309,7 +371,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                   children: [
                     GameWidget(onMarkDonePressed: () {
                       onMarkDone(gameNotifier, gameState, questionsState,
-                          questionsProvider);
+                          questionsProvider, true);
                     }),
                     Gap(MediaQuery.of(context).size.height >
                             smallDeviceThreshold
@@ -339,7 +401,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                             : 25),
                         gameBacknNextButton(context, () {
                           onMarkDone(gameNotifier, gameState, questionsState,
-                              questionsProvider);
+                              questionsProvider, true);
                           // if (questionIndex <= questions.questions.length - 1) {
                           //   if (mounted) {
                           //     questionIndex++;

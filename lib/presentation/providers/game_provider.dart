@@ -21,6 +21,7 @@ class GameState {
   final int questionIndex;
   final int questionProgress;
   bool isTimerRunning;
+  bool isTimerFinished;
   FocusNode firstNumberFocus;
   FocusNode secondNumberFocus;
   Question? question;
@@ -36,6 +37,7 @@ class GameState {
     this.questionIndex = 0,
     this.questionProgress = 0,
     this.isTimerRunning = false,
+    this.isTimerFinished = false,
     required this.firstNumberFocus,
     required this.secondNumberFocus,
     this.question,
@@ -52,6 +54,7 @@ class GameState {
     int? questionIndex,
     int? questionProgress,
     bool? isTimerRunning,
+    bool? isTimerFinished,
     FocusNode? firstNumberFocus,
     FocusNode? secondNumberFocus,
     Question? question,
@@ -67,6 +70,7 @@ class GameState {
       questionIndex: questionIndex ?? this.questionIndex,
       questionProgress: questionProgress ?? this.questionProgress,
       isTimerRunning: isTimerRunning ?? this.isTimerRunning,
+      isTimerFinished: isTimerFinished ?? this.isTimerFinished,
       firstNumberFocus: firstNumberFocus ?? this.firstNumberFocus,
       secondNumberFocus: secondNumberFocus ?? this.secondNumberFocus,
       question: question ?? this.question,
@@ -101,7 +105,9 @@ class GameNotifier extends StateNotifier<GameState> {
   }
 
   void updateQuestion(Question question) {
-    state = state.copyWith(question: question);
+    state =
+        // state.copyWith(question: question, firstNumber: "", secondNumber: "");
+        state.copyWith(question: question);
   }
 
   void updateTimer(int seconds) {
@@ -131,7 +137,7 @@ class GameNotifier extends StateNotifier<GameState> {
         _tick(); // Update the timer every second
       } else {
         timer.cancel();
-        state = state.copyWith(isTimerRunning: false);
+        state = state.copyWith(isTimerRunning: false, isTimerFinished: true);
       }
     });
   }

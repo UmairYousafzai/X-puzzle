@@ -18,8 +18,14 @@ class DropdownFieldWidget extends ConsumerWidget {
 
     return DropdownButtonFormField<String>(
       value: selectedValue.when(data: (data) {
-        onChanged(data);
-        return data;
+        if (data != null && data.isNotEmpty) {
+          onChanged(data);
+          return data;
+        } else {
+          onChanged("Level 1");
+
+          return "Level 1";
+        }
       }, error: (err, stack) {
         return "Level 1";
       }, loading: () {
