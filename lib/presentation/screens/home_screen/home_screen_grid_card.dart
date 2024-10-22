@@ -8,10 +8,10 @@ import 'package:xpuzzle/utils/constants.dart';
 import '../../../data/models/remote/style_card_model.dart';
 import '../../theme/colors.dart';
 
-class StyleCard extends ConsumerStatefulWidget {
+class GridStyleCard extends ConsumerStatefulWidget {
   final StyleCardItemModel styleItemModel;
 
-  const StyleCard({super.key, required this.styleItemModel});
+  const GridStyleCard({super.key, required this.styleItemModel});
 
   @override
   _StyleCard createState() {
@@ -19,24 +19,22 @@ class StyleCard extends ConsumerStatefulWidget {
   }
 }
 
-class _StyleCard extends ConsumerState<StyleCard> {
+class _StyleCard extends ConsumerState<GridStyleCard> {
   @override
   Widget build(BuildContext context) {
     final sharedPref= ref.watch(sharedPreferencesProvider);
     return Container(
-      width: context.screenWidth * 0.43,
-      height: context.screenHeight * 0.28,
-      margin: const EdgeInsets.all(6),
-      padding: const EdgeInsets.all(15),
+      width: context.screenWidth * 0.445,
+      height: context.screenHeight * 0.29,
       decoration: BoxDecoration(
         color: Colors.white,
         borderRadius: BorderRadius.circular(20),
         boxShadow: [
           BoxShadow(
-            color: Colors.grey.withOpacity(0.5),
-            spreadRadius: 1,
-            blurRadius: 2,
-            offset: const Offset(0, 3),
+            color: Colors.grey.withOpacity(0.2),
+            spreadRadius: 4,
+            blurRadius: 5,
+            offset: const Offset(0, 0),
           ),
         ],
       ),
