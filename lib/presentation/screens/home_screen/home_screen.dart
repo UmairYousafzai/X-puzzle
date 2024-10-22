@@ -5,8 +5,8 @@ import 'package:flutter_svg/svg.dart';
 import 'package:xpuzzle/presentation/widgets/custom_app_bar.dart';
 
 import '../../providers/home_screen_providers.dart';
-import 'home_screen2_stateful.dart';
-import 'home_screen_stateful.dart';
+import 'home_screen_list_view.dart';
+import 'home_screen_grid_view.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -94,8 +94,8 @@ class HomeScreen extends ConsumerWidget {
                     height: MediaQuery.of(context).size.height * 0.03,
                   ),
                   screenState["view_type"] == ViewType.list
-                      ? const Expanded(child: HomeScreenConsumerWidget())
-                      : const Expanded(child: HomeScreen2ConsumerWidget()),
+                      ? const Expanded(child: HomeScreenGridView())
+                      : const Expanded(child: HomeScreenListView()),
                 ],
               ),
             ),
