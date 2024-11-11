@@ -48,6 +48,7 @@ class QuestionProviderNotifier extends StateNotifier<QuestionState> {
         isNPAndNS: isNPAndNS,
         isComplete: true);
 
+    print("question size:  ${newQuestions.length}");
     state = state.copyWith(
         questions: newQuestions,
         isPPAndPS: isPPAndPS,

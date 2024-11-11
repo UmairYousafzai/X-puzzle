@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:xpuzzle/presentation/screens/dialogs/style_completed_custom_dialog.dart';
 
 import '../../theme/colors.dart';
 
@@ -10,19 +11,20 @@ class CustomProgressBar extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 30),
+      padding: const EdgeInsets.symmetric(horizontal: 15),
       child: Container(
-        height: 6, // Height of the progress bar
+        height: 6, //
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(10), // Rounded corners for the track
-         color: MColors().colorSecondaryBlueDark
+         color: MColors().beigeColor
         ),
         child: Stack(
           children: [
             Container(
+
               // Background container for the track
               decoration: BoxDecoration(
-                color: MColors().white, // Track background color
+                color: MColors().beigeColor, // Track background color
                 borderRadius: BorderRadius.circular(10),
               ),
             ),
@@ -31,7 +33,7 @@ class CustomProgressBar extends StatelessWidget {
               child: Container(
                 decoration: BoxDecoration(
                   borderRadius: BorderRadius.circular(10),
-                 color: MColors().colorSecondaryBlueDark
+                 gradient: LinearGradient(colors: [MColors().brightCyan,MColors().vividSkyBlue,])
                 ),
               ),
             ),

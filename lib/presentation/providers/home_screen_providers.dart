@@ -35,7 +35,7 @@ enum ViewType { list, grid }
 
 class HomeScreenViewNotifier extends StateNotifier<Map<String, dynamic>> {
   HomeScreenViewNotifier()
-      : super({"view_type": ViewType.list, "is_loading": false});
+      : super({"view_type": ViewType.list, "is_loading": false,"style":0});
 
   void toggleView() {
     if (state["view_type"] == ViewType.list) {
@@ -47,6 +47,10 @@ class HomeScreenViewNotifier extends StateNotifier<Map<String, dynamic>> {
 
   void setLoading(bool isLoading) {
     state = {...state, "is_loading": isLoading};
+  }
+
+  void setStyle(int style) {
+    state = {...state, "style": style};
   }
 
 

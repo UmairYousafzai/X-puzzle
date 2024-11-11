@@ -7,12 +7,13 @@ extension ScreenSize on BuildContext {
 
 //UI
 int smallDeviceThreshold = 700;
+int largeDeviceThreshold = 800;
 
 
 
 
 //Strings
-String quizCompletedLabel="Congratulation you've Completed this Quiz!";
+String quizCompletedLabel="Congratulations you’ve\nCompleted this Quiz!";
 String playMoreQuizLabel="Let's keep testing your knowledge by playing more quizzes!";
 
 

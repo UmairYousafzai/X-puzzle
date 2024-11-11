@@ -20,7 +20,7 @@ class QuestionTimeRepositoryImpl extends QuestionTimeRepository {
     try {
       QuestionTimeModel questionTimeModel =
           QuestionTimeModel.copy(questionTime);
-     return await _timeDao.insertQuestionTime(questionTimeModel);
+      return await _timeDao.insertQuestionTime(questionTimeModel);
     } catch (e) {
       if (kDebugMode) {
         print(e);
@@ -40,5 +40,20 @@ class QuestionTimeRepositoryImpl extends QuestionTimeRepository {
         isPPAndNS: isPPAndNS,
         isNPAndPS: isNPAndPS,
         isNPAndNS: isNPAndNS);
+  }
+
+  @override
+  Future<void> deleteQuestionTime({
+    bool isPPAndPS = false,
+    bool isPPAndNS = false,
+    bool isNPAndPS = false,
+    bool isNPAndNS = false,
+  }) async {
+    await _timeDao.deleteEntry(
+      isPPAndPS: isPPAndPS,
+      isPPAndNS: isPPAndNS,
+      isNPAndPS: isNPAndPS,
+      isNPAndNS: isNPAndNS,
+    );
   }
 }

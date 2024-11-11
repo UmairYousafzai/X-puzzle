@@ -34,22 +34,27 @@ class GameWidget extends ConsumerWidget {
       child: Stack(
         alignment: Alignment.center,
         children: [
-          FractionallySizedBox(
-            widthFactor: 0.5,
+          Align(
+            alignment: Alignment.center,
             child: SvgPicture.asset(
               'assets/icons/svg/purple_cross.svg',
               fit: BoxFit.contain,
+              height: context.screenHeight > smallDeviceThreshold
+                  ? context.screenHeight * 0.23
+                  : context.screenHeight * 0.2,
             ),
           ),
           Positioned(
             top: MediaQuery.of(context).size.height > smallDeviceThreshold
-                ? context.screenHeight * 0.07
-                : context.screenHeight * 0.042,
+                ? context.screenHeight * 0.066
+                : context.screenHeight * 0.05,
             left: 0,
             right: 0,
             child: Padding(
               padding:
-                  EdgeInsets.symmetric(horizontal: context.screenHeight * 0.05),
+                  EdgeInsets.only(left: context.screenHeight * 0.05,right: context.screenHeight * 0.05,
+                    top: context.screenHeight > largeDeviceThreshold?context.screenHeight*0.019 :context.screenHeight*0.008,
+              ),
               child: Column(
                 children: [
                   Gap(context.screenHeight * 0.01),
@@ -78,20 +83,20 @@ class GameWidget extends ConsumerWidget {
                     mainAxisAlignment: MainAxisAlignment.spaceAround,
                     children: [
                       gameNumberTextField(
-                        value: gameState.firstNumber,
-                        context: context,
-                        fontSize: 22,
-                        onChanged: gameNotifier.updateFirstNumber,
-                        focusNode: firstNumberFocus,
-                      ),
+                          value: gameState.firstNumber,
+                          context: context,
+                          fontSize: context.screenHeight>smallDeviceThreshold ? 22: 18,
+                          onChanged: gameNotifier.updateFirstNumber,
+                          focusNode: firstNumberFocus,
+                          hasError: gameState.hasErrorOnTextFieldOne),
                       const Gap(10),
                       gameNumberTextField(
-                        value: gameState.secondNumber,
-                        context: context,
-                        fontSize: 22,
-                        onChanged: gameNotifier.updateSecondNumber,
-                        focusNode: secondNumberFocus,
-                      ),
+                          value: gameState.secondNumber,
+                          context: context,
+                          fontSize: 22,
+                          onChanged: gameNotifier.updateSecondNumber,
+                          focusNode: secondNumberFocus,
+                          hasError: gameState.hasErrorOnTextFieldTwo),
                     ],
                   ),
                   const Gap(5),
@@ -103,7 +108,11 @@ class GameWidget extends ConsumerWidget {
                         color: Colors.black),
                   ),
                   Gap(context.screenHeight * 0.066),
-                  gameDoneButton(onMarkDonePressed, context),
+                  gameDoneButton(
+                    onMarkDonePressed,
+                    context,
+                    "Mark Done",
+                  ),
                   Gap(context.screenHeight * 0.02),
                 ],
               ),

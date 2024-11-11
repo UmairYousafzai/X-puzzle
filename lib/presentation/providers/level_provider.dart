@@ -24,6 +24,7 @@ final levelProvider = AsyncNotifierProvider<LevelProviderNotifier, String?>(
 
 final levelListProvider = Provider<List<String>>((ref) {
   return [
+    'Select Level',
     'Level 1',
     'Level 2',
     'Level 3',

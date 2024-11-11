@@ -9,8 +9,9 @@ import '../../widgets/buttons/buttons.dart';
 
 class ListStyleCard extends StatelessWidget {
   final StyleCardItemModel item;
+  final void Function() onClicked;
 
-  const ListStyleCard({super.key, required this.item});
+  const ListStyleCard({super.key, required this.item,required this.onClicked});
 
   @override
   Widget build(BuildContext context) {
@@ -79,7 +80,7 @@ class ListStyleCard extends StatelessWidget {
                         .apply(color: Colors.black87),
                   ),
                   const Gap(20),
-                  startButton(() {}, context)
+                  startButton(onClicked, context)
                 ],
               ),
             ],

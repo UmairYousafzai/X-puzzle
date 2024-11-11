@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:xpuzzle/utils/constants.dart';
 
 import '../../theme/colors.dart';
@@ -129,7 +130,8 @@ gameNumberButton(VoidCallback onPressed, Color backgroundColor, String text,
   );
 }
 
-gameDoneButton(VoidCallback onPressed, BuildContext context) {
+gameDoneButton(VoidCallback onPressed, BuildContext context, String title,
+    {double borderRadius = 30, double paddingHorizontal = 0.2}) {
   return InkWell(
     onTap: onPressed,
     child: Container(
@@ -140,18 +142,21 @@ gameDoneButton(VoidCallback onPressed, BuildContext context) {
           color: MColors().colorSecondaryOrangeDark, // #0CD4F8 with 50% opacity
           width: 1, // You can adjust the border width as needed
         ),
-        borderRadius: BorderRadius.circular(30),
+        borderRadius: BorderRadius.circular(borderRadius),
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(
-            horizontal: 60,
+            horizontal: context.screenWidth * paddingHorizontal,
             vertical: MediaQuery.of(context).size.height > smallDeviceThreshold
-                ? 12
+                ? 14
                 : 6),
         child: Text(
-          'Mark Done',
-          style: Theme.of(context).textTheme.titleMedium!.copyWith(
-              color: MColors().colorSecondaryOrangeDark, fontSize: 13),
+          title,
+          textAlign: TextAlign.center,
+          style: GoogleFonts.poppins(
+              fontWeight: FontWeight.w600,
+              color: MColors().colorSecondaryOrangeDark,
+              fontSize: 15.32),
         ),
       ),
     ),
@@ -163,7 +168,7 @@ gameBacknNextButton(
   return GestureDetector(
     onTap: isActive ? onPressed : null,
     child: Opacity(
-      opacity:isActive ? 1.0 : 0.33,
+      opacity: isActive ? 1.0 : 0.33,
       child: Container(
         padding: EdgeInsets.symmetric(
           vertical:
@@ -181,14 +186,13 @@ gameBacknNextButton(
         child: isNext
             ? Row(
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                mainAxisSize: MainAxisSize.min, // Adjust the size to the content
+                mainAxisSize:
+                    MainAxisSize.min, // Adjust the size to the content
                 children: [
                   Text(
                     'Next', // The text inside the button
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleSmall!
-                        .copyWith(fontWeight: FontWeight.w500, fontSize: 16),
+                    style: GoogleFonts.poppins(
+                        fontSize: 16, fontWeight: FontWeight.w500),
                   ),
                   const Gap(15),
                   // Gap between the text and the arrow icon
@@ -213,7 +217,8 @@ gameBacknNextButton(
                 ],
               )
             : Row(
-                mainAxisSize: MainAxisSize.min, // Adjust the size to the content
+                mainAxisSize:
+                    MainAxisSize.min, // Adjust the size to the content
                 children: [
                   // Gap between the text and the arrow icon
                   Container(
@@ -237,15 +242,46 @@ gameBacknNextButton(
                   const Gap(15),
                   Text(
                     'Back', // The text inside the button
-                    style: Theme.of(context)
-                        .textTheme
-                        .titleSmall!
-                        .copyWith(fontWeight: FontWeight.w500, fontSize: 16),
+                    style: GoogleFonts.poppins(
+                        fontSize: 16, fontWeight: FontWeight.w500),
                   ),
                 ],
               ),
       ),
     ),
+  );
+}
+
+gradientButton(BuildContext context, VoidCallback onPressed, String title,
+    double borderRadius) {
+  return GestureDetector(
+    onTap: onPressed,
+    child: Container(
+        padding: EdgeInsets.symmetric(
+          vertical: MediaQuery.of(context).size.height > smallDeviceThreshold
+              ? 15
+              : 10,
+          horizontal: context.screenWidth * 0.1,
+        ),
+        decoration: BoxDecoration(
+          color: MColors().colorPrimary, // #FFFBF3
+          gradient: const LinearGradient(colors: [
+            Color(0xFF38E8F3),
+            Color(0xFF09D3F8),
+          ]),
+          borderRadius: BorderRadius.circular(borderRadius),
+        ),
+        child: Align(
+          alignment: Alignment.center,
+          child: Text(
+            title,
+            style: GoogleFonts.poppins(
+              fontSize: 16,
+              fontWeight: FontWeight.w500,
+              color: Colors.white,
+            ),
+          ),
+        )),
   );
 }
 
@@ -263,8 +299,8 @@ viewCompleteResultsButton(VoidCallback onPressed, BuildContext context) {
       child: Center(
         child: Text(
           'View Complete Results',
-          style: Theme.of(context).textTheme.titleSmall!.copyWith(
-              fontWeight: FontWeight.w600,
+          style: GoogleFonts.poppins(
+              fontWeight: FontWeight.w500,
               fontSize: 18,
               color: MColors().colorSecondaryOrangeDark),
         ),

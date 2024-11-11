@@ -22,6 +22,8 @@ class GameState {
   final int questionProgress;
   bool isTimerRunning;
   bool isTimerFinished;
+  bool hasErrorOnTextFieldOne;
+  bool hasErrorOnTextFieldTwo;
   FocusNode firstNumberFocus;
   FocusNode secondNumberFocus;
   Question? question;
@@ -38,6 +40,8 @@ class GameState {
     this.questionProgress = 0,
     this.isTimerRunning = false,
     this.isTimerFinished = false,
+    this.hasErrorOnTextFieldOne = false,
+    this.hasErrorOnTextFieldTwo = false,
     required this.firstNumberFocus,
     required this.secondNumberFocus,
     this.question,
@@ -55,6 +59,8 @@ class GameState {
     int? questionProgress,
     bool? isTimerRunning,
     bool? isTimerFinished,
+    bool? hasErrorOnTextFieldOne,
+    bool? hasErrorOnTextFieldTwo,
     FocusNode? firstNumberFocus,
     FocusNode? secondNumberFocus,
     Question? question,
@@ -71,6 +77,10 @@ class GameState {
       questionProgress: questionProgress ?? this.questionProgress,
       isTimerRunning: isTimerRunning ?? this.isTimerRunning,
       isTimerFinished: isTimerFinished ?? this.isTimerFinished,
+      hasErrorOnTextFieldOne:
+          hasErrorOnTextFieldOne ?? this.hasErrorOnTextFieldOne,
+      hasErrorOnTextFieldTwo:
+          hasErrorOnTextFieldTwo ?? this.hasErrorOnTextFieldTwo,
       firstNumberFocus: firstNumberFocus ?? this.firstNumberFocus,
       secondNumberFocus: secondNumberFocus ?? this.secondNumberFocus,
       question: question ?? this.question,
@@ -106,8 +116,8 @@ class GameNotifier extends StateNotifier<GameState> {
 
   void updateQuestion(Question question) {
     state =
-        // state.copyWith(question: question, firstNumber: "", secondNumber: "");
-        state.copyWith(question: question);
+        state.copyWith(question: question, firstNumber: "", secondNumber: "");
+    // state.copyWith(question: question);
   }
 
   void updateTimer(int seconds) {
@@ -127,6 +137,14 @@ class GameNotifier extends StateNotifier<GameState> {
 
   void setTime(int minutes, int seconds, int? timeID) {
     state = state.copyWith(minutes: minutes, seconds: seconds, timeID: timeID);
+  }
+
+  void setErrorOnInputOne(bool error) {
+    state = state.copyWith(hasErrorOnTextFieldOne: error);
+  }
+
+  void setErrorOnInputTwo(bool error) {
+    state = state.copyWith(hasErrorOnTextFieldTwo: error);
   }
 
   void playTimer() {

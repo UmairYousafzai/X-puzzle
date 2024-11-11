@@ -6,9 +6,12 @@ import 'package:xpuzzle/presentation/screens/select_level_screen.dart';
 import 'package:xpuzzle/presentation/theme/app_theme.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
 
-
 void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  SystemChrome.setPreferredOrientations([
+    DeviceOrientation.portraitUp,
+    DeviceOrientation.portraitDown,
+  ]);
   FlutterNativeSplash.preserve(widgetsBinding: widgetsBinding);
   runApp(const ProviderScope(child: MyApp()));
   FlutterNativeSplash.remove();
@@ -17,12 +20,12 @@ void main() {
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
 
-
   // This widget is the root of your application.
   @override
   Widget build(BuildContext context) {
     if (kDebugMode) {
       print("heigth  size: ${MediaQuery.of(context).size.height}");
+      print("width  size: ${MediaQuery.of(context).size.width}");
     }
     SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
       statusBarColor: Colors.transparent,

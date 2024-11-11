@@ -10,4 +10,10 @@ abstract class QuestionTimeRepository {
     bool isNPAndPS = false,
     bool isNPAndNS = false,
   });
+  Future<void> deleteQuestionTime({
+    bool isPPAndPS = false,
+    bool isPPAndNS = false,
+    bool isNPAndPS = false,
+    bool isNPAndNS = false,
+  });
 }
