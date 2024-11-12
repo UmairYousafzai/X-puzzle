@@ -9,6 +9,7 @@ import 'package:xpuzzle/presentation/providers/question/question_provider.dart';
 import 'package:xpuzzle/presentation/providers/question/question_state.dart';
 import 'package:xpuzzle/presentation/providers/result_provider.dart';
 import 'package:xpuzzle/presentation/providers/shared_pref_provider.dart';
+import 'package:xpuzzle/presentation/screens/dialogs/show_on_question_complete_dialog.dart';
 import 'package:xpuzzle/utils/constants.dart';
 import 'package:xpuzzle/utils/navigation/navigate.dart';
 
@@ -150,9 +151,22 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       QuestionProviderNotifier questionNotifier,
       bool shouldValidateData) async {
     if (validateQuestion(shouldValidateData)) {
-      updateQuestion(gameState, questionState, questionNotifier, gameNotifier);
-
-      checkIfQuestionsCompleted(gameState, questionState, gameNotifier);
+      showOnQuestionCompleteDialog(
+          isCorrectAnswer: isCorrectQuestion(gameState),
+          context: context,
+          onNext: () async {
+            if (questionState.questions.length == 1) Navigator.pop(context);
+            await updateQuestion(
+                gameState, questionState, questionNotifier, gameNotifier);
+            checkIfQuestionsCompleted(gameState, questionState, gameNotifier);
+          },
+          onTryAgain: () {
+            gameNotifier.updateFirstNumber("");
+            gameNotifier.updateSecondNumber("");
+          },
+          onClose: () {
+            Navigator.pop(context);
+          });
     }
   }
 
@@ -194,7 +208,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         isNPAndNS: gameState.question?.isNPAndNS ?? false);
   }
 
-  void updateQuestion(
+  Future<void> updateQuestion(
     GameState gameState,
     QuestionState questionState,
     QuestionProviderNotifier questionNotifier,
@@ -287,12 +301,14 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       GameNotifier gameNotifier,
       GameState gameState,
       QuestionProviderNotifier questionNotifier) {
-    print("completeAllRemainingQuestions============  called");
+    if (kDebugMode) {
+      print("completeAllRemainingQuestions============  called");
+    }
 
     var questions = questionState.questions;
     for (int i = 0; i < questions.length; i++) {
-      onMarkDone(
-          gameNotifier, gameState, questionState, questionNotifier, false);
+      updateQuestion(gameState, questionState, questionNotifier, gameNotifier);
+      checkIfQuestionsCompleted(gameState, questionState, gameNotifier);
     }
   }
 

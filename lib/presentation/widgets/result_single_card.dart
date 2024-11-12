@@ -82,6 +82,7 @@ class ResultSingleCard extends StatelessWidget {
                                       left: 5.0, top: 3, right: 5, bottom: 3),
                                   child: Text(
                                     question.inputNumOne,
+                                    textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color:
@@ -108,6 +109,7 @@ class ResultSingleCard extends StatelessWidget {
                                       left: 5.0, top: 3, right: 5, bottom: 3),
                                   child: Text(
                                     question.inputNumTwo,
+                                    textAlign: TextAlign.center,
                                     style: TextStyle(
                                         fontWeight: FontWeight.bold,
                                         color:

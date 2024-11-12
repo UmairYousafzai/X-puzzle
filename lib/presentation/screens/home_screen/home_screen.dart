@@ -1,4 +1,5 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -25,7 +26,9 @@ class HomeScreen extends ConsumerWidget {
     return PopScope(
       canPop: true,
       onPopInvokedWithResult: (didPop,result) {
-        print("canPop===========> $didPop");
+        if (kDebugMode) {
+          print("canPop===========> $didPop");
+        }
 
           ref.watch(homeViewTypeProvider.notifier).setLoading(false);
           Navigator.push(context, MaterialPageRoute(builder: (ctx)=> const SelectLevelScreen()));

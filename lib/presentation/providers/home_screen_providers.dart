@@ -8,25 +8,25 @@ final homeScreenStylesProvider = Provider<List<StyleCardItemModel>>((ref) {
         style: Styles.style1,
         product: "Positive product",
         sum: "Positive sum",
-        styleName: "Style1",
+        styleName: "Level 1",
         imageSrc: "assets/icons/svg/style_icon.svg"),
     StyleCardItemModel(
         style: Styles.style2,
         product: "Positive product",
         sum: "Negative sum",
-        styleName: "Style2",
+        styleName: "Level 2",
         imageSrc: "assets/icons/svg/style_two.svg"),
     StyleCardItemModel(
         style: Styles.style3,
         product: "Negative product",
         sum: "Positive sum",
-        styleName: "Style3",
+        styleName: "Level 3",
         imageSrc: "assets/icons/svg/style_three.svg"),
     StyleCardItemModel(
         style: Styles.style4,
         product: "Negative product",
         sum: "Negative sum",
-        styleName: "Style4",
+        styleName: "Level 4",
         imageSrc: "assets/icons/svg/style_four.svg")
   ];
 });
