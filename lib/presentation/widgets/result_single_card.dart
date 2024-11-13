@@ -69,7 +69,7 @@ class ResultSingleCard extends StatelessWidget{
                             ),
                             child: Padding(
                               padding: const EdgeInsets.only(left: 5.0,top: 3,right: 5,bottom: 3),
-                              child: Text(question.numOne,style: TextStyle(
+                              child: Text(question.inputNumOne,style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: MColors().colorSecondaryBlueDark
                               ),),
@@ -83,7 +83,7 @@ class ResultSingleCard extends StatelessWidget{
                             ),
                             child: Padding(
                               padding: const EdgeInsets.only(left: 5.0,top: 3,right: 5,bottom: 3),
-                              child: Text(question.numTwo,style: TextStyle(
+                              child: Text(question.inputNumTwo,style: TextStyle(
                                   fontWeight: FontWeight.bold,
                                   color: MColors().colorSecondaryBlueDark
                               ),),

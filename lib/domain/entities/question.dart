@@ -3,6 +3,8 @@ class Question {
     required this.id,
     required  this.numOne,
     required this.numTwo,
+    required this.inputNumOne,
+    required this.inputNumTwo,
     required this.topNum,
     required this.bottomNum,
     required this.isComplete,
@@ -16,8 +18,11 @@ class Question {
   int? id;
   String numOne;
   String numTwo;
+  String inputNumOne;
+  String inputNumTwo;
   String topNum;
   String bottomNum;
+
   bool isComplete;
   bool isCorrect;
   bool isPPAndPS;

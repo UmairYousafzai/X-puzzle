@@ -6,6 +6,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 class SharedPreferencesHelper {
   final SharedPreferences _sharedPreferences;
   final LEVEL_KEY = "level";
+  final STYLE_KEY = "style";
   final QUESTION_PPROGRESS_KEY = "question_progress";
   final SWITCH_INDICES_KEY = "indices";
 
@@ -44,6 +45,51 @@ class SharedPreferencesHelper {
 
   String? getLevel() {
     return _sharedPreferences.getString(LEVEL_KEY);
+  }
+
+  Future<void> setStyleStatus(
+      {bool isPPAndPS = false,
+      bool isPPAndNS = false,
+      bool isNPAndPS = false,
+      bool isNPAndNS = false}) async {
+    String keyPrefix = "";
+
+    if (isPPAndPS) {
+      keyPrefix = "isPPAndPS";
+    } else if (isPPAndNS) {
+      keyPrefix = "isPPAndNS";
+    } else if (isNPAndPS) {
+      keyPrefix = "isNPAndPS";
+    } else if (isNPAndNS) {
+      keyPrefix = "isNPAndNS";
+    }
+
+    if (kDebugMode) {
+      print("style saved value==============> $keyPrefix");
+    }
+    await _sharedPreferences.setBool("$keyPrefix-$STYLE_KEY", true);
+  }
+
+  bool? isStyleAttempted(  {bool isPPAndPS = false,
+    bool isPPAndNS = false,
+    bool isNPAndPS = false,
+    bool isNPAndNS = false}) {
+    String keyPrefix = "";
+
+    if (isPPAndPS) {
+      keyPrefix = "isPPAndPS";
+    } else if (isPPAndNS) {
+      keyPrefix = "isPPAndNS";
+    } else if (isNPAndPS) {
+      keyPrefix = "isNPAndPS";
+    } else if (isNPAndNS) {
+      keyPrefix = "isNPAndNS";
+    }
+
+    if (kDebugMode) {
+      print("style get value==============> $keyPrefix");
+    }
+    return _sharedPreferences.getBool("$keyPrefix-$STYLE_KEY");
   }
 
   Future<void> saveQuestionProgress(

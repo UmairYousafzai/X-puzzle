@@ -29,6 +29,8 @@ class DatabaseHelper {
       id INTEGER PRIMARY KEY AUTOINCREMENT,
       num_one TEXT NOT NULL,  
       num_two TEXT NOT NULL,  
+      input_num_one TEXT NOT NULL,  
+      input_num_two TEXT NOT NULL,  
       top_num TEXT NOT NULL,
       bottom_num TEXT NOT NULL,
       is_complete BOOLEAN DEFAULT 0,

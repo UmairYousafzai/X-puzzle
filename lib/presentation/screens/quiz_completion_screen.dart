@@ -72,6 +72,7 @@ class _QuizCompletionScreen extends ConsumerState<QuizCompletionScreen> {
 
     final questions = ref.watch(questionProvider).questions;
     return Scaffold(
+
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
@@ -114,7 +115,7 @@ class _QuizCompletionScreen extends ConsumerState<QuizCompletionScreen> {
               Gap(context.screenHeight * 0.03),
               level.when(data: (data) {
                 return LevelsHeader(
-                  level: data,
+                  level: data ?? "",
                   style: getStyle(resultScreen),
                   totalQuestions: questions.length,
                   correct: totalCorrectAns(questions),
@@ -142,6 +143,7 @@ class _QuizCompletionScreen extends ConsumerState<QuizCompletionScreen> {
                     borderRadius: BorderRadius.circular(15),
                     image: const DecorationImage(
                         image: AssetImage(
+
                             "assets/images/background_congratulations.png"),
                         fit: BoxFit.cover)),
                 child: Padding(
@@ -149,7 +151,7 @@ class _QuizCompletionScreen extends ConsumerState<QuizCompletionScreen> {
                   child: Column(
                     children: [
                       Gap(context.screenHeight * 0.15),
-                      Image.asset('assets/images/great_job.png'),
+                      Image.asset(width:context.screenWidth*0.74,'assets/images/great_job.png'),
                       Gap(context.screenHeight * 0.14),
                       Center(
                         child: Text(
@@ -181,10 +183,15 @@ class _QuizCompletionScreen extends ConsumerState<QuizCompletionScreen> {
                       ),
                       const Gap(15),
                       viewCompleteResultsButton(() {
-                        Navigator.push(
-                            context,
-                            MaterialPageRoute(
-                                builder: (ctx) => const ResultsScreen()));
+                        Navigator.pushAndRemoveUntil(
+                          context,
+                          MaterialPageRoute(
+                              builder: (context) => const ResultsScreen()),
+                              (Route<dynamic> route) {
+
+                            return route.isFirst;
+                          },
+                        );
                       }, context),
                       const Gap(15),
                       primaryButton(() {

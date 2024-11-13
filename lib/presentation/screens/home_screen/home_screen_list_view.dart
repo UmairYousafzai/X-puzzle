@@ -7,22 +7,21 @@ import '../../../domain/use_cases/store_questions.dart';
 import '../../providers/home_screen_providers.dart';
 import '../../providers/question/question_provider.dart';
 import '../../providers/question/question_usecase_provider.dart';
-import '../../theme/colors.dart';
 import '../../widgets/snackBar_messages.dart';
 import '../game_screen/game_screen.dart';
-import 'home_screen2_card_design.dart';
+import 'home_screen_list_card.dart';
+import 'home_screen_grid_card.dart';
 
-class HomeScreen2ConsumerWidget extends ConsumerStatefulWidget {
-  const HomeScreen2ConsumerWidget({super.key});
+class HomeScreenListView extends ConsumerStatefulWidget {
+  const HomeScreenListView({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() {
-    return HomeScreen2ConsumerState();
+    return HomeScreenListViewState();
   }
 }
 
-class HomeScreen2ConsumerState extends ConsumerState<HomeScreen2ConsumerWidget> {
-
+class HomeScreenListViewState extends ConsumerState<HomeScreenListView> {
   Future<void> generateAndStoreQuestion({
     required GetQuestions getQuestionsUseCase,
     required StoreQuestions storeQuestions,
@@ -91,8 +90,6 @@ class HomeScreen2ConsumerState extends ConsumerState<HomeScreen2ConsumerWidget> 
 
   @override
   Widget build(BuildContext context) {
-    final cards=ref.watch(homeScreenStylesProvider);
-
     final screenState = ref.watch(homeViewTypeProvider);
     final screenStateNotifier = ref.watch(homeViewTypeProvider.notifier);
     final storeQuestionsUseCase = ref.watch(storeQuestionUseCaseProvider);
@@ -104,22 +101,16 @@ class HomeScreen2ConsumerState extends ConsumerState<HomeScreen2ConsumerWidget> 
     var questionNotifier = ref.read(questionProvider.notifier);
     final navigator = Navigator.of(context);
     final ctxt= context;
-    return screenState["is_loading"]
-        ? Center(
-      child: CircularProgressIndicator(
-        color: MColors().colorSecondaryBlueLight,
-      ),
-    )
-        :
+    final cards = ref.watch(homeScreenStylesProvider);
 
-     SizedBox(
+    return SizedBox(
       width: MediaQuery.of(context).size.width,
       height: MediaQuery.of(context).size.height * 0.715,
       child: ListView.builder(
         itemCount: cards.length,
         itemBuilder: (BuildContext context, int index) {
-          return InkWell(
-            onTap: ()async{
+          return GestureDetector(
+            onTap: () async {
               screenStateNotifier.setLoading(true);
               var questions = await getQuestions(
                   getQuestionUseCase, questionNotifier,
@@ -163,7 +154,7 @@ class HomeScreen2ConsumerState extends ConsumerState<HomeScreen2ConsumerWidget> 
             },
             child: Padding(
               padding: const EdgeInsets.symmetric(vertical: 8.0),
-              child: HomeScreen2CardDesign(item: cards[index]),
+              child: ListStyleCard(item: cards[index]),
             ),
           );
         },

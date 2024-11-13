@@ -43,7 +43,7 @@ class QuestionRepositoryImpl extends QuestionRepository {
 
   @override
   Future<void> updateQuestion(Question question) async {
-    await _questionDao.setQuestionCorrectStatus(question);
+    await _questionDao.updateQuestion(question);
   }
 
   @override
@@ -62,6 +62,6 @@ class QuestionRepositoryImpl extends QuestionRepository {
   }
   @override
   Future<bool> checkIfIsNPAndNSExists() {
-    return _questionDao.checkIfIsNPAndPSExists();
+    return _questionDao.checkIfIsNPAndNSExists();
   }
 }

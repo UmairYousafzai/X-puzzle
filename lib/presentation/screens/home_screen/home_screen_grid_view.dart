@@ -8,22 +8,23 @@ import 'package:xpuzzle/domain/use_cases/store_questions.dart';
 import 'package:xpuzzle/presentation/providers/question/question_provider.dart';
 import 'package:xpuzzle/presentation/providers/question/question_repository_provider.dart';
 import 'package:xpuzzle/presentation/widgets/snackBar_messages.dart';
+import 'package:xpuzzle/utils/constants.dart';
 import '../../providers/home_screen_providers.dart';
 import '../../providers/question/question_usecase_provider.dart';
 import '../../theme/colors.dart';
 import '../game_screen/game_screen.dart';
-import 'home_screen_card_design.dart';
+import 'home_screen_grid_card.dart';
 
-class HomeScreenConsumerWidget extends ConsumerStatefulWidget {
-  const HomeScreenConsumerWidget({super.key});
+class HomeScreenGridView extends ConsumerStatefulWidget {
+  const HomeScreenGridView({super.key});
 
   @override
   ConsumerState<ConsumerStatefulWidget> createState() {
-    return HomeScreenConsumerState();
+    return HomeScreenGridViewState();
   }
 }
 
-class HomeScreenConsumerState extends ConsumerState<HomeScreenConsumerWidget> {
+class HomeScreenGridViewState extends ConsumerState<HomeScreenGridView> {
   Future<void> generateAndStoreQuestion({
     required GetQuestions getQuestionsUseCase,
     required StoreQuestions storeQuestions,
@@ -98,12 +99,14 @@ class HomeScreenConsumerState extends ConsumerState<HomeScreenConsumerWidget> {
     final isPPAndPSQuestionUseCase = ref.watch(isPPAndPSUseCaseProvider);
     final isPPAndNSQuestionUseCase = ref.watch(isPPAndNSUseCaseProvider);
     final isNPAndPSQuestionUseCase = ref.watch(isNPAndPSUseCaseProvider);
-    final isNPAndNSQuestionUseCase = ref.watch(isNPAndPSUseCaseProvider);
+    final isNPAndNSQuestionUseCase = ref.watch(isNPAndNSUseCaseProvider);
     final getQuestionUseCase = ref.watch(getQuestionUseCaseProvider);
     var questionNotifier = ref.read(questionProvider.notifier);
     final navigator = Navigator.of(context);
     final ctxt= context;
     final cards = ref.watch(homeScreenStylesProvider);
+    double childAspectRatio = context.screenWidth / (context.screenHeight * 0.64); // Adjust the multiplier to tweak the ratio
+
     return screenState["is_loading"]
         ? Center(
             child: CircularProgressIndicator(
@@ -111,9 +114,9 @@ class HomeScreenConsumerState extends ConsumerState<HomeScreenConsumerWidget> {
             ),
           )
         : GridView.builder(
-            gridDelegate: const SliverGridDelegateWithFixedCrossAxisCount(
+            gridDelegate:  SliverGridDelegateWithFixedCrossAxisCount(
               crossAxisCount: 2,
-              childAspectRatio: 0.7,
+              childAspectRatio: childAspectRatio,
             ),
             itemCount: cards.length,
             itemBuilder: (BuildContext context, int index) {
@@ -162,7 +165,7 @@ class HomeScreenConsumerState extends ConsumerState<HomeScreenConsumerWidget> {
                               builder: (ctx) => const GameScreen()));
                         }
                       },
-                      child: StyleCard(styleItemModel: cards[index])),
+                      child: GridStyleCard(styleItemModel: cards[index])),
                 ],
               );
             },
