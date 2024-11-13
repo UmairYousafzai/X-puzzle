@@ -11,6 +11,7 @@ class LevelsHeader extends StatelessWidget{
   const LevelsHeader({super.key, required this.level,required this.totalQuestions, required this.style, required this.correct});
   @override
   Widget build(BuildContext context) {
+
     return Stack(
       alignment: Alignment.center,
       children: [
@@ -23,7 +24,7 @@ class LevelsHeader extends StatelessWidget{
             children: [
               Text(level,style: const TextStyle(fontWeight: FontWeight.w600),),
               Text("$totalQuestions/$correct",style: const TextStyle(fontWeight: FontWeight.bold,fontSize: 20),),
-              Text(style,style: const TextStyle(fontWeight: FontWeight.w600))
+              Text(style, style: const TextStyle(fontWeight: FontWeight.w600))
             ],
 
           ),
