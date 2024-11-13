@@ -83,8 +83,6 @@ void showStyleCompletedCustomDialog(BuildContext context,
                         context,
                         "View Results",
                         borderRadius: 15,
-                        paddingHorizontal: 0.06,
-                          fontSize: context.screenHeight>smallDeviceThreshold?15:13
                       ),
                     ),
                     SizedBox(

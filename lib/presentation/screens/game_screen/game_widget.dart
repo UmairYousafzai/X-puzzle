@@ -46,8 +46,8 @@ class GameWidget extends ConsumerWidget {
           ),
           Positioned(
             top: MediaQuery.of(context).size.height > smallDeviceThreshold
-                ? context.screenHeight * 0.074
-                : context.screenHeight * 0.04,
+                ? context.screenHeight * 0.066
+                : context.screenHeight * 0.05,
             left: 0,
             right: 0,
             child: Padding(

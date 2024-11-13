@@ -131,7 +131,7 @@ gameNumberButton(VoidCallback onPressed, Color backgroundColor, String text,
 }
 
 gameDoneButton(VoidCallback onPressed, BuildContext context, String title,
-    {double borderRadius = 30, double paddingHorizontal = 0.2,double? fontSize,}) {
+    {double borderRadius = 30, double paddingHorizontal = 0.2}) {
   return InkWell(
     onTap: onPressed,
     child: Container(
@@ -149,15 +149,14 @@ gameDoneButton(VoidCallback onPressed, BuildContext context, String title,
             horizontal: context.screenWidth * paddingHorizontal,
             vertical: MediaQuery.of(context).size.height > smallDeviceThreshold
                 ? 14
-                : 9),
+                : 6),
         child: Text(
           title,
           textAlign: TextAlign.center,
-          maxLines: 1,
           style: GoogleFonts.poppins(
               fontWeight: FontWeight.w600,
               color: MColors().colorSecondaryOrangeDark,
-              fontSize: fontSize??15.32),
+              fontSize: 15.32),
         ),
       ),
     ),

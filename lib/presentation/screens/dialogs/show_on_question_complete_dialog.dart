@@ -115,7 +115,6 @@ void showOnQuestionCompleteDialog(
                             context,
                             "Try Again",
                             borderRadius: 15,
-                            fontSize: context.screenHeight>smallDeviceThreshold?15:13
                           ),
                         ),
                       SizedBox(

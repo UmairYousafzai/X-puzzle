@@ -79,19 +79,18 @@ class ResultSingleCard extends StatelessWidget {
                                     color: MColors().colorSecondaryBlueLighter),
                                 child: Padding(
                                   padding: const EdgeInsets.only(
-                                      left: 3.0, top: 3, right: 3, bottom: 3),
-                                  child:  Text(
-                                      question.inputNumOne,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color:
-                                              MColors().colorSecondaryBlueDark),
-                                      // Add ellipsis for long text
+                                      left: 5.0, top: 3, right: 5, bottom: 3),
+                                  child: Text(
+                                    question.inputNumOne,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color:
+                                            MColors().colorSecondaryBlueDark),
                                     overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                    ),
-
+                                    // Add ellipsis for long text
+                                    maxLines: 1,
+                                  ),
                                 ),
                               ),
                             ),
@@ -107,7 +106,7 @@ class ResultSingleCard extends StatelessWidget {
                                     color: MColors().colorSecondaryBlueLighter),
                                 child: Padding(
                                   padding: const EdgeInsets.only(
-                                      left: 3.0, top: 3, right: 3, bottom: 3),
+                                      left: 5.0, top: 3, right: 5, bottom: 3),
                                   child: Text(
                                     question.inputNumTwo,
                                     textAlign: TextAlign.center,
