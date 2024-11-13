@@ -4,6 +4,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:xpuzzle/presentation/widgets/snackBar_messages.dart';
 import 'package:xpuzzle/utils/constants.dart';
+import 'package:xpuzzle/utils/navigation/navigate.dart';
 import '../providers/level_provider.dart';
 import '../widgets/background_image_container.dart';
 import '../widgets/buttons/buttons.dart';
@@ -28,12 +29,12 @@ class _SelectLevelScreenState extends ConsumerState<SelectLevelScreen> {
       child: Column(
         //mainAxisAlignment: MainAxisAlignment.center,
         children: [
-          Gap(context.screenHeight * 0.1),
+          Gap(context.screenHeight * 0.01),
           Image.asset(
             'assets/logos/X-Puzzles-logo.png',
           ),
           const Gap(18),
-          Text("Welcome to the X puzzle",
+          Text("Welcome to the X Puzzle",
               style: Theme.of(context).textTheme.titleMedium?.copyWith(
                   color: const Color(0xFF1E2D7C),
                   fontWeight: FontWeight.w700,
@@ -50,10 +51,10 @@ class _SelectLevelScreenState extends ConsumerState<SelectLevelScreen> {
           ),
           Gap(context.screenHeight * 0.04),
           primaryButton(() {
-            if (selectedValue.isNotEmpty) {
+            print("selectedValue========> $selectedValue");
+            if (selectedValue.isNotEmpty && selectedValue!= "Select Level") {
               ref.read(levelProvider.notifier).updateLevel(selectedValue);
-              Navigator.push(context,
-                  MaterialPageRoute(builder: (ctx) => const HomeScreen()));
+             navigatePushAndRemoveUntil(context, const HomeScreen(),false);
             }else{
               showErrorSnackBar(context, "Please select level");
             }

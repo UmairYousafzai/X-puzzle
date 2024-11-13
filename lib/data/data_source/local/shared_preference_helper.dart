@@ -51,7 +51,7 @@ class SharedPreferencesHelper {
       {bool isPPAndPS = false,
       bool isPPAndNS = false,
       bool isNPAndPS = false,
-      bool isNPAndNS = false}) async {
+      bool isNPAndNS = false, required bool value ,}) async {
     String keyPrefix = "";
 
     if (isPPAndPS) {
@@ -67,7 +67,7 @@ class SharedPreferencesHelper {
     if (kDebugMode) {
       print("style saved value==============> $keyPrefix");
     }
-    await _sharedPreferences.setBool("$keyPrefix-$STYLE_KEY", true);
+    await _sharedPreferences.setBool("$keyPrefix-$STYLE_KEY", value);
   }
 
   bool? isStyleAttempted(  {bool isPPAndPS = false,

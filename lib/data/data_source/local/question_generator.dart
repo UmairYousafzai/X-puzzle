@@ -1,7 +1,7 @@
-import 'dart:math';
+  import 'dart:math';
 
-import 'package:flutter/foundation.dart';
-import 'package:xpuzzle/domain/entities/question.dart';
+  import 'package:flutter/foundation.dart';
+  import 'package:xpuzzle/domain/entities/question.dart';
 
 List<Question> generatePositiveMultipleAndPositiveInteger({
   int numberOfQuestion = 0,
@@ -18,23 +18,23 @@ List<Question> generatePositiveMultipleAndPositiveInteger({
     int left = 0;
     int right = 0;
     if (isPPAndPS) {
-      left = random.nextInt(20) + 1;
-      right = random.nextInt(20) + 1;
+      left = random.nextInt(8) + 1;
+      right = random.nextInt(7) + 1;
     } else if (isPPAndNS) {
-      left = -(random.nextInt(20) + 1);
-      right = -random.nextInt(20) + 1;
+      right = random.nextInt(7) + 2;
+      left = -(random.nextInt(right - 1) + 1);
+      right *= -1;
     } else if (isNPAndPS) {
-      left = random.nextInt(19) + 2;
+      left = random.nextInt(7) + 2;
       right = -(random.nextInt(left - 1) + 1);
     } else if (isNPAndNS) {
-      left = random.nextInt(10) + 1;
-      right = -(random.nextInt(10) + left + 1);
+      left = random.nextInt(5) + 1;
+      right = -(random.nextInt(7) + 2);
     }
+    List<int> pairList = [left, right]..sort();
+    String pair = '${pairList[0]},${pairList[1]}';
 
-    String pair = '$left,$right';
-
-    if(!uniquePair.contains(pair)){
-
+    if (!uniquePair.contains(pair)) {
       uniquePair.add(pair);
       final sum = left + right;
       final product = left * right;
@@ -54,11 +54,9 @@ List<Question> generatePositiveMultipleAndPositiveInteger({
         isNPAndNS: isNPAndNS,
       );
 
-        questions.add(question);
+      questions.add(question);
     }
-    }
-
-
+  }
 
   if (kDebugMode) {
     print("generated question values==============> ${questions.toString()}");

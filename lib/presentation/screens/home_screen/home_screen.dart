@@ -1,10 +1,17 @@
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:xpuzzle/presentation/providers/level_provider.dart';
+import 'package:xpuzzle/presentation/providers/shared_pref_provider.dart';
+import 'package:xpuzzle/presentation/screens/dialogs/style_completed_custom_dialog.dart';
+import 'package:xpuzzle/presentation/screens/select_level_screen.dart';
 import 'package:xpuzzle/presentation/widgets/custom_app_bar.dart';
+import 'package:xpuzzle/utils/constants.dart';
 
 import '../../providers/home_screen_providers.dart';
+import '../../widgets/level_with_background.dart';
 import 'home_screen_list_view.dart';
 import 'home_screen_grid_view.dart';
 
@@ -15,26 +22,19 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final screenState = ref.watch(homeViewTypeProvider);
     final viewNotifier = ref.read(homeViewTypeProvider.notifier);
+    final levels = ref.watch(levelProvider);
     return PopScope(
-      onPopInvoked: (canPop) {
-        ref.watch(homeViewTypeProvider.notifier).setLoading(false);
+      canPop: true,
+      onPopInvokedWithResult: (didPop,result) {
+        if (kDebugMode) {
+          print("canPop===========> $didPop");
+        }
+
+          ref.watch(homeViewTypeProvider.notifier).setLoading(false);
+          Navigator.push(context, MaterialPageRoute(builder: (ctx)=> const SelectLevelScreen()));
+
       },
       child: Scaffold(
-        appBar: customAppBar(
-            context,
-            "Home",
-            SvgPicture.asset(
-              "assets/icons/svg/hamburger_menu_icon.svg",
-              width: 40,
-              height: 25,
-            ),
-            Image.asset(
-              "assets/images/place_holder_profile.png",
-              width: 50,
-              height: 50,
-            ),
-            onPressedLeading: () {},
-            onPressedAction: () {}),
         body: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
@@ -48,6 +48,21 @@ class HomeScreen extends ConsumerWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
+                  customAppBar(
+                      context,
+                      "Home",
+                      SvgPicture.asset(
+                        "assets/icons/svg/hamburger_menu_icon.svg",
+                        width: 40,
+                        height: 25,
+                      ),
+                      Image.asset(
+                        "assets/images/place_holder_profile.png",
+                        width: 50,
+                        height: 50,
+                      ),
+                      onPressedLeading: () {},
+                      onPressedAction: () {}),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.01,
                   ),
@@ -83,9 +98,15 @@ class HomeScreen extends ConsumerWidget {
                                         : Icons.list))
                           ],
                         ),
-                        const Text(
-                          "Please select the session you'd like to begin",
-                          style: TextStyle(color: Colors.grey),
+                        Text(
+                          "Please select the session you'd \nlike to begin",
+                          style: Theme.of(context)
+                              .textTheme
+                              .bodySmall!
+                              .copyWith(
+                                  fontWeight: FontWeight.w400,
+                                  color: Colors.grey,
+                                  fontSize: context.screenHeight * 0.021),
                         ),
                       ],
                     ),
@@ -93,6 +114,19 @@ class HomeScreen extends ConsumerWidget {
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.03,
                   ),
+                  levels.when(data: (data) {
+                    return Padding(
+                        padding: const EdgeInsets.fromLTRB(18, 0, 0, 18),
+                        child: levelWithBackground(data ?? ""));
+                  }, error: (err, stack) {
+                    return Padding(
+                        padding: const EdgeInsets.fromLTRB(18, 0, 0, 18),
+                        child: levelWithBackground(""));
+                  }, loading: () {
+                    return Padding(
+                        padding: const EdgeInsets.fromLTRB(18, 0, 0, 18),
+                        child: levelWithBackground(""));
+                  }),
                   screenState["view_type"] == ViewType.list
                       ? const Expanded(child: HomeScreenGridView())
                       : const Expanded(child: HomeScreenListView()),

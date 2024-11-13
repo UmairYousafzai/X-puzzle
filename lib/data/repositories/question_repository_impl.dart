@@ -60,8 +60,24 @@ class QuestionRepositoryImpl extends QuestionRepository {
   Future<bool> checkIfIsNPAndPSExists() {
     return _questionDao.checkIfIsNPAndPSExists();
   }
+
   @override
   Future<bool> checkIfIsNPAndNSExists() {
     return _questionDao.checkIfIsNPAndNSExists();
+  }
+
+  @override
+  Future<void> deleteQuestions(
+      {bool isPPAndPS = false,
+      bool isPPAndNS = false,
+      bool isNPAndPS = false,
+      bool isNPAndNS = false,
+      bool isComplete = true}) async {
+    await _questionDao.deleteEntry(
+      isPPAndPS: isPPAndPS,
+      isPPAndNS: isPPAndNS,
+      isNPAndPS: isNPAndPS,
+      isNPAndNS: isNPAndNS,
+    );
   }
 }

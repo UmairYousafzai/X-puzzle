@@ -12,8 +12,8 @@ class GameTimeWidget extends StatelessWidget {
     return Container(
       padding:  EdgeInsets.symmetric(
           vertical: MediaQuery.of(context).size.height > smallDeviceThreshold
-              ? 10
-              : 5,
+              ? 12
+              : 7,
           horizontal: 35),
       decoration: BoxDecoration(
         color: const Color(0xFFFFFBF3), // #FFFBF3
