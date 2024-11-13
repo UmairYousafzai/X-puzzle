@@ -9,8 +9,9 @@ class SharedPreferencesHelper {
   final STYLE_KEY = "style";
   final QUESTION_PPROGRESS_KEY = "question_progress";
   final SWITCH_INDICES_KEY = "indices";
+  final bool isUpdated;
 
-  SharedPreferencesHelper(this._sharedPreferences);
+  SharedPreferencesHelper(this._sharedPreferences,this.isUpdated);
 
   Future<void> saveString(String key, String value) async {
     await _sharedPreferences.setString(key, value);

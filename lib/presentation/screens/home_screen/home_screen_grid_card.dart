@@ -68,6 +68,7 @@ class _StyleCard extends ConsumerState<GridStyleCard> {
                   .apply(color: Colors.black87),
             ),
             sharedPref.when(data: (pref) {
+              print("share pref invoke");
               var isAttempted = pref.isStyleAttempted(
                   isPPAndPS: widget.index == 0,
                   isPPAndNS: widget.index == 1,

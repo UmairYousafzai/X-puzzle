@@ -184,6 +184,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                 isPPAndNS: gameState.question?.isPPAndNS ?? false,
                 isNPAndPS: gameState.question?.isNPAndPS ?? false,
                 isNPAndNS: gameState.question?.isNPAndNS ?? false);
+            ref.read(sharedPreferencesProvider.notifier).setUpdated(true);
             gameNotifier.resetGame();
             navigateToResult();
           },
@@ -248,17 +249,22 @@ class _GameScreenState extends ConsumerState<GameScreen> {
   }
 
   bool isCorrectQuestion(GameState gameState) {
-    final question = gameState.question;
-    final numOne = question?.numOne;
-    final numTwo = question?.numTwo;
+    try {
+      final question = gameState.question;
+      final inputNumOne = gameState.firstNumber;
+      final inputNumTwo = gameState.secondNumber;
+      int product = int.parse(inputNumOne) * int.parse(inputNumTwo);
+      int sum = int.parse(inputNumOne) + int.parse(inputNumTwo);
 
-    final inputNumOne = gameState.firstNumber;
-    final inputNumTwo = gameState.secondNumber;
+      return (product.toString() == question?.topNum) &&
+          (sum.toString() == question?.bottomNum);
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
 
-    bool isNumOneCorrect = (inputNumOne == numOne || inputNumTwo == numOne);
-    bool isNumTwoCorrect = (inputNumOne == numTwo || inputNumTwo == numTwo);
-
-    return (isNumOneCorrect && isNumTwoCorrect) && (inputNumOne != inputNumTwo);
+      return false;
+    }
   }
 
   bool validateQuestion(bool shouldCheck) {

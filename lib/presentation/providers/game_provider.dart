@@ -6,7 +6,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:xpuzzle/domain/entities/time.dart';
 import 'package:xpuzzle/domain/use_cases/store_time.dart';
-import 'package:xpuzzle/presentation/providers/question/question_provider.dart';
 import 'package:xpuzzle/presentation/providers/time/time_use_case_provider.dart';
 import '../../domain/entities/question.dart';
 
@@ -116,8 +115,8 @@ class GameNotifier extends StateNotifier<GameState> {
 
   void updateQuestion(Question question) {
     state =
-        state.copyWith(question: question, firstNumber: "", secondNumber: "");
-    // state.copyWith(question: question);
+        // state.copyWith(question: question, firstNumber: "", secondNumber: "");
+    state.copyWith(question: question);
   }
 
   void updateTimer(int seconds) {

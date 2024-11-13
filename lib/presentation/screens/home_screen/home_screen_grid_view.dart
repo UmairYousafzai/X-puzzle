@@ -208,7 +208,6 @@ class HomeScreenGridViewState extends ConsumerState<HomeScreenGridView> {
     final isNPAndNSQuestionUseCase = ref.watch(isNPAndNSUseCaseProvider);
     final getQuestionUseCase = ref.watch(getQuestionUseCaseProvider);
     var questionNotifier = ref.read(questionProvider.notifier);
-    final navigator = Navigator.of(context);
     final ctxt = context;
     final cards = ref.watch(homeScreenStylesProvider);
     double childAspectRatio = context.screenWidth /
