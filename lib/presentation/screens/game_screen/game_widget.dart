@@ -40,8 +40,8 @@ class GameWidget extends ConsumerWidget {
               'assets/icons/svg/purple_cross.svg',
               fit: BoxFit.contain,
               height: context.screenHeight > smallDeviceThreshold
-                  ? context.screenHeight * 0.23
-                  : context.screenHeight * 0.2,
+                  ? context.screenHeight * 0.21
+                  : context.screenHeight * 0.21,
             ),
           ),
           Positioned(
@@ -50,12 +50,13 @@ class GameWidget extends ConsumerWidget {
                 : context.screenHeight * 0.04,
             left: 0,
             right: 0,
-            child: Padding(
+
+            child: /*Padding(
               padding:
                   EdgeInsets.only(left: context.screenHeight * 0.05,right: context.screenHeight * 0.05,
-                    top: context.screenHeight > largeDeviceThreshold?context.screenHeight*0.019 :context.screenHeight*0.008,
+                    top: context.screenHeight > largeDeviceThreshold?context.screenHeight*0.010 :context.screenHeight*0.008,
               ),
-              child: Column(
+              child: */Column(
                 children: [
                   Gap(context.screenHeight * 0.01),
                   Text(
@@ -79,25 +80,28 @@ class GameWidget extends ConsumerWidget {
                         color: Colors.black),
                   ),
                   const Gap(5),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      gameNumberTextField(
-                          value: gameState.firstNumber,
-                          context: context,
-                          fontSize: context.screenHeight>smallDeviceThreshold ? 22: 18,
-                          onChanged: gameNotifier.updateFirstNumber,
-                          focusNode: firstNumberFocus,
-                          hasError: gameState.hasErrorOnTextFieldOne),
-                      const Gap(10),
-                      gameNumberTextField(
-                          value: gameState.secondNumber,
-                          context: context,
-                          fontSize: 22,
-                          onChanged: gameNotifier.updateSecondNumber,
-                          focusNode: secondNumberFocus,
-                          hasError: gameState.hasErrorOnTextFieldTwo),
-                    ],
+                  Padding(
+                    padding:  EdgeInsets.symmetric(horizontal:context.screenWidth*0.12),
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceAround,
+                      children: [
+                        gameNumberTextField(
+                            value: gameState.firstNumber,
+                            context: context,
+                            fontSize: 22,
+                            onChanged: gameNotifier.updateFirstNumber,
+                            focusNode: firstNumberFocus,
+                            hasError: gameState.hasErrorOnTextFieldOne),
+                        const Gap(10),
+                        gameNumberTextField(
+                            value: gameState.secondNumber,
+                            context: context,
+                            fontSize: 22,
+                            onChanged: gameNotifier.updateSecondNumber,
+                            focusNode: secondNumberFocus,
+                            hasError: gameState.hasErrorOnTextFieldTwo),
+                      ],
+                    ),
                   ),
                   const Gap(5),
                   Text(
@@ -116,7 +120,7 @@ class GameWidget extends ConsumerWidget {
                   Gap(context.screenHeight * 0.02),
                 ],
               ),
-            ),
+            /*),*/
           ),
         ],
       ),
