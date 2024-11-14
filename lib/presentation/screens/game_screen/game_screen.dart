@@ -346,27 +346,17 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       child: Scaffold(
         backgroundColor: MColors().white,
         resizeToAvoidBottomInset: true,
-        appBar: level.when(
-          data: (level) {
-            return customAppBar(
-                context,
-                level ?? "", // Pass the current level here
-                SvgPicture.asset(
-                  "assets/icons/svg/hamburger_menu_icon.svg",
-                  width: 40,
-                  height: 25,
-                ),
-                null,
-                onPressedLeading: () {},
-                titleColor: const Color(0xFF1E2D7C));
-          },
-          loading: () => AppBar(
-            title: const Text('Loading...'), // Temporary AppBar while loading
-          ),
-          error: (error, stack) => AppBar(
-            title: Text('Error: $error'),
-          ),
-        ),
+        appBar: customAppBar(
+            context,
+            gameState.getLevel(), // Pass the current level here
+            SvgPicture.asset(
+              "assets/icons/svg/hamburger_menu_icon.svg",
+              width: 40,
+              height: 25,
+            ),
+            null,
+            onPressedLeading: () {},
+            titleColor: const Color(0xFF1E2D7C)),
         body: SingleChildScrollView(
           reverse: true,
           child: Padding(

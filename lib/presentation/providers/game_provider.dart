@@ -85,6 +85,18 @@ class GameState {
       question: question ?? this.question,
     );
   }
+
+  String getLevel() {
+    if (question?.isPPAndPS ?? false) {
+      return "Level 1";
+    } else if (question?.isPPAndNS ?? false) {
+      return "Level 2";
+    } else if (question?.isNPAndPS ?? false) {
+      return "Level 3";
+    } else {
+      return "Level 4";
+    }
+  }
 }
 
 class GameNotifier extends StateNotifier<GameState> {
@@ -116,7 +128,7 @@ class GameNotifier extends StateNotifier<GameState> {
   void updateQuestion(Question question) {
     state =
         // state.copyWith(question: question, firstNumber: "", secondNumber: "");
-    state.copyWith(question: question);
+        state.copyWith(question: question);
   }
 
   void updateTimer(int seconds) {

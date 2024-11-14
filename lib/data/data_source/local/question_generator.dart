@@ -1,7 +1,7 @@
-  import 'dart:math';
+import 'dart:math';
 
-  import 'package:flutter/foundation.dart';
-  import 'package:xpuzzle/domain/entities/question.dart';
+import 'package:flutter/foundation.dart';
+import 'package:xpuzzle/domain/entities/question.dart';
 
 List<Question> generatePositiveMultipleAndPositiveInteger({
   int numberOfQuestion = 0,
@@ -28,13 +28,14 @@ List<Question> generatePositiveMultipleAndPositiveInteger({
       left = random.nextInt(7) + 2;
       right = -(random.nextInt(left - 1) + 1);
     } else if (isNPAndNS) {
-      left = random.nextInt(5) + 1;
+      left = random.nextInt(5) + 2;
       right = -(random.nextInt(7) + 2);
     }
+
     List<int> pairList = [left, right]..sort();
     String pair = '${pairList[0]},${pairList[1]}';
 
-    if (!uniquePair.contains(pair)) {
+    if (!uniquePair.contains(pair) && left != right) {
       uniquePair.add(pair);
       final sum = left + right;
       final product = left * right;
