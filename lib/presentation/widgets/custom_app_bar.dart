@@ -5,14 +5,14 @@ import 'package:xpuzzle/presentation/theme/colors.dart';
 AppBar customAppBar(
   BuildContext context,
   String title,
-  SvgPicture leadingIcon,
+  SvgPicture? leadingIcon,
   Image? actionIcon, {
   Function()? onPressedLeading,
   Function()? onPressedAction,
-  Color titleColor = const Color(0xFF1E2D7C),
+  Color titleColor =  Colors.black,
 }) {
   return AppBar(
-    backgroundColor: MColors().white,
+    backgroundColor: Colors.transparent,
     title: Text(
       title,
       style: Theme.of(context).textTheme.titleLarge!.copyWith(
@@ -20,10 +20,10 @@ AppBar customAppBar(
             fontWeight: FontWeight.w700,
           ),
     ),
-    leading: IconButton(
+    leading: leadingIcon != null? IconButton(
       icon: leadingIcon,
       onPressed: onPressedLeading,
-    ),
+    ): Container(),
     actions: [
       actionIcon == null
           ? Container()

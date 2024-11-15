@@ -9,6 +9,7 @@ import '../../data/models/remote/style_card_model.dart';
 import '../providers/level_provider.dart';
 import '../providers/question/question_provider.dart';
 import '../theme/colors.dart';
+import '../widgets/buttons/buttons.dart';
 import '../widgets/custom_app_bar.dart';
 import '../widgets/levels_header.dart';
 import '../widgets/result_single_card.dart';
@@ -57,17 +58,6 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
     }
 
     return Scaffold(
-      appBar: customAppBar(
-          context,
-          "All Result", // Pass the current level here
-          SvgPicture.asset(
-            "assets/icons/svg/back_icon.svg",
-            width: 50,
-            height: 35,
-          ),
-          Image.asset("assets/images/print_icon.png"),
-          onPressedLeading: () {},
-          titleColor: Colors.black),
       body: Container(
         width: MediaQuery.of(context).size.width,
         height: MediaQuery.of(context).size.height,
@@ -83,7 +73,13 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-
+                customAppBar(
+                    context,
+                    "All Result", // Pass the current level here
+                    null,
+                    Image.asset("assets/images/print_icon.png"),
+                    onPressedLeading: null,
+                    titleColor: Colors.black),
                 SizedBox(
                   height: MediaQuery.of(context).size.height * 0.01,
                 ),
@@ -129,6 +125,10 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
                           },
                         ),
                 ),
+                primaryButton(() {
+                  Navigator.pop(context);
+                }, 'Explore More', Colors.white, context),
+                Gap(MediaQuery.of(context).size.height * 0.01),
               ],
             ),
           ),

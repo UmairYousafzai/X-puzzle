@@ -1,5 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
@@ -8,7 +9,9 @@ import 'package:xpuzzle/presentation/providers/question/question_provider.dart';
 import 'package:xpuzzle/presentation/providers/question/question_state.dart';
 import 'package:xpuzzle/presentation/providers/result_provider.dart';
 import 'package:xpuzzle/presentation/providers/shared_pref_provider.dart';
+import 'package:xpuzzle/presentation/screens/dialogs/show_on_question_complete_dialog.dart';
 import 'package:xpuzzle/utils/constants.dart';
+import 'package:xpuzzle/utils/navigation/navigate.dart';
 
 import '../../../domain/entities/question.dart';
 import '../../providers/game_provider.dart';
@@ -147,10 +150,23 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       QuestionState questionState,
       QuestionProviderNotifier questionNotifier,
       bool shouldValidateData) async {
-    if (validateQuestion(gameState, shouldValidateData)) {
-      updateQuestion(gameState, questionState, questionNotifier, gameNotifier);
-
-      checkIfQuestionsCompleted(gameState, questionState, gameNotifier);
+    if (validateQuestion(shouldValidateData)) {
+      showOnQuestionCompleteDialog(
+          isCorrectAnswer: isCorrectQuestion(gameState),
+          context: context,
+          onNext: () async {
+            if (questionState.questions.length == 1) Navigator.pop(context);
+            await updateQuestion(
+                gameState, questionState, questionNotifier, gameNotifier);
+            checkIfQuestionsCompleted(gameState, questionState, gameNotifier);
+          },
+          onTryAgain: () {
+            gameNotifier.updateFirstNumber("");
+            gameNotifier.updateSecondNumber("");
+          },
+          onClose: () {
+            Navigator.pop(context);
+          });
     }
   }
 
@@ -163,10 +179,12 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       ref.watch(sharedPreferencesProvider).when(
           data: (pref) {
             pref.setStyleStatus(
+                value: true,
                 isPPAndPS: gameState.question?.isPPAndPS ?? false,
                 isPPAndNS: gameState.question?.isPPAndNS ?? false,
                 isNPAndPS: gameState.question?.isNPAndPS ?? false,
                 isNPAndNS: gameState.question?.isNPAndNS ?? false);
+            ref.read(sharedPreferencesProvider.notifier).setUpdated(true);
             gameNotifier.resetGame();
             navigateToResult();
           },
@@ -180,13 +198,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
   }
 
   void navigateToResult() {
-    Navigator.pushAndRemoveUntil(
-      context,
-      MaterialPageRoute(builder: (context) => const QuizCompletionScreen()),
-      (Route<dynamic> route) {
-        return route.isFirst;
-      },
-    );
+    navigatePushAndRemoveUntil(context, const QuizCompletionScreen(), true);
   }
 
   void setQuestionTypeForResults(GameState gameState) {
@@ -197,7 +209,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         isNPAndNS: gameState.question?.isNPAndNS ?? false);
   }
 
-  void updateQuestion(
+  Future<void> updateQuestion(
     GameState gameState,
     QuestionState questionState,
     QuestionProviderNotifier questionNotifier,
@@ -237,22 +249,48 @@ class _GameScreenState extends ConsumerState<GameScreen> {
   }
 
   bool isCorrectQuestion(GameState gameState) {
-    return (gameState.firstNumber == gameState.question?.numOne ||
-            gameState.firstNumber == gameState.question?.numTwo) &&
-        (gameState.secondNumber == gameState.question?.numOne ||
-            gameState.secondNumber == gameState.question?.numTwo);
+    try {
+      final question = gameState.question;
+      final inputNumOne = gameState.firstNumber;
+      final inputNumTwo = gameState.secondNumber;
+      int product = int.parse(inputNumOne) * int.parse(inputNumTwo);
+      int sum = int.parse(inputNumOne) + int.parse(inputNumTwo);
+
+      return (product.toString() == question?.topNum) &&
+          (sum.toString() == question?.bottomNum);
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+
+      return false;
+    }
   }
 
-  bool validateQuestion(GameState gameState, bool shouldCheck) {
+  bool validateQuestion(bool shouldCheck) {
+    var gameState = ref.watch(gameProvider);
+    var gameNotifier = ref.watch(gameProvider.notifier);
     if (!shouldCheck) return true;
     if (!gameState.isTimerRunning) {
       showErrorSnackBar(context, "Please start the game.");
       return false;
     }
-    if (gameState.firstNumber.isEmpty && gameState.secondNumber.isEmpty) {
-      showErrorSnackBar(context, "Please enter the answer.");
+    var isFieldEmpty = false;
+    if (gameState.firstNumber.isEmpty) {
+      gameNotifier.setErrorOnInputOne(true);
+      isFieldEmpty = true;
+    }
+
+    if (gameState.secondNumber.isEmpty) {
+      gameNotifier.setErrorOnInputTwo(true);
+      isFieldEmpty = true;
+    }
+
+    if (isFieldEmpty) {
       return false;
     }
+    gameNotifier.setErrorOnInputTwo(false);
+    gameNotifier.setErrorOnInputOne(false);
 
     return true;
   }
@@ -269,12 +307,14 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       GameNotifier gameNotifier,
       GameState gameState,
       QuestionProviderNotifier questionNotifier) {
-    print("completeAllRemainingQuestions============  called");
+    if (kDebugMode) {
+      print("completeAllRemainingQuestions============  called");
+    }
 
     var questions = questionState.questions;
-    for (int i = 0; i < questions.length ; i++) {
-      onMarkDone(
-          gameNotifier, gameState, questionState, questionNotifier, false);
+    for (int i = 0; i < questions.length; i++) {
+      updateQuestion(gameState, questionState, questionNotifier, gameNotifier);
+      checkIfQuestionsCompleted(gameState, questionState, gameNotifier);
     }
   }
 
@@ -285,6 +325,9 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     final gameState = ref.watch(gameProvider);
     final gameNotifier = ref.read(gameProvider.notifier);
     final level = ref.read(levelProvider);
+
+    double screenPadding =
+        MediaQuery.of(context).size.height > smallDeviceThreshold ? 10 : 5;
 
     ref.listen<GameState>(gameProvider, (prev, next) {
       if (next.isTimerFinished) {
@@ -303,33 +346,22 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       child: Scaffold(
         backgroundColor: MColors().white,
         resizeToAvoidBottomInset: true,
-        appBar: level.when(
-          data: (level) {
-            return customAppBar(
-              context,
-              level ?? "", // Pass the current level here
-              SvgPicture.asset(
-                "assets/icons/svg/hamburger_menu_icon.svg",
-                width: 40,
-                height: 25,
-              ),
-              null,
-              onPressedLeading: () {},
-            );
-          },
-          loading: () => AppBar(
-            title: const Text('Loading...'), // Temporary AppBar while loading
-          ),
-          error: (error, stack) => AppBar(
-            title: Text('Error: $error'),
-          ),
-        ),
+        appBar: customAppBar(
+            context,
+            gameState.getLevel(), // Pass the current level here
+            SvgPicture.asset(
+              "assets/icons/svg/hamburger_menu_icon.svg",
+              width: 40,
+              height: 25,
+            ),
+            null,
+            onPressedLeading: () {},
+            titleColor: const Color(0xFF1E2D7C)),
         body: SingleChildScrollView(
+          reverse: true,
           child: Padding(
-            padding: EdgeInsets.all(
-                MediaQuery.of(context).size.height > smallDeviceThreshold
-                    ? 10
-                    : 5),
+            padding: EdgeInsets.fromLTRB(
+                screenPadding, screenPadding, screenPadding, screenPadding),
             child: Column(
               children: [
                 Gap(context.screenHeight * 0.02),
@@ -350,10 +382,16 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                             smallDeviceThreshold
                         ? 20
                         : 10),
-                    gameStartResetButton(context, () {
-                      switchQuestion(questionsState, gameState, gameNotifier);
-                    }, 'assets/icons/svg/reset_icon.svg',
-                        MColors().colorSecondaryBlueDark),
+                    Opacity(
+                      opacity: gameState.isTimerRunning ? 1.0 : 0.33,
+                      child: gameStartResetButton(context, () {
+                        if (gameState.isTimerRunning) {
+                          switchQuestion(
+                              questionsState, gameState, gameNotifier);
+                        }
+                      }, 'assets/icons/svg/reset_icon.svg',
+                          MColors().colorSecondaryBlueDark),
+                    ),
                   ],
                 ),
                 Gap(MediaQuery.of(context).size.height > smallDeviceThreshold
@@ -364,8 +402,8 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                       calculateCompletionPercentage(gameState.questionProgress),
                 ),
                 Gap(MediaQuery.of(context).size.height > smallDeviceThreshold
-                    ? 40
-                    : 35),
+                    ? context.screenHeight * 0.07
+                    : context.screenHeight * 0.1),
                 Column(
                   mainAxisAlignment: MainAxisAlignment.spaceAround,
                   children: [
@@ -375,8 +413,8 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                     }),
                     Gap(MediaQuery.of(context).size.height >
                             smallDeviceThreshold
-                        ? 70
-                        : 35),
+                        ? context.screenHeight * 0.09
+                        : context.screenHeight * 0.1),
                     Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [

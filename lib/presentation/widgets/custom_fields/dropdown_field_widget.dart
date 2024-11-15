@@ -22,14 +22,14 @@ class DropdownFieldWidget extends ConsumerWidget {
           onChanged(data);
           return data;
         } else {
-          onChanged("Level 1");
+          onChanged("Select Level");
 
-          return "Level 1";
+          return "Select Level";
         }
       }, error: (err, stack) {
-        return "Level 1";
+        return "Select Level";
       }, loading: () {
-        return "Level 1";
+        return "Select Level";
       }),
       onChanged: onChanged,
       items: levels.map((String value) {
@@ -46,7 +46,6 @@ class DropdownFieldWidget extends ConsumerWidget {
           borderRadius: BorderRadius.circular(15),
           borderSide: BorderSide.none,
         ),
-        labelText: 'Select Level',
         labelStyle: const TextStyle(
           fontSize: 16,
           color: Colors.black,

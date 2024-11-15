@@ -9,8 +9,9 @@ class SharedPreferencesHelper {
   final STYLE_KEY = "style";
   final QUESTION_PPROGRESS_KEY = "question_progress";
   final SWITCH_INDICES_KEY = "indices";
+  final bool isUpdated;
 
-  SharedPreferencesHelper(this._sharedPreferences);
+  SharedPreferencesHelper(this._sharedPreferences,this.isUpdated);
 
   Future<void> saveString(String key, String value) async {
     await _sharedPreferences.setString(key, value);
@@ -51,7 +52,7 @@ class SharedPreferencesHelper {
       {bool isPPAndPS = false,
       bool isPPAndNS = false,
       bool isNPAndPS = false,
-      bool isNPAndNS = false}) async {
+      bool isNPAndNS = false, required bool value ,}) async {
     String keyPrefix = "";
 
     if (isPPAndPS) {
@@ -67,7 +68,7 @@ class SharedPreferencesHelper {
     if (kDebugMode) {
       print("style saved value==============> $keyPrefix");
     }
-    await _sharedPreferences.setBool("$keyPrefix-$STYLE_KEY", true);
+    await _sharedPreferences.setBool("$keyPrefix-$STYLE_KEY", value);
   }
 
   bool? isStyleAttempted(  {bool isPPAndPS = false,

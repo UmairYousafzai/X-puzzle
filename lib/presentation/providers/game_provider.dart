@@ -6,7 +6,6 @@ import 'package:flutter/widgets.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:xpuzzle/domain/entities/time.dart';
 import 'package:xpuzzle/domain/use_cases/store_time.dart';
-import 'package:xpuzzle/presentation/providers/question/question_provider.dart';
 import 'package:xpuzzle/presentation/providers/time/time_use_case_provider.dart';
 import '../../domain/entities/question.dart';
 
@@ -22,6 +21,8 @@ class GameState {
   final int questionProgress;
   bool isTimerRunning;
   bool isTimerFinished;
+  bool hasErrorOnTextFieldOne;
+  bool hasErrorOnTextFieldTwo;
   FocusNode firstNumberFocus;
   FocusNode secondNumberFocus;
   Question? question;
@@ -38,6 +39,8 @@ class GameState {
     this.questionProgress = 0,
     this.isTimerRunning = false,
     this.isTimerFinished = false,
+    this.hasErrorOnTextFieldOne = false,
+    this.hasErrorOnTextFieldTwo = false,
     required this.firstNumberFocus,
     required this.secondNumberFocus,
     this.question,
@@ -55,6 +58,8 @@ class GameState {
     int? questionProgress,
     bool? isTimerRunning,
     bool? isTimerFinished,
+    bool? hasErrorOnTextFieldOne,
+    bool? hasErrorOnTextFieldTwo,
     FocusNode? firstNumberFocus,
     FocusNode? secondNumberFocus,
     Question? question,
@@ -71,10 +76,26 @@ class GameState {
       questionProgress: questionProgress ?? this.questionProgress,
       isTimerRunning: isTimerRunning ?? this.isTimerRunning,
       isTimerFinished: isTimerFinished ?? this.isTimerFinished,
+      hasErrorOnTextFieldOne:
+          hasErrorOnTextFieldOne ?? this.hasErrorOnTextFieldOne,
+      hasErrorOnTextFieldTwo:
+          hasErrorOnTextFieldTwo ?? this.hasErrorOnTextFieldTwo,
       firstNumberFocus: firstNumberFocus ?? this.firstNumberFocus,
       secondNumberFocus: secondNumberFocus ?? this.secondNumberFocus,
       question: question ?? this.question,
     );
+  }
+
+  String getLevel() {
+    if (question?.isPPAndPS ?? false) {
+      return "Level 1";
+    } else if (question?.isPPAndNS ?? false) {
+      return "Level 2";
+    } else if (question?.isNPAndPS ?? false) {
+      return "Level 3";
+    } else {
+      return "Level 4";
+    }
   }
 }
 
@@ -127,6 +148,14 @@ class GameNotifier extends StateNotifier<GameState> {
 
   void setTime(int minutes, int seconds, int? timeID) {
     state = state.copyWith(minutes: minutes, seconds: seconds, timeID: timeID);
+  }
+
+  void setErrorOnInputOne(bool error) {
+    state = state.copyWith(hasErrorOnTextFieldOne: error);
+  }
+
+  void setErrorOnInputTwo(bool error) {
+    state = state.copyWith(hasErrorOnTextFieldTwo: error);
   }
 
   void playTimer() {
