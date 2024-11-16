@@ -8,6 +8,7 @@ import 'package:xpuzzle/presentation/providers/shared_pref_provider.dart';
 import 'package:xpuzzle/presentation/screens/dialogs/style_completed_custom_dialog.dart';
 import 'package:xpuzzle/presentation/screens/select_level_screen.dart';
 import 'package:xpuzzle/presentation/widgets/custom_app_bar.dart';
+import 'package:xpuzzle/presentation/widgets/custom_drawer.dart';
 import 'package:xpuzzle/utils/constants.dart';
 
 import '../../providers/home_screen_providers.dart';
@@ -23,6 +24,8 @@ class HomeScreen extends ConsumerWidget {
     final screenState = ref.watch(homeViewTypeProvider);
     final viewNotifier = ref.read(homeViewTypeProvider.notifier);
     final levels = ref.watch(levelProvider);
+    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+
     return PopScope(
       canPop: true,
       onPopInvokedWithResult: (didPop,result) {
@@ -35,6 +38,8 @@ class HomeScreen extends ConsumerWidget {
 
       },
       child: Scaffold(
+        key: _scaffoldKey,
+        drawer: const CustomDrawer(),
         body: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
@@ -61,7 +66,9 @@ class HomeScreen extends ConsumerWidget {
                         width: 50,
                         height: 50,
                       ),
-                      onPressedLeading: () {},
+                      onPressedLeading: () {
+                        _scaffoldKey.currentState?.openDrawer();
+                      },
                       onPressedAction: () {}),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.01,
