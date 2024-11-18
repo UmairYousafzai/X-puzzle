@@ -7,7 +7,7 @@ import 'package:xpuzzle/presentation/providers/level_provider.dart';
 import 'package:xpuzzle/presentation/providers/shared_pref_provider.dart';
 import 'package:xpuzzle/presentation/screens/select_level_screen.dart';
 import 'package:xpuzzle/presentation/widgets/custom_app_bar.dart';
-import 'package:xpuzzle/presentation/widgets/custom_drawer.dart';
+import 'package:xpuzzle/presentation/widgets/custom_navigation_drawer.dart';
 import 'package:xpuzzle/utils/constants.dart';
 import '../../providers/home_screen_providers.dart';
 import '../../widgets/level_with_background.dart';
@@ -39,7 +39,7 @@ class HomeScreen extends ConsumerWidget {
       },
       child: Scaffold(
         key: _scaffoldKey,
-        drawer: const CustomDrawer(),
+        drawer:  const CustomNavigationDrawer(),
         body: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,

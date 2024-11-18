@@ -49,7 +49,7 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
   void updateEmail(String value) {
     value = value.trim();
     if (value.isEmpty) {
-      state = state.copyWith(emailError: 'Email cannot be empty');
+      state = state.copyWith(email: value, emailError: null);
     } else if (!RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$').hasMatch(value)) {
       state = state.copyWith(emailError: 'Enter a valid email address');
     } else {

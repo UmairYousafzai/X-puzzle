@@ -1,14 +1,16 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:xpuzzle/presentation/screens/user_details_screen.dart';
 import 'package:xpuzzle/presentation/widgets/text_widget.dart';
+import 'package:xpuzzle/utils/navigation/navigate.dart';
 import '../providers/shared_pref_provider.dart';
 import '../theme/colors.dart';
-import '../../data/data_source/local/shared_preference_helper.dart';
 
-class CustomDrawer extends ConsumerWidget {
-  const CustomDrawer({Key? key}) : super(key: key);
+class CustomNavigationDrawer extends ConsumerWidget {
+  const CustomNavigationDrawer({Key? key}) : super(key: key);
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -20,6 +22,7 @@ class CustomDrawer extends ConsumerWidget {
 
     // Access SharedPreferences using the provider
     final sharedPreferencesAsyncValue = ref.watch(sharedPreferencesProvider);
+
 
     return sharedPreferencesAsyncValue.when(
       data: (sharedPreferencesHelper) {
@@ -71,11 +74,8 @@ class CustomDrawer extends ConsumerWidget {
                 child: Column(
                   children: [
                     ListTile(
-                      leading: Image.asset(
-                        'assets/icons/profile_icon.png',
-                        height: 20,
-                        width: 20,
-                      ),
+                      leading:SvgPicture.asset('assets/icons/svg/profile_icon.svg',height: 20,width: 20,),
+
                       title: const TextWidget(
                         text: 'Profile',
                         fontSize: 16,
@@ -84,11 +84,8 @@ class CustomDrawer extends ConsumerWidget {
                       onTap: () {},
                     ),
                     ListTile(
-                      leading: Image.asset(
-                        'assets/icons/stats_icon.png',
-                        height: 20,
-                        width: 20,
-                      ),
+                      leading:SvgPicture.asset('assets/icons/svg/stats_icon.svg',height: 20,width: 20,),
+
                       title: const TextWidget(
                         text: 'Stats',
                         fontSize: 16,
@@ -97,11 +94,8 @@ class CustomDrawer extends ConsumerWidget {
                       onTap: () {},
                     ),
                     ListTile(
-                      leading: Image.asset(
-                        'assets/icons/notification_icon.png',
-                        height: 20,
-                        width: 20,
-                      ),
+                      leading:SvgPicture.asset('assets/icons/svg/notifications_icon.svg',height: 20,width: 20,),
+
                       title: const TextWidget(
                         text: 'Notifications',
                         fontSize: 16,
@@ -116,17 +110,18 @@ class CustomDrawer extends ConsumerWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 20, bottom: 30),
                 child: ListTile(
-                  leading: Image.asset(
-                    'assets/icons/logout_icon.png',
-                    height: 20,
-                    width: 20,
-                  ),
+                  leading:SvgPicture.asset('assets/icons/svg/logout_icon.svg',height: 20,width: 20,),
+
                   title: const TextWidget(
                     text: 'Logout',
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
-                  onTap: () {},
+                  onTap: () {
+                    sharedPreferencesHelper.clear().then((value){
+                      navigatePushAndRemoveUntil(context, const UserDetailsScreen(), true);
+                    });
+                  },
                 ),
               ),
             ],
