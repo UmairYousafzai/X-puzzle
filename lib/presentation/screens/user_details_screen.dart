@@ -1,9 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
+import 'package:intl/intl.dart';
+import 'package:xpuzzle/domain/entities/user.dart';
+import 'package:xpuzzle/presentation/screens/select_level_screen.dart';
 import 'package:xpuzzle/presentation/widgets/custom_textfield_widget.dart';
 import 'package:xpuzzle/presentation/widgets/text_widget.dart';
 import 'package:xpuzzle/utils/constants.dart';
+import '../providers/shared_pref_provider.dart';
 import '../providers/signupProvider.dart';
 import '../widgets/background_image_container.dart';
 import '../widgets/buttons/buttons.dart';
@@ -13,10 +17,15 @@ class UserDetailsScreen extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+
+
     final signUpState = ref.watch(signUpProvider);
     final signUpNotifier = ref.read(signUpProvider.notifier);
+    final sharedPreferencesHelper = ref.read(sharedPreferencesProvider).value!;
+    final dobController = TextEditingController(text: signUpState.dob);
 
-    void handleButtonClick() {
+//Function  for the field validation and saving user data
+    void handleButtonClick() async {
       if (signUpState.firstName.isNotEmpty &&
           signUpState.lastName.isNotEmpty &&
           signUpState.dob.isNotEmpty &&
@@ -25,15 +34,45 @@ class UserDetailsScreen extends ConsumerWidget {
           signUpState.lastNameError == null &&
           signUpState.dobError == null &&
           signUpState.emailError == null) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('All fields are valid.'))
+
+        User user = User(
+          firstName: signUpState.firstName,
+          lastName: signUpState.lastName,
+          dob: signUpState.dob,
+          email: signUpState.email,
         );
+
+        // Save user data using SharedPreferencesHelper
+        await sharedPreferencesHelper.saveUser(user).then((value){
+          Navigator.pushReplacement(
+            context,
+            MaterialPageRoute(builder: (ctx) => const SelectLevelScreen()),
+          );
+        });
+
+        // Navigate to SelectLevelScreen
+
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Please enter valid Inputs')),
+          const SnackBar(content: Text('Please enter valid inputs')),
         );
       }
     }
+    void openDatePicker() async {
+      DateTime? pickedDate = await showDatePicker(
+        context: context,
+        initialDate: DateTime.now(),
+        firstDate: DateTime(1900),
+        lastDate: DateTime.now(),
+      );
+      if (pickedDate != null) {
+        String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate); // Format date as YYYY-MM-DD
+        signUpNotifier.updateDOB(formattedDate);
+        dobController.text = formattedDate; // Update the TextField value
+
+      }
+    }
+
 
     return GestureDetector(
       onTap: FocusScope.of(context).unfocus,
@@ -44,9 +83,9 @@ class UserDetailsScreen extends ConsumerWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Image.asset(
-                  'assets/logos/X-Puzzles-logo.png',
-                ),
+                Align(
+                  alignment: Alignment.center,
+                    child: Image.asset('assets/logos/X-Puzzles-logo.png')),
                 const Gap(18),
                 Align(
                   alignment: Alignment.centerLeft,
@@ -67,65 +106,70 @@ class UserDetailsScreen extends ConsumerWidget {
                 ),
                 Gap(context.screenHeight * 0.035),
 
-                const TextWidget(
-                  text: 'First Name',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
+                 const Padding(
+                   padding: EdgeInsets.only(left: 12),
+                   child: TextWidget(
+                    text: 'First Name',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                                   ),
+                 ),
                 Gap(context.screenHeight * 0.01),
                 CustomTextField(
                   hintText: 'Enter your First name',
                   errorText: signUpState.firstNameError,
-                  onChanged: (value) {
-                    signUpNotifier.updateFirstName(value);
-                  },
+                  onChanged: (value) => signUpNotifier.updateFirstName(value),
                 ),
                 Gap(context.screenHeight * 0.01),
 
-                const TextWidget(
-                  text: 'Last Name',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
+                 const Padding(
+                   padding: EdgeInsets.only(left: 12),
+                   child: const TextWidget(
+                    text: 'Last Name',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                                   ),
+                 ),
                 Gap(context.screenHeight * 0.01),
                 CustomTextField(
                   hintText: 'Enter your Last name',
                   errorText: signUpState.lastNameError,
-                  onChanged: (value) {
-                    signUpNotifier.updateLastName(value);
-                  },
+                  onChanged: (value) => signUpNotifier.updateLastName(value),
                 ),
                 Gap(context.screenHeight * 0.01),
 
-                const TextWidget(
-                  text: 'DOB',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
-                ),
+                 const Padding(
+                   padding: EdgeInsets.only(left: 12),
+                   child: const TextWidget(
+                    text: 'DOB',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                                   ),
+                 ),
                 Gap(context.screenHeight * 0.01),
                 CustomTextField(
                   hintText: 'Enter your DOB',
                   showIconButton: true,
                   errorText: signUpState.dobError,
-                  onChanged: (value) {
-                    signUpNotifier.updateDOB(value);
-                  },
+                  onChanged: (value) => signUpNotifier.updateDOB(value),
+                  onIconPressed: openDatePicker,
+                  controller: dobController, // Pass the controller
                 ),
                 Gap(context.screenHeight * 0.01),
 
-                // Email Field
-                const TextWidget(
-                  text: 'Email',
-                  fontSize: 14,
-                  fontWeight: FontWeight.w500,
+                const Padding(
+                  padding: EdgeInsets.only(left: 12),
+                  child: TextWidget(
+                    text: 'Email',
+                    fontSize: 14,
+                    fontWeight: FontWeight.w500,
+                  ),
                 ),
                 Gap(context.screenHeight * 0.01),
                 CustomTextField(
                   hintText: 'Enter your email (optional)',
                   errorText: signUpState.emailError,
-                  onChanged: (value) {
-                    signUpNotifier.updateEmail(value);
-                  },
+                  onChanged: (value) => signUpNotifier.updateEmail(value),
                 ),
                 Gap(context.screenHeight * 0.04),
 

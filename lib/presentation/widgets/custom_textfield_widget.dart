@@ -3,17 +3,21 @@ import 'package:google_fonts/google_fonts.dart';
 
 class CustomTextField extends StatelessWidget {
   final String hintText;
-  final String? errorText; // Error text to display under the TextField
-  final Function(String) onChanged; // onChanged callback for validation
-  final bool showIconButton; // To show the calendar icon button
+  final String? errorText;
+  final Function(String) onChanged;
+  final bool showIconButton;
+  final VoidCallback? onIconPressed;
+  final TextEditingController? controller; // Added controller
 
   const CustomTextField({
-    Key? key,
+    super.key,
     required this.hintText,
-    required this.onChanged, // Required onChanged parameter
+    required this.onChanged,
     this.errorText,
-    this.showIconButton = false, // Default value set to false
-  }) : super(key: key);
+    this.showIconButton = false,
+    this.onIconPressed,
+    this.controller, // Accepting controller
+  });
 
   @override
   Widget build(BuildContext context) {
@@ -22,42 +26,38 @@ class CustomTextField extends StatelessWidget {
       children: [
         Container(
           decoration: BoxDecoration(
-            color: const Color(0xFFFFFBF3), // Background color #FFFBF3
-            borderRadius: BorderRadius.circular(12),
+            color: const Color(0xFFFFFBF3),
+            borderRadius: BorderRadius.circular(15),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 12),
           child: Row(
             children: [
               Expanded(
                 child: TextField(
+                  controller: controller, // Use the controller
                   onChanged: onChanged,
-                  keyboardType: TextInputType.text, // Default keyboard
+                  keyboardType: TextInputType.text,
                   decoration: InputDecoration(
                     contentPadding: const EdgeInsets.symmetric(vertical: 20),
                     hintText: hintText,
                     hintStyle: GoogleFonts.poppins(
                       fontWeight: FontWeight.w400,
                       fontSize: 14,
-                      color: Colors.grey,
+                      color: Colors.black.withOpacity(0.5),
                     ),
                     border: InputBorder.none,
                   ),
                 ),
               ),
-              if (showIconButton) // Show the IconButton if true
+              if (showIconButton)
                 IconButton(
-                  icon: const Icon(
-                    Icons.calendar_month, // Permanent calendar icon
-                    color: Colors.grey,
-                  ),
-                  onPressed: () {
-                    // Define your action when the calendar icon is pressed
-                  },
+                  icon:  Image.asset('assets/icons/calendar_logo.png',height: 20,),
+                  onPressed: onIconPressed,
                 ),
             ],
           ),
         ),
-        if (errorText != null) // Show error message if validation fails
+        if (errorText != null)
           Padding(
             padding: const EdgeInsets.only(top: 8),
             child: Text(

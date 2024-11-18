@@ -8,11 +8,13 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
   void updateFirstName(String value) {
     value = value.trim();
     if (value.isEmpty) {
-      state = state.copyWith(firstNameError: 'First name cannot be empty');
-    } else if (value.length < 2) {
-      state = state.copyWith(firstNameError: 'First name must be at least 2 characters long');
+      state = state.copyWith(firstNameError: 'First Name cannot be empty');
+    } else if (value.length < 2 || value.length > 50) {
+      state = state.copyWith(firstNameError: 'First Name must be between 2 and 50 characters long');
+    } else if (!RegExp(r"^[a-zA-Z\s'-]+$").hasMatch(value)) {
+      state = state.copyWith(firstNameError: 'First Name can only contain letters, spaces, apostrophes, and hyphens');
     } else {
-      state = state.copyWith(firstName: value, firstNameError: null); // Clear error if valid
+      state = state.copyWith(firstName: value, firstNameError: null);
     }
   }
 
@@ -20,11 +22,13 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
   void updateLastName(String value) {
     value = value.trim();
     if (value.isEmpty) {
-      state = state.copyWith(lastNameError: 'Last name cannot be empty');
-    } else if (value.length < 2) {
-      state = state.copyWith(lastNameError: 'Last name must be at least 2 characters long');
+      state = state.copyWith(lastNameError: 'Last Name cannot be empty');
+    } else if (value.length < 2 || value.length > 50) {
+      state = state.copyWith(lastNameError: 'Last Name must be between 2 and 50 characters long');
+    } else if (!RegExp(r"^[a-zA-Z\s'-]+$").hasMatch(value)) {
+      state = state.copyWith(lastNameError: 'Last Name can only contain letters, spaces, apostrophes, and hyphens');
     } else {
-      state = state.copyWith(lastName: value, lastNameError: null); // Clear error if valid
+      state = state.copyWith(lastName: value, lastNameError: null);
     }
   }
 
@@ -33,12 +37,13 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
     value = value.trim();
     if (value.isEmpty) {
       state = state.copyWith(dobError: 'Date of Birth cannot be empty');
-    } else if (!RegExp(r'^\d{2}/\d{2}/\d{4}$').hasMatch(value)) {
-      state = state.copyWith(dobError: 'Date of Birth must be in the format DD/MM/YYYY');
+    } else if (!RegExp(r'^\d{4}-\d{2}-\d{2}$').hasMatch(value)) { // Updated regex to match YYYY-MM-DD
+      state = state.copyWith(dobError: 'Date of Birth must be in the format YYYY-MM-DD');
     } else {
       state = state.copyWith(dob: value, dobError: null); // Clear error if valid
     }
   }
+
 
   // Method to update and validate the Email
   void updateEmail(String value) {

@@ -5,12 +5,10 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:xpuzzle/presentation/providers/level_provider.dart';
 import 'package:xpuzzle/presentation/providers/shared_pref_provider.dart';
-import 'package:xpuzzle/presentation/screens/dialogs/style_completed_custom_dialog.dart';
 import 'package:xpuzzle/presentation/screens/select_level_screen.dart';
 import 'package:xpuzzle/presentation/widgets/custom_app_bar.dart';
 import 'package:xpuzzle/presentation/widgets/custom_drawer.dart';
 import 'package:xpuzzle/utils/constants.dart';
-
 import '../../providers/home_screen_providers.dart';
 import '../../widgets/level_with_background.dart';
 import 'home_screen_list_view.dart';
@@ -26,16 +24,18 @@ class HomeScreen extends ConsumerWidget {
     final levels = ref.watch(levelProvider);
     final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
 
+    // Access SharedPreferences using the provider
+    final sharedPreferencesAsyncValue = ref.watch(sharedPreferencesProvider);
+
     return PopScope(
       canPop: true,
-      onPopInvokedWithResult: (didPop,result) {
+      onPopInvokedWithResult: (didPop, result) {
         if (kDebugMode) {
           print("canPop===========> $didPop");
         }
 
-          ref.watch(homeViewTypeProvider.notifier).setLoading(false);
-          Navigator.push(context, MaterialPageRoute(builder: (ctx)=> const SelectLevelScreen()));
-
+        ref.watch(homeViewTypeProvider.notifier).setLoading(false);
+        Navigator.push(context, MaterialPageRoute(builder: (ctx) => const SelectLevelScreen()));
       },
       child: Scaffold(
         key: _scaffoldKey,
@@ -78,12 +78,23 @@ class HomeScreen extends ConsumerWidget {
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-                        Text(
-                          "Hi, Name",
-                          style:
-                              Theme.of(context).textTheme.titleSmall?.copyWith(
-                                    fontSize: 20,
-                                  ),
+                        sharedPreferencesAsyncValue.when(
+                          data: (sharedPreferencesHelper) {
+                            final user = sharedPreferencesHelper.getUser();
+                            final userName = '${user?.firstName ?? 'User'} ${user?.lastName ?? ''}'.trim();
+                            // Fallback to "User" if null
+                            return Text(
+                              "Hi, $userName",
+                              style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                                fontSize: 18,
+                              ),
+                            );
+                          },
+                          loading: () => const CircularProgressIndicator(), // Show loading indicator
+                          error: (error, stack) => Text(
+                            'Error: $error',
+                            style: const TextStyle(color: Colors.red),
+                          ),
                         ),
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -99,10 +110,9 @@ class HomeScreen extends ConsumerWidget {
                                 onPressed: () {
                                   viewNotifier.toggleView();
                                 },
-                                icon: Icon(
-                                    screenState["view_type"] == ViewType.list
-                                        ? Icons.grid_view
-                                        : Icons.list))
+                                icon: Icon(screenState["view_type"] == ViewType.list
+                                    ? Icons.grid_view
+                                    : Icons.list))
                           ],
                         ),
                         Text(
@@ -111,9 +121,9 @@ class HomeScreen extends ConsumerWidget {
                               .textTheme
                               .bodySmall!
                               .copyWith(
-                                  fontWeight: FontWeight.w400,
-                                  color: Colors.grey,
-                                  fontSize: context.screenHeight * 0.021),
+                              fontWeight: FontWeight.w400,
+                              color: Colors.grey,
+                              fontSize: context.screenHeight * 0.021),
                         ),
                       ],
                     ),
