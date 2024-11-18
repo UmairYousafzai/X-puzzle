@@ -2,9 +2,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:xpuzzle/presentation/screens/select_level_screen.dart';
-import 'package:xpuzzle/presentation/theme/app_theme.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:xpuzzle/presentation/providers/shared_pref_provider.dart';
+import 'package:xpuzzle/presentation/screens/select_level_screen.dart';
+import 'package:xpuzzle/presentation/screens/user_details_screen.dart';
+import 'package:xpuzzle/presentation/theme/app_theme.dart';
 
 void main() {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
@@ -17,24 +19,32 @@ void main() {
   FlutterNativeSplash.remove();
 }
 
-class MyApp extends StatelessWidget {
+class MyApp extends ConsumerWidget {
   const MyApp({super.key});
 
-  // This widget is the root of your application.
   @override
-  Widget build(BuildContext context) {
-    if (kDebugMode) {
-      print("heigth  size: ${MediaQuery.of(context).size.height}");
-      print("width  size: ${MediaQuery.of(context).size.width}");
-    }
-    SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-      statusBarColor: Colors.transparent,
-    ));
-    return MaterialApp(
-      debugShowCheckedModeBanner: false,
-      title: 'X Puzzle',
-      theme: theme,
-      home: const SelectLevelScreen(),
+  Widget build(BuildContext context, WidgetRef ref) {
+    final sharedPreferencesHelper = ref.watch(sharedPreferencesProvider);
+
+    return sharedPreferencesHelper.when(
+      data: (helper) {
+        final user = helper.getUser();
+        if (kDebugMode) {
+          print("heigth  size: ${MediaQuery.of(context).size.height}");
+          print("width  size: ${MediaQuery.of(context).size.width}");
+        }
+        SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+          statusBarColor: Colors.transparent,
+        ));
+        return MaterialApp(
+          debugShowCheckedModeBanner: false,
+          title: 'X Puzzle',
+          theme: theme,
+          home: user == null ? const UserDetailsScreen() : const SelectLevelScreen(),
+        );
+      },
+      loading: () => const Center(child: CircularProgressIndicator()),
+      error: (err, stack) => Text('Error: $err'),
     );
   }
 }

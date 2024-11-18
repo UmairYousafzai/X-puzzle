@@ -1,14 +1,15 @@
 import 'dart:convert';
-
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import '../../../domain/entities/user.dart';
 
 class SharedPreferencesHelper {
   final SharedPreferences _sharedPreferences;
-  final LEVEL_KEY = "level";
-  final STYLE_KEY = "style";
-  final QUESTION_PPROGRESS_KEY = "question_progress";
-  final SWITCH_INDICES_KEY = "indices";
+  final String LEVEL_KEY = "level";
+  final String STYLE_KEY = "style";
+  final String QUESTION_PROGRESS_KEY = "question_progress";
+  final String SWITCH_INDICES_KEY = "indices";
+  final String USER_DETAILS_KEY = "userDetails";
   final bool isUpdated;
 
   SharedPreferencesHelper(this._sharedPreferences, this.isUpdated);
@@ -35,6 +36,20 @@ class SharedPreferencesHelper {
 
   Future<void> remove(String key) async {
     await _sharedPreferences.remove(key);
+  }
+
+  Future<void> saveUser(User user) async {
+    final userJson = jsonEncode(user.toJson());
+    await _sharedPreferences.setString(USER_DETAILS_KEY, userJson);
+  }
+
+  User? getUser() {
+    final userJson = _sharedPreferences.getString(USER_DETAILS_KEY);
+    if (userJson != null) {
+      final Map<String, dynamic> json = jsonDecode(userJson);
+      return User.fromJson(json);
+    }
+    return null;
   }
 
   Future<void> saveLevel(String level) async {
@@ -116,14 +131,15 @@ class SharedPreferencesHelper {
     } else if (isNPAndNS) {
       keyPrefix = "isNPAndNS";
     }
-    await _sharedPreferences.setInt(keyPrefix + QUESTION_PPROGRESS_KEY, value);
+    await _sharedPreferences.setInt("$keyPrefix-$QUESTION_PROGRESS_KEY", value);
   }
 
-  int? getQuestionProgress(
-      {bool isPPAndPS = false,
-      bool isPPAndNS = false,
-      bool isNPAndPS = false,
-      bool isNPAndNS = false}) {
+  int? getQuestionProgress({
+    bool isPPAndPS = false,
+    bool isPPAndNS = false,
+    bool isNPAndPS = false,
+    bool isNPAndNS = false,
+  }) {
     String keyPrefix = "";
 
     if (isPPAndPS) {
@@ -135,7 +151,7 @@ class SharedPreferencesHelper {
     } else if (isNPAndNS) {
       keyPrefix = "isNPAndNS";
     }
-    return _sharedPreferences.getInt(keyPrefix + QUESTION_PPROGRESS_KEY);
+    return _sharedPreferences.getInt("$keyPrefix-$QUESTION_PROGRESS_KEY");
   }
 
   Future<void> savePreviousShuffle(Set<List<dynamic>> switchedIndices) async {
