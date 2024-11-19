@@ -7,6 +7,7 @@ import 'package:xpuzzle/presentation/screens/user_details_screen.dart';
 import 'package:xpuzzle/presentation/widgets/text_widget.dart';
 import 'package:xpuzzle/utils/navigation/navigate.dart';
 import '../providers/shared_pref_provider.dart';
+import '../providers/signupProvider.dart';
 import '../theme/colors.dart';
 
 class CustomNavigationDrawer extends ConsumerWidget {
@@ -22,6 +23,8 @@ class CustomNavigationDrawer extends ConsumerWidget {
 
     // Access SharedPreferences using the provider
     final sharedPreferencesAsyncValue = ref.watch(sharedPreferencesProvider);
+    final signUpNotifier = ref.read(signUpProvider.notifier);
+
 
 
     return sharedPreferencesAsyncValue.when(
@@ -118,8 +121,9 @@ class CustomNavigationDrawer extends ConsumerWidget {
                     fontWeight: FontWeight.w500,
                   ),
                   onTap: () {
+                    signUpNotifier.resetState();
                     sharedPreferencesHelper.clear().then((value){
-                      navigatePushAndRemoveUntil(context, const UserDetailsScreen(), true);
+                      navigatePushAndRemoveUntil(context, const UserDetailsScreen(), false);
                     });
                   },
                 ),

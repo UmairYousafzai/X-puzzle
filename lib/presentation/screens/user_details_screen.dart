@@ -28,6 +28,10 @@ class UserDetailsScreen extends ConsumerWidget {
 
 //Function  for the field validation and saving user data
     void handleButtonClick() async {
+      signUpNotifier.updateFirstName(signUpState.firstName);
+      signUpNotifier.updateLastName(signUpState.lastName);
+      signUpNotifier.updateDOB(signUpState.dob);
+      signUpNotifier.updateEmail(signUpState.email);
       if (signUpState.firstName.isNotEmpty &&
           signUpState.lastName.isNotEmpty &&
           signUpState.dob.isNotEmpty &&
