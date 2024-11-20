@@ -11,19 +11,4 @@ class User {
     required this.email,
   });
 
-  Map<String, dynamic> toJson() => {
-    'firstName': firstName,
-    'lastName': lastName,
-    'dob': dob,
-    'email': email,
-  };
-
-  factory User.fromJson(Map<String, dynamic> json) {
-    return User(
-      firstName: json['firstName'],
-      lastName: json['lastName'],
-      dob: json['dob'],
-      email: json['email'],
-    );
-  }
 }

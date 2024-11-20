@@ -4,33 +4,34 @@ import '../../domain/entities/states/signup_state.dart';
 class SignUpNotifier extends StateNotifier<SignUpState> {
   SignUpNotifier() : super(SignUpState());
 
-  // Method to update and validate the First Name
+// Method to update and validate the First Name
   void updateFirstName(String value) {
     value = value.trim();
     if (value.isEmpty) {
-      state = state.copyWith(firstNameError: 'First Name cannot be empty');
+      state = state.copyWith(firstName: '', firstNameError: 'First Name cannot be empty');
     } else if (value.length < 2 || value.length > 50) {
-      state = state.copyWith(firstNameError: 'First Name must be between 2 and 50 characters long');
+      state = state.copyWith(firstName: value, firstNameError: 'First Name must be between 2 and 50 characters long');
     } else if (!RegExp(r"^[a-zA-Z\s'-]+$").hasMatch(value)) {
-      state = state.copyWith(firstNameError: 'First Name can only contain letters, spaces, apostrophes, and hyphens');
+      state = state.copyWith(firstName: value, firstNameError: 'First Name can only contain letters, spaces, apostrophes, and hyphens');
     } else {
       state = state.copyWith(firstName: value, firstNameError: null);
     }
   }
 
-  // Method to update and validate the Last Name
+// Method to update and validate the Last Name
   void updateLastName(String value) {
     value = value.trim();
     if (value.isEmpty) {
-      state = state.copyWith(lastNameError: 'Last Name cannot be empty');
+      state = state.copyWith(lastName: '', lastNameError: 'Last Name cannot be empty');
     } else if (value.length < 2 || value.length > 50) {
-      state = state.copyWith(lastNameError: 'Last Name must be between 2 and 50 characters long');
+      state = state.copyWith(lastName: value, lastNameError: 'Last Name must be between 2 and 50 characters long');
     } else if (!RegExp(r"^[a-zA-Z\s'-]+$").hasMatch(value)) {
-      state = state.copyWith(lastNameError: 'Last Name can only contain letters, spaces, apostrophes, and hyphens');
+      state = state.copyWith(lastName: value, lastNameError: 'Last Name can only contain letters, spaces, apostrophes, and hyphens');
     } else {
       state = state.copyWith(lastName: value, lastNameError: null);
     }
   }
+
 
   // Method to update and validate the DOB
   void updateDOB(String value) {
@@ -49,14 +50,20 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
   void updateEmail(String value) {
     value = value.trim();
     if (value.isEmpty) {
-      state = state.copyWith(emailError: 'Email cannot be empty');
+      state = state.copyWith(email: value, emailError: null);
     } else if (!RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$').hasMatch(value)) {
       state = state.copyWith(emailError: 'Enter a valid email address');
     } else {
       state = state.copyWith(email: value, emailError: null); // Clear error if valid
     }
   }
+
+  void resetState() {
+    state = SignUpState();
+  }
 }
+
+
 
 // Provider to manage the SignUpNotifier
 final signUpProvider = StateNotifierProvider<SignUpNotifier, SignUpState>(

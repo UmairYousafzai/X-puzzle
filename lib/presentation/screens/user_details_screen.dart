@@ -4,9 +4,11 @@ import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:xpuzzle/domain/entities/user.dart';
 import 'package:xpuzzle/presentation/screens/select_level_screen.dart';
+import 'package:xpuzzle/presentation/theme/colors.dart';
 import 'package:xpuzzle/presentation/widgets/custom_textfield_widget.dart';
 import 'package:xpuzzle/presentation/widgets/text_widget.dart';
 import 'package:xpuzzle/utils/constants.dart';
+import 'package:xpuzzle/utils/navigation/navigate.dart';
 import '../providers/shared_pref_provider.dart';
 import '../providers/signupProvider.dart';
 import '../widgets/background_image_container.dart';
@@ -26,10 +28,13 @@ class UserDetailsScreen extends ConsumerWidget {
 
 //Function  for the field validation and saving user data
     void handleButtonClick() async {
+      signUpNotifier.updateFirstName(signUpState.firstName);
+      signUpNotifier.updateLastName(signUpState.lastName);
+      signUpNotifier.updateDOB(signUpState.dob);
+      signUpNotifier.updateEmail(signUpState.email);
       if (signUpState.firstName.isNotEmpty &&
           signUpState.lastName.isNotEmpty &&
           signUpState.dob.isNotEmpty &&
-          signUpState.email.isNotEmpty &&
           signUpState.firstNameError == null &&
           signUpState.lastNameError == null &&
           signUpState.dobError == null &&
@@ -42,15 +47,9 @@ class UserDetailsScreen extends ConsumerWidget {
           email: signUpState.email,
         );
 
-        // Save user data using SharedPreferencesHelper
         await sharedPreferencesHelper.saveUser(user).then((value){
-          Navigator.pushReplacement(
-            context,
-            MaterialPageRoute(builder: (ctx) => const SelectLevelScreen()),
-          );
+          navigatePushReplacement(context, const SelectLevelScreen());
         });
-
-        // Navigate to SelectLevelScreen
 
       } else {
         ScaffoldMessenger.of(context).showSnackBar(
@@ -64,14 +63,29 @@ class UserDetailsScreen extends ConsumerWidget {
         initialDate: DateTime.now(),
         firstDate: DateTime(1900),
         lastDate: DateTime.now(),
+        builder: (BuildContext context, Widget? child) {
+          return Theme(
+            data: Theme.of(context).copyWith(
+              colorScheme:  ColorScheme.light(
+                primary: MColors().colorSecondaryBlueDark // Selected date color
+              ),
+              textButtonTheme: TextButtonThemeData(
+                style: TextButton.styleFrom(
+                  foregroundColor: MColors().colorSecondaryBlueDark, // Button text color
+                ),
+              ),
+            ),
+            child: child!,
+          );
+        },
       );
       if (pickedDate != null) {
         String formattedDate = DateFormat('yyyy-MM-dd').format(pickedDate); // Format date as YYYY-MM-DD
         signUpNotifier.updateDOB(formattedDate);
         dobController.text = formattedDate; // Update the TextField value
-
       }
     }
+
 
 
     return GestureDetector(
@@ -124,7 +138,7 @@ class UserDetailsScreen extends ConsumerWidget {
 
                  const Padding(
                    padding: EdgeInsets.only(left: 12),
-                   child: const TextWidget(
+                   child: TextWidget(
                     text: 'Last Name',
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
@@ -140,7 +154,7 @@ class UserDetailsScreen extends ConsumerWidget {
 
                  const Padding(
                    padding: EdgeInsets.only(left: 12),
-                   child: const TextWidget(
+                   child:  TextWidget(
                     text: 'DOB',
                     fontSize: 14,
                     fontWeight: FontWeight.w500,
@@ -153,7 +167,8 @@ class UserDetailsScreen extends ConsumerWidget {
                   errorText: signUpState.dobError,
                   onChanged: (value) => signUpNotifier.updateDOB(value),
                   onIconPressed: openDatePicker,
-                  controller: dobController, // Pass the controller
+                  controller: dobController,
+                  disableField: true,
                 ),
                 Gap(context.screenHeight * 0.01),
 

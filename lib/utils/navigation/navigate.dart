@@ -50,3 +50,27 @@ void navigatePushAndRemoveUntil(
     (Route<dynamic> route) => shouldSaveFirst ? route.isFirst : false,
   );
 }
+
+void navigatePushReplacement(BuildContext context, Widget widget) {
+  Navigator.pushReplacement(
+    context,
+    PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => widget,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        final slideAnimation = Tween<Offset>(
+          begin: const Offset(1.0, 0.0),
+          end: Offset.zero,
+        ).animate(CurvedAnimation(
+          parent: animation,
+          curve: Curves.easeInOut,
+        ));
+
+        return SlideTransition(
+          position: slideAnimation,
+          child: child,
+        );
+      },
+      transitionDuration: const Duration(milliseconds: 300),
+    ),
+  );
+}

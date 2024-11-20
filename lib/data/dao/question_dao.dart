@@ -122,7 +122,9 @@ class QuestionDao {
   }) async {
     final db = await _databaseHelper.database;
 
-    print("questions deleted:${isPPAndPS ? 1 : 0}, ${isPPAndNS ? 1 : 0}, ${isNPAndNS ? 1 : 0},${isNPAndPS ? 1 : 0},${isComplete ? 1 : 0 } ");
+    if (kDebugMode) {
+      print("questions deleted:${isPPAndPS ? 1 : 0}, ${isPPAndNS ? 1 : 0}, ${isNPAndNS ? 1 : 0},${isNPAndPS ? 1 : 0},${isComplete ? 1 : 0 } ");
+    }
     await db?.delete(
       DatabaseHelper.TABLE_QUESTION,
       where: 'is_pp_and_ps=? AND is_pp_and_ns=? AND is_np_and_ns=? AND is_np_and_ps=? AND is_complete=?',

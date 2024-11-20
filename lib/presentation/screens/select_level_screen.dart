@@ -58,8 +58,6 @@ class _SelectLevelScreenState extends ConsumerState<SelectLevelScreen> {
             }else{
               showErrorSnackBar(context, "Please select level");
             }
-
-
           }, 'Continue', Colors.black, context)
         ],
       ),

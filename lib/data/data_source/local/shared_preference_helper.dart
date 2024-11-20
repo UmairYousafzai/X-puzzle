@@ -2,6 +2,7 @@ import 'dart:convert';
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import '../../../domain/entities/user.dart';
+import '../../models/local/user_model.dart';
 
 class SharedPreferencesHelper {
   final SharedPreferences _sharedPreferences;
@@ -38,8 +39,16 @@ class SharedPreferencesHelper {
     await _sharedPreferences.remove(key);
   }
 
+
   Future<void> saveUser(User user) async {
-    final userJson = jsonEncode(user.toJson());
+    // Convert User to UserModel to use toJson
+    final userModel = UserModel(
+      firstName: user.firstName,
+      lastName: user.lastName,
+      dob: user.dob,
+      email: user.email,
+    );
+    final userJson = jsonEncode(userModel.toJson());
     await _sharedPreferences.setString(USER_DETAILS_KEY, userJson);
   }
 
@@ -47,10 +56,12 @@ class SharedPreferencesHelper {
     final userJson = _sharedPreferences.getString(USER_DETAILS_KEY);
     if (userJson != null) {
       final Map<String, dynamic> json = jsonDecode(userJson);
-      return User.fromJson(json);
+      // Use UserModel's fromJson method to create a User object
+      return UserModel.fromJson(json);
     }
     return null;
   }
+
 
   Future<void> saveLevel(String level) async {
     if (kDebugMode) {

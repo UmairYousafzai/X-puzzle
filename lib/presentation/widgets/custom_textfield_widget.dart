@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
 class CustomTextField extends StatelessWidget {
@@ -7,7 +8,8 @@ class CustomTextField extends StatelessWidget {
   final Function(String) onChanged;
   final bool showIconButton;
   final VoidCallback? onIconPressed;
-  final TextEditingController? controller; // Added controller
+  final TextEditingController? controller;
+  final bool? disableField;
 
   const CustomTextField({
     super.key,
@@ -16,11 +18,14 @@ class CustomTextField extends StatelessWidget {
     this.errorText,
     this.showIconButton = false,
     this.onIconPressed,
-    this.controller, // Accepting controller
+    this.controller,
+    this.disableField,
   });
 
   @override
   Widget build(BuildContext context) {
+    final focusNode = FocusNode();
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -33,26 +38,41 @@ class CustomTextField extends StatelessWidget {
           child: Row(
             children: [
               Expanded(
-                child: TextField(
-                  controller: controller, // Use the controller
-                  onChanged: onChanged,
-                  keyboardType: TextInputType.text,
-                  decoration: InputDecoration(
-                    contentPadding: const EdgeInsets.symmetric(vertical: 20),
-                    hintText: hintText,
-                    hintStyle: GoogleFonts.poppins(
+                child: GestureDetector(
+                  onTap: () {
+                    if (disableField != true) {
+                      focusNode.requestFocus();
+                    }
+                  },
+                  child: TextField(
+                    controller: controller,
+                    onChanged: onChanged,
+                    keyboardType: TextInputType.text,
+                    focusNode: focusNode,
+                    enabled: disableField != true,
+                    style: GoogleFonts.poppins(
                       fontWeight: FontWeight.w400,
                       fontSize: 14,
-                      color: Colors.black.withOpacity(0.5),
+                      color: Colors.black, // Set the text color to black
                     ),
-                    border: InputBorder.none,
+                    decoration: InputDecoration(
+                      contentPadding: const EdgeInsets.symmetric(vertical: 20),
+                      hintText: hintText,
+                      hintStyle: GoogleFonts.poppins(
+                        fontWeight: FontWeight.w400,
+                        fontSize: 14,
+                        color: Colors.black.withOpacity(0.5),
+                      ),
+                      border: InputBorder.none,
+                    ),
                   ),
                 ),
               ),
               if (showIconButton)
                 IconButton(
-                  icon:  Image.asset('assets/icons/calendar_logo.png',height: 20,),
-                  onPressed: onIconPressed,
+                  icon: SvgPicture.asset('assets/icons/svg/calendar_icon.svg',height: 20,width: 20,),
+
+    onPressed: onIconPressed,
                 ),
             ],
           ),
