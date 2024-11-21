@@ -126,8 +126,8 @@ class GameNotifier extends StateNotifier<GameState> {
   }
 
   void updateQuestion(Question question) {
-    state = state.copyWith(question: question, firstNumber: "", secondNumber: "");
-    // state = state.copyWith(question: question);
+    // state = state.copyWith(question: question, firstNumber: "", secondNumber: "");
+    state = state.copyWith(question: question);
   }
 
   void updateTimer(int seconds) {
