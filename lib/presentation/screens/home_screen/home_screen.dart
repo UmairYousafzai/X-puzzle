@@ -38,7 +38,7 @@ class HomeScreen extends ConsumerWidget {
         Navigator.push(context, MaterialPageRoute(builder: (ctx) => const SelectLevelScreen()));
       },
       child: Scaffold(
-        key: _scaffoldKey,
+        // key: _scaffoldKey,
         drawer:  const CustomNavigationDrawer(),
         body: Container(
           width: MediaQuery.of(context).size.width,
@@ -66,8 +66,8 @@ class HomeScreen extends ConsumerWidget {
                         width: 50,
                         height: 50,
                       ),
-                      onPressedLeading: () {
-                        _scaffoldKey.currentState?.openDrawer();
+                      onPressedLeading: (buildContext) {
+                        Scaffold.of(buildContext).openDrawer();
                       },
                       onPressedAction: () {}),
                   SizedBox(

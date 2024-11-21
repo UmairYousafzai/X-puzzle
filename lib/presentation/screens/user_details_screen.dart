@@ -17,6 +17,7 @@ import '../widgets/buttons/buttons.dart';
 class UserDetailsScreen extends ConsumerWidget {
   const UserDetailsScreen({super.key});
 
+
   @override
   Widget build(BuildContext context, WidgetRef ref) {
 
