@@ -155,7 +155,8 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           isCorrectAnswer: isCorrectQuestion(gameState),
           context: context,
           onNext: () async {
-            if (questionState.questions.length == 1) Navigator.pop(context);
+            if (questionState.questions.length == 1)
+              Navigator.pop(context);
             await updateQuestion(
                 gameState, questionState, questionNotifier, gameNotifier);
             checkIfQuestionsCompleted(gameState, questionState, gameNotifier);
@@ -355,7 +356,9 @@ class _GameScreenState extends ConsumerState<GameScreen> {
               height: 25,
             ),
             null,
-            onPressedLeading: () {},
+            onPressedLeading: (buildContext) {
+
+            },
             titleColor: const Color(0xFF1E2D7C)),
         body: SingleChildScrollView(
           reverse: true,

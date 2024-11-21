@@ -25,101 +25,111 @@ class GameWidget extends ConsumerWidget {
     final secondNumberFocus = ref.watch(gameProvider).secondNumberFocus;
 
     return Container(
-      width: context.screenWidth * 0.9,
-      height: context.screenHeight * 0.5,
+      width: MediaQuery.of(context).size.width * 0.9,
+      height: MediaQuery.of(context).size.height * 0.5,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(25),
         color: MColors().colorPrimary,
       ),
-      child: Stack(
-        alignment: Alignment.center,
-        children: [
-          Align(
+
+      child: LayoutBuilder(
+        builder: (context, constraints) {
+          double containerWidth = constraints.maxWidth;
+          double containerHeight = constraints.maxHeight;
+
+          return Stack(
             alignment: Alignment.center,
-            child: SvgPicture.asset(
-              'assets/icons/svg/purple_cross.svg',
-              fit: BoxFit.contain,
-              height: context.screenHeight > smallDeviceThreshold
-                  ? context.screenHeight * 0.23
-                  : context.screenHeight * 0.2,
-            ),
-          ),
-          Positioned(
-            top: MediaQuery.of(context).size.height > smallDeviceThreshold
-                ? context.screenHeight * 0.074
-                : context.screenHeight * 0.04,
-            left: 0,
-            right: 0,
-            child: Padding(
-              padding:
-                  EdgeInsets.only(left: context.screenHeight * 0.05,right: context.screenHeight * 0.05,
-                    top: context.screenHeight > largeDeviceThreshold?context.screenHeight*0.019 :context.screenHeight*0.008,
+            children: [
+              Align(
+                child: SvgPicture.asset(
+                  'assets/icons/svg/purple_cross.svg',
+                  fit: BoxFit.contain,
+                  height: containerHeight * 0.4,
+                ),
               ),
-              child: Column(
-                children: [
-                  Gap(context.screenHeight * 0.01),
-                  Text(
-                    'Enter Number',
-                    style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                        color: MColors().colorSecondaryBlueDark, fontSize: 18),
-                  ),
-                  Gap(context.screenHeight * 0.01),
-                  Text(
-                    'X',
-                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        fontSize: 24,
-                        fontWeight: FontWeight.w700,
-                        color: MColors().colorSecondaryOrangeDark),
-                  ),
-                  Text(
-                    gameState.question?.topNum ?? "",
-                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        fontSize: 28,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black),
-                  ),
-                  const Gap(5),
-                  Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      gameNumberTextField(
-                          value: gameState.firstNumber,
-                          context: context,
-                          fontSize: context.screenHeight>smallDeviceThreshold ? 22: 18,
-                          onChanged: gameNotifier.updateFirstNumber,
-                          focusNode: firstNumberFocus,
-                          hasError: gameState.hasErrorOnTextFieldOne),
-                      const Gap(10),
-                      gameNumberTextField(
-                          value: gameState.secondNumber,
-                          context: context,
-                          fontSize: 22,
-                          onChanged: gameNotifier.updateSecondNumber,
-                          focusNode: secondNumberFocus,
-                          hasError: gameState.hasErrorOnTextFieldTwo),
-                    ],
-                  ),
-                  const Gap(5),
-                  Text(
-                    gameState.question?.bottomNum ?? "",
-                    style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                        fontSize: 28,
-                        fontWeight: FontWeight.w700,
-                        color: Colors.black),
-                  ),
-                  Gap(context.screenHeight * 0.066),
-                  gameDoneButton(
-                    onMarkDonePressed,
-                    context,
-                    "Mark Done",
-                  ),
-                  Gap(context.screenHeight * 0.02),
-                ],
+              Positioned(
+                top: containerHeight * 0.14,
+                child: Column(
+                  children: [
+                    Text(
+                      'Enter Number',
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                          color: MColors().colorSecondaryBlueDark, fontSize: containerWidth * 0.05),
+                    ),
+                  ],
+                ),
               ),
-            ),
-          ),
-        ],
+              Positioned(
+                top: smallDeviceThreshold>context.screenHeight?containerHeight * 0.21:containerHeight*0.245,
+                right: 0,
+                left: 0,
+                child: Column(
+                  children: [
+                    SizedBox(height: containerHeight * 0.040),
+                    Text(
+                      'X',
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                          fontSize: containerWidth * 0.06,
+                          fontWeight: FontWeight.w700,
+                          color: MColors().colorSecondaryOrangeDark),
+                    ),
+                    Text(
+                      gameState.question?.topNum ?? "",
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                          fontSize: containerWidth * 0.07,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black),
+                    ),
+                    SizedBox(height:smallDeviceThreshold>context.screenHeight?containerHeight * 0.0:containerHeight*0.02),
+                    Padding(
+                      padding: EdgeInsets.symmetric(horizontal: containerWidth * 0.16),
+                      child: Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceAround,
+                        children: [
+                          gameNumberTextField(
+                              value: gameState.firstNumber,
+                              context: context,
+                              fontSize: containerWidth * 0.05,
+                              onChanged: gameNotifier.updateFirstNumber,
+                              focusNode: firstNumberFocus,
+                              hasError: gameState.hasErrorOnTextFieldOne),
+                          SizedBox(width: containerWidth * 0.05),
+                          gameNumberTextField(
+                              value: gameState.secondNumber,
+                              context: context,
+                              fontSize: containerWidth * 0.05,
+                              onChanged: gameNotifier.updateSecondNumber,
+                              focusNode: secondNumberFocus,
+                              hasError: gameState.hasErrorOnTextFieldTwo),
+                        ],
+                      ),
+                    ),
+
+                    SizedBox(height: containerHeight * 0.01),
+
+                    Text(
+                      gameState.question?.bottomNum ?? "",
+                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                          fontSize: containerWidth * 0.07,
+                          fontWeight: FontWeight.w700,
+                          color: Colors.black),
+                    ),
+                    SizedBox(height: containerHeight * 0.10),
+
+                    gameDoneButton(
+                      onMarkDonePressed,
+                      context,
+                      "Mark Done",
+                    ),
+                    SizedBox(height: containerHeight * 0.01),
+                  ],
+                ),
+              ),
+            ],
+          );
+        },
       ),
     );
+
   }
 }

@@ -59,13 +59,14 @@ class HomeScreenGridViewState extends ConsumerState<HomeScreenGridView> {
     }
   }
 
-  Future<List<Question>> getQuestions(GetQuestions getQuestion,
-      QuestionProviderNotifier questionNotifier, {
-        bool isPPAndPS = false,
-        bool isPPAndNS = false,
-        bool isNPAndPS = false,
-        bool isNPAndNS = false,
-      }) async {
+  Future<List<Question>> getQuestions(
+    GetQuestions getQuestion,
+    QuestionProviderNotifier questionNotifier, {
+    bool isPPAndPS = false,
+    bool isPPAndNS = false,
+    bool isNPAndPS = false,
+    bool isNPAndNS = false,
+  }) async {
     var questions = await getQuestion.execute(
         isPPAndPS: isPPAndPS,
         isPPAndNS: isPPAndNS,
@@ -98,18 +99,19 @@ class HomeScreenGridViewState extends ConsumerState<HomeScreenGridView> {
     return true;
   }
 
-  void onResult(Map<String, dynamic> screenState) async {
-    await getQuestionsForResult(screenState);
+  void onResult() async {
+    await getQuestionsForResult();
 
     Navigator.push(
         context, MaterialPageRoute(builder: (ctx) => const ResultsScreen()));
   }
 
   void onTryAgain(
-      GetQuestions getQuestionUseCase,
-      StoreQuestions storeQuestionsUseCase,
-      QuestionProviderNotifier questionNotifier,
-      HomeScreenViewNotifier screenStateNotifier,) async {
+    GetQuestions getQuestionUseCase,
+    StoreQuestions storeQuestionsUseCase,
+    QuestionProviderNotifier questionNotifier,
+    HomeScreenViewNotifier screenStateNotifier,
+  ) async {
     print("ontry again============>()");
 
     var screenState = ref.watch(homeViewTypeProvider);
@@ -131,7 +133,8 @@ class HomeScreenGridViewState extends ConsumerState<HomeScreenGridView> {
         loading: () {});
   }
 
-  Future<void> resetSpecificQuestionData(Map<String, dynamic> screenState,
+  Future<void> resetSpecificQuestionData(
+      Map<String, dynamic> screenState,
       GetQuestions getQuestionUseCase,
       StoreQuestions storeQuestionsUseCase,
       QuestionProviderNotifier questionNotifier,
@@ -164,23 +167,37 @@ class HomeScreenGridViewState extends ConsumerState<HomeScreenGridView> {
         isNPAndPS: isNPAndPS,
         isNPAndNS: isNPAndNS);
 
-    generateQuestionAndNavigate(true, getQuestionUseCase,
-        storeQuestionsUseCase, questionNotifier, screenStateNotifier);
+    generateQuestionAndNavigate(true, getQuestionUseCase, storeQuestionsUseCase,
+        questionNotifier, screenStateNotifier);
   }
 
-  Future<void> getQuestionsForResult(Map<String, dynamic> screenState) async {
+  Future<void> getQuestionsForResult() async {
+    var screenState = ref.watch(homeViewTypeProvider);
     await ref.watch(questionProvider.notifier).fetchQuestion(
+        isPPAndPS: screenState["style"] == 0 ? true : false,
+        isPPAndNS: screenState["style"] == 1 ? true : false,
+        isNPAndPS: screenState["style"] == 2 ? true : false,
+        isNPAndNS: screenState["style"] == 3 ? true : false);
+    setQuestionTypeForResults(screenState);
+  }
+
+  void setQuestionTypeForResults(
+    Map<String, dynamic> screenState,
+  ) {
+    ref.read(resultProvider.notifier).setQuestionType(
         isPPAndPS: screenState["style"] == 0 ? true : false,
         isPPAndNS: screenState["style"] == 1 ? true : false,
         isNPAndPS: screenState["style"] == 2 ? true : false,
         isNPAndNS: screenState["style"] == 3 ? true : false);
   }
 
-  void generateQuestionAndNavigate(bool shouldGetQuestion,
-      GetQuestions getQuestionUseCase,
-      StoreQuestions storeQuestionsUseCase,
-      QuestionProviderNotifier questionNotifier,
-      HomeScreenViewNotifier screenStateNotifier,) async {
+  void generateQuestionAndNavigate(
+    bool shouldGetQuestion,
+    GetQuestions getQuestionUseCase,
+    StoreQuestions storeQuestionsUseCase,
+    QuestionProviderNotifier questionNotifier,
+    HomeScreenViewNotifier screenStateNotifier,
+  ) async {
     var screenState = ref.watch(homeViewTypeProvider);
     if (shouldGetQuestion) {
       await generateAndStoreQuestion(
@@ -216,71 +233,71 @@ class HomeScreenGridViewState extends ConsumerState<HomeScreenGridView> {
 
     return screenState["is_loading"]
         ? Center(
-      child: CircularProgressIndicator(
-        color: MColors().colorSecondaryBlueLight,
-      ),
-    )
+            child: CircularProgressIndicator(
+              color: MColors().colorSecondaryBlueLight,
+            ),
+          )
         : GridView.builder(
-      gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-        crossAxisCount: 2,
-        childAspectRatio: childAspectRatio,
-      ),
-      itemCount: cards.length,
-      itemBuilder: (BuildContext context, int index) {
-        return Column(
-          children: [
-            GestureDetector(
-                onTap: () async {
-                  screenStateNotifier.setStyle(index);
-                  screenStateNotifier.setLoading(true);
-                  var questions = await getQuestions(
-                      getQuestionUseCase, questionNotifier,
-                      isPPAndPS: index == 0,
-                      isPPAndNS: index == 1,
-                      isNPAndPS: index == 2,
-                      isNPAndNS: index == 3);
-                  var isQuestionsExist = false;
-                  if (index == 0) {
-                    isQuestionsExist =
-                    await isPPAndPSQuestionUseCase.execute();
-                  } else if (index == 1) {
-                    isQuestionsExist =
-                    await isPPAndNSQuestionUseCase.execute();
-                  } else if (index == 2) {
-                    isQuestionsExist =
-                    await isNPAndPSQuestionUseCase.execute();
-                  } else if (index == 3) {
-                    isQuestionsExist =
-                    await isNPAndNSQuestionUseCase.execute();
-                  }
-                  if (isQuestionsExist && questions.isEmpty) {
-                    screenStateNotifier.setLoading(false);
-                    showStyleCompletedCustomDialog(ctxt, () {
-                      onResult(screenState);
-                    }, () {
-                      screenStateNotifier.setLoading(true);
-                      onTryAgain(
-                        getQuestionUseCase,
-                        storeQuestionsUseCase,
-                        questionNotifier,
-                        screenStateNotifier,
-                      );
-                    });
-                  } else {
-                    generateQuestionAndNavigate(
-                      questions.isEmpty,
-                       getQuestionUseCase,
-                      storeQuestionsUseCase,
-                      questionNotifier,
-                      screenStateNotifier,
-                    );
-                  }
-                },
-                child: GridStyleCard(
-                    styleItemModel: cards[index], index: index)),
-          ],
-        );
-      },
-    );
+            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              crossAxisCount: 2,
+              childAspectRatio: childAspectRatio,
+            ),
+            itemCount: cards.length,
+            itemBuilder: (BuildContext context, int index) {
+              return Column(
+                children: [
+                  GestureDetector(
+                      onTap: () async {
+                        screenStateNotifier.setStyle(index);
+                        screenStateNotifier.setLoading(true);
+                        var questions = await getQuestions(
+                            getQuestionUseCase, questionNotifier,
+                            isPPAndPS: index == 0,
+                            isPPAndNS: index == 1,
+                            isNPAndPS: index == 2,
+                            isNPAndNS: index == 3);
+                        var isQuestionsExist = false;
+                        if (index == 0) {
+                          isQuestionsExist =
+                              await isPPAndPSQuestionUseCase.execute();
+                        } else if (index == 1) {
+                          isQuestionsExist =
+                              await isPPAndNSQuestionUseCase.execute();
+                        } else if (index == 2) {
+                          isQuestionsExist =
+                              await isNPAndPSQuestionUseCase.execute();
+                        } else if (index == 3) {
+                          isQuestionsExist =
+                              await isNPAndNSQuestionUseCase.execute();
+                        }
+                        if (isQuestionsExist && questions.isEmpty) {
+                          screenStateNotifier.setLoading(false);
+                          showStyleCompletedCustomDialog(ctxt, () {
+                            onResult();
+                          }, () {
+                            screenStateNotifier.setLoading(true);
+                            onTryAgain(
+                              getQuestionUseCase,
+                              storeQuestionsUseCase,
+                              questionNotifier,
+                              screenStateNotifier,
+                            );
+                          });
+                        } else {
+                          generateQuestionAndNavigate(
+                            questions.isEmpty,
+                            getQuestionUseCase,
+                            storeQuestionsUseCase,
+                            questionNotifier,
+                            screenStateNotifier,
+                          );
+                        }
+                      },
+                      child: GridStyleCard(
+                          styleItemModel: cards[index], index: index)),
+                ],
+              );
+            },
+          );
   }
 }

@@ -13,7 +13,7 @@ class SharedPreferencesHelper {
   final String USER_DETAILS_KEY = "userDetails";
   final bool isUpdated;
 
-  SharedPreferencesHelper(this._sharedPreferences,this.isUpdated);
+  SharedPreferencesHelper(this._sharedPreferences, this.isUpdated);
 
   Future<void> saveString(String key, String value) async {
     await _sharedPreferences.setString(key, value);
@@ -74,11 +74,13 @@ class SharedPreferencesHelper {
     return _sharedPreferences.getString(LEVEL_KEY);
   }
 
-  Future<void> setStyleStatus(
-      {bool isPPAndPS = false,
-      bool isPPAndNS = false,
-      bool isNPAndPS = false,
-      bool isNPAndNS = false, required bool value ,}) async {
+  Future<void> setStyleStatus({
+    bool isPPAndPS = false,
+    bool isPPAndNS = false,
+    bool isNPAndPS = false,
+    bool isNPAndNS = false,
+    required bool value,
+  }) async {
     String keyPrefix = "";
 
     if (isPPAndPS) {
@@ -97,10 +99,11 @@ class SharedPreferencesHelper {
     await _sharedPreferences.setBool("$keyPrefix-$STYLE_KEY", value);
   }
 
-  bool? isStyleAttempted(  {bool isPPAndPS = false,
-    bool isPPAndNS = false,
-    bool isNPAndPS = false,
-    bool isNPAndNS = false}) {
+  bool? isStyleAttempted(
+      {bool isPPAndPS = false,
+      bool isPPAndNS = false,
+      bool isNPAndPS = false,
+      bool isNPAndNS = false}) {
     String keyPrefix = "";
 
     if (isPPAndPS) {

@@ -9,11 +9,10 @@ import 'package:xpuzzle/presentation/screens/select_level_screen.dart';
 import 'package:xpuzzle/presentation/widgets/custom_app_bar.dart';
 import 'package:xpuzzle/presentation/widgets/custom_navigation_drawer.dart';
 import 'package:xpuzzle/utils/constants.dart';
-
 import '../../providers/home_screen_providers.dart';
 import '../../widgets/level_with_background.dart';
-import 'home_screen_grid_view.dart';
 import 'home_screen_list_view.dart';
+import 'home_screen_grid_view.dart';
 
 class HomeScreen extends ConsumerWidget {
   const HomeScreen({super.key});
@@ -36,12 +35,11 @@ class HomeScreen extends ConsumerWidget {
         }
 
         ref.watch(homeViewTypeProvider.notifier).setLoading(false);
-        Navigator.push(context,
-            MaterialPageRoute(builder: (ctx) => const SelectLevelScreen()));
+        Navigator.push(context, MaterialPageRoute(builder: (ctx) => const SelectLevelScreen()));
       },
       child: Scaffold(
-        key: _scaffoldKey,
-        drawer: const CustomNavigationDrawer(),
+        // key: _scaffoldKey,
+        drawer:  const CustomNavigationDrawer(),
         body: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
@@ -67,9 +65,11 @@ class HomeScreen extends ConsumerWidget {
                         "assets/images/place_holder_profile.png",
                         width: 50,
                         height: 50,
-                      ), onPressedLeading: () {
-                    scaffoldKey.currentState?.openDrawer();
-                  }, onPressedAction: () {}),
+                      ),
+                      onPressedLeading: (buildContext) {
+                        Scaffold.of(buildContext).openDrawer();
+                      },
+                      onPressedAction: () {}),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.01,
                   ),
@@ -81,22 +81,16 @@ class HomeScreen extends ConsumerWidget {
                         sharedPreferencesAsyncValue.when(
                           data: (sharedPreferencesHelper) {
                             final user = sharedPreferencesHelper.getUser();
-                            final userName =
-                                '${user?.firstName ?? 'User'} ${user?.lastName ?? ''}'
-                                    .trim();
+                            final userName = '${user?.firstName ?? 'User'} ${user?.lastName ?? ''}'.trim();
                             // Fallback to "User" if null
                             return Text(
                               "Hi, $userName",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleSmall
-                                  ?.copyWith(
-                                    fontSize: 18,
-                                  ),
+                              style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                                fontSize: 18,
+                              ),
                             );
                           },
-                          loading: () =>
-                              const CircularProgressIndicator(), // Show loading indicator
+                          loading: () => const CircularProgressIndicator(), // Show loading indicator
                           error: (error, stack) => Text(
                             'Error: $error',
                             style: const TextStyle(color: Colors.red),
@@ -116,10 +110,9 @@ class HomeScreen extends ConsumerWidget {
                                 onPressed: () {
                                   viewNotifier.toggleView();
                                 },
-                                icon: Icon(
-                                    screenState["view_type"] == ViewType.list
-                                        ? Icons.grid_view
-                                        : Icons.list))
+                                icon: Icon(screenState["view_type"] == ViewType.list
+                                    ? Icons.grid_view
+                                    : Icons.list))
                           ],
                         ),
                         Text(
@@ -128,9 +121,9 @@ class HomeScreen extends ConsumerWidget {
                               .textTheme
                               .bodySmall!
                               .copyWith(
-                                  fontWeight: FontWeight.w400,
-                                  color: Colors.grey,
-                                  fontSize: context.screenHeight * 0.021),
+                              fontWeight: FontWeight.w400,
+                              color: Colors.grey,
+                              fontSize: context.screenHeight * 0.021),
                         ),
                       ],
                     ),

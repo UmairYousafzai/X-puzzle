@@ -28,14 +28,14 @@ List<Question> generatePositiveMultipleAndPositiveInteger({
       left = random.nextInt(7) + 2;
       right = -(random.nextInt(left - 1) + 1);
     } else if (isNPAndNS) {
-      left = random.nextInt(5) + 2;
-      right = -(random.nextInt(7) + 2);
+      left = random.nextInt(5) + 2;   // 0 = 2
+      right = -(random.nextInt(left) +left+1 );
     }
 
     List<int> pairList = [left, right]..sort();
     String pair = '${pairList[0]},${pairList[1]}';
 
-    if (!uniquePair.contains(pair) && left != right) {
+    if (!uniquePair.contains(pair) && (left.abs()) != right.abs()) {
       uniquePair.add(pair);
       final sum = left + right;
       final product = left * right;
