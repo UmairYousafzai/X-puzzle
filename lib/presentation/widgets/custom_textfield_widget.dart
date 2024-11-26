@@ -10,6 +10,7 @@ class CustomTextField extends StatelessWidget {
   final VoidCallback? onIconPressed;
   final TextEditingController? controller;
   final bool? disableField;
+  final FocusNode? focusNode; // Unique FocusNode for each field
 
   const CustomTextField({
     super.key,
@@ -20,11 +21,13 @@ class CustomTextField extends StatelessWidget {
     this.onIconPressed,
     this.controller,
     this.disableField,
+    this.focusNode, // Accepting FocusNode as a parameter
   });
 
   @override
   Widget build(BuildContext context) {
-    final focusNode = FocusNode();
+    final node =
+        focusNode ?? FocusNode(); // Use provided FocusNode or create one
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
@@ -41,14 +44,14 @@ class CustomTextField extends StatelessWidget {
                 child: GestureDetector(
                   onTap: () {
                     if (disableField != true) {
-                      focusNode.requestFocus();
+                      node.requestFocus();
                     }
                   },
                   child: TextField(
                     controller: controller,
                     onChanged: onChanged,
                     keyboardType: TextInputType.text,
-                    focusNode: focusNode,
+                    focusNode: node, // Assigning the unique FocusNode
                     enabled: disableField != true,
                     style: GoogleFonts.poppins(
                       fontWeight: FontWeight.w400,
@@ -70,9 +73,12 @@ class CustomTextField extends StatelessWidget {
               ),
               if (showIconButton)
                 IconButton(
-                  icon: SvgPicture.asset('assets/icons/svg/calendar_icon.svg',height: 20,width: 20,),
-
-    onPressed: onIconPressed,
+                  icon: SvgPicture.asset(
+                    'assets/icons/svg/calendar_icon.svg',
+                    height: 20,
+                    width: 20,
+                  ),
+                  onPressed: onIconPressed,
                 ),
             ],
           ),

@@ -1,4 +1,6 @@
 import 'dart:io';
+
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
@@ -6,6 +8,7 @@ import 'package:gap/gap.dart';
 import 'package:xpuzzle/presentation/screens/user_details_screen.dart';
 import 'package:xpuzzle/presentation/widgets/text_widget.dart';
 import 'package:xpuzzle/utils/navigation/navigate.dart';
+
 import '../providers/shared_pref_provider.dart';
 import '../providers/signupProvider.dart';
 import '../theme/colors.dart';
@@ -18,19 +21,19 @@ class CustomNavigationDrawer extends ConsumerWidget {
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
 
-    final imageHeight = (Platform.isIOS ? screenHeight * 0.20 : screenHeight * 0.22)
-        .clamp(170.0, screenHeight * 0.4);
+    final imageHeight =
+        (Platform.isIOS ? screenHeight * 0.20 : screenHeight * 0.22)
+            .clamp(170.0, screenHeight * 0.4);
 
     // Access SharedPreferences using the provider
     final sharedPreferencesAsyncValue = ref.watch(sharedPreferencesProvider);
     final signUpNotifier = ref.read(signUpProvider.notifier);
 
-
-
     return sharedPreferencesAsyncValue.when(
       data: (sharedPreferencesHelper) {
         final user = sharedPreferencesHelper.getUser();
-        final userName = user?.firstName ?? 'John'; // Fallback to "John" if user is null
+        final userName =
+            user?.firstName ?? 'John'; // Fallback to "John" if user is null
 
         return Drawer(
           backgroundColor: MColors().colorPrimary,
@@ -62,8 +65,8 @@ class CustomNavigationDrawer extends ConsumerWidget {
                               .textTheme
                               .titleSmall!
                               .copyWith(
-                              fontSize: screenWidth * 0.045,
-                              fontWeight: FontWeight.w400),
+                                  fontSize: screenWidth * 0.045,
+                                  fontWeight: FontWeight.w400),
                         ),
                       ],
                     ),
@@ -77,8 +80,11 @@ class CustomNavigationDrawer extends ConsumerWidget {
                 child: Column(
                   children: [
                     ListTile(
-                      leading:SvgPicture.asset('assets/icons/svg/profile_icon.svg',height: 20,width: 20,),
-
+                      leading: SvgPicture.asset(
+                        'assets/icons/svg/profile_icon.svg',
+                        height: 20,
+                        width: 20,
+                      ),
                       title: const TextWidget(
                         text: 'Profile',
                         fontSize: 16,
@@ -87,8 +93,11 @@ class CustomNavigationDrawer extends ConsumerWidget {
                       onTap: () {},
                     ),
                     ListTile(
-                      leading:SvgPicture.asset('assets/icons/svg/stats_icon.svg',height: 20,width: 20,),
-
+                      leading: SvgPicture.asset(
+                        'assets/icons/svg/stats_icon.svg',
+                        height: 20,
+                        width: 20,
+                      ),
                       title: const TextWidget(
                         text: 'Stats',
                         fontSize: 16,
@@ -97,8 +106,11 @@ class CustomNavigationDrawer extends ConsumerWidget {
                       onTap: () {},
                     ),
                     ListTile(
-                      leading:SvgPicture.asset('assets/icons/svg/notifications_icon.svg',height: 20,width: 20,),
-
+                      leading: SvgPicture.asset(
+                        'assets/icons/svg/notifications_icon.svg',
+                        height: 20,
+                        width: 20,
+                      ),
                       title: const TextWidget(
                         text: 'Notifications',
                         fontSize: 16,
@@ -113,17 +125,24 @@ class CustomNavigationDrawer extends ConsumerWidget {
               Padding(
                 padding: const EdgeInsets.only(left: 20, bottom: 30),
                 child: ListTile(
-                  leading:SvgPicture.asset('assets/icons/svg/logout_icon.svg',height: 20,width: 20,),
-
+                  leading: SvgPicture.asset(
+                    'assets/icons/svg/logout_icon.svg',
+                    height: 20,
+                    width: 20,
+                  ),
                   title: const TextWidget(
                     text: 'Logout',
                     fontSize: 16,
                     fontWeight: FontWeight.w500,
                   ),
-                  onTap: () {
-                    signUpNotifier.resetState();
-                    sharedPreferencesHelper.clear().then((value){
-                      navigatePushAndRemoveUntil(context, const UserDetailsScreen(), false);
+                  onTap: () async {
+                    if (kDebugMode) {
+                      print('Loggin out user------------');
+                    }
+                    await signUpNotifier.resetState();
+                    await sharedPreferencesHelper.clear().then((value) {
+                      navigatePushAndRemoveUntil(
+                          context, UserDetailsScreen(), false);
                     });
                   },
                 ),

@@ -1,8 +1,8 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:xpuzzle/presentation/providers/shared_pref_provider.dart';
 import 'package:xpuzzle/presentation/screens/select_level_screen.dart';
 import 'package:xpuzzle/presentation/screens/user_details_screen.dart';
@@ -26,6 +26,7 @@ class MyApp extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final sharedPreferencesHelper = ref.watch(sharedPreferencesProvider);
 
+    print("app started");
     return sharedPreferencesHelper.when(
       data: (helper) {
         final user = helper.getUser();
@@ -40,7 +41,17 @@ class MyApp extends ConsumerWidget {
           debugShowCheckedModeBanner: false,
           title: 'X Puzzle',
           theme: theme,
-          home: user == null ? const UserDetailsScreen() : const SelectLevelScreen(),
+          builder: (context, child) {
+            return MediaQuery(
+              data: MediaQuery.of(context).copyWith(
+                textScaler: TextScaler.noScaling,
+              ),
+              child: child!,
+            );
+          },
+          home: user == null
+              ? const UserDetailsScreen()
+              : const SelectLevelScreen(),
         );
       },
       loading: () => const Center(child: CircularProgressIndicator()),
