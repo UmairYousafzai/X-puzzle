@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:xpuzzle/main.dart';
 import 'package:xpuzzle/utils/constants.dart';
 
 import '../../theme/colors.dart';
@@ -131,7 +133,7 @@ gameNumberButton(VoidCallback onPressed, Color backgroundColor, String text,
 }
 
 gameDoneButton(VoidCallback onPressed, BuildContext context, String title,
-    {double borderRadius = 30, double paddingHorizontal = 0.2,double? fontSize,}) {
+    {double borderRadius = 30, double paddingHorizontal =70,double? fontSize,}) {
   return InkWell(
     onTap: onPressed,
     child: Container(
@@ -146,10 +148,8 @@ gameDoneButton(VoidCallback onPressed, BuildContext context, String title,
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(
-            horizontal: context.screenWidth * paddingHorizontal,
-            vertical: MediaQuery.of(context).size.height > smallDeviceThreshold
-                ? 14
-                : 9),
+            horizontal:  paddingHorizontal.r,
+            vertical:14.r),
         child: Text(
           title,
           textAlign: TextAlign.center,

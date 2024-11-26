@@ -4,28 +4,31 @@ import 'package:google_fonts/google_fonts.dart';
 
 class CustomTextField extends StatelessWidget {
   final String hintText;
-  final String? errorText;
+  final String errorText;
   final Function(String) onChanged;
   final bool showIconButton;
   final VoidCallback? onIconPressed;
   final TextEditingController? controller;
   final bool? disableField;
+  final FocusNode? focusNode;
+  final VoidCallback? onTap; // Nullable onTap function
 
   const CustomTextField({
     super.key,
     required this.hintText,
     required this.onChanged,
-    this.errorText,
+    required this.errorText,
     this.showIconButton = false,
     this.onIconPressed,
     this.controller,
     this.disableField,
+    this.focusNode,
+    this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
-    final focusNode = FocusNode();
-
+    final node = focusNode ?? FocusNode();
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -41,14 +44,18 @@ class CustomTextField extends StatelessWidget {
                 child: GestureDetector(
                   onTap: () {
                     if (disableField != true) {
-                      focusNode.requestFocus();
+                      node.requestFocus();
+                    }
+                    if (onTap != null) {
+                      onTap!();
                     }
                   },
                   child: TextField(
                     controller: controller,
                     onChanged: onChanged,
                     keyboardType: TextInputType.text,
-                    focusNode: focusNode,
+                    focusNode: node,
+                    onTap: onTap,
                     enabled: disableField != true,
                     style: GoogleFonts.poppins(
                       fontWeight: FontWeight.w400,
@@ -70,18 +77,21 @@ class CustomTextField extends StatelessWidget {
               ),
               if (showIconButton)
                 IconButton(
-                  icon: SvgPicture.asset('assets/icons/svg/calendar_icon.svg',height: 20,width: 20,),
-
-    onPressed: onIconPressed,
+                  icon: SvgPicture.asset(
+                    'assets/icons/svg/calendar_icon.svg',
+                    height: 20,
+                    width: 20,
+                  ),
+                  onPressed: onIconPressed,
                 ),
             ],
           ),
         ),
-        if (errorText != null)
+        if (errorText.isNotEmpty)
           Padding(
             padding: const EdgeInsets.only(top: 8),
             child: Text(
-              errorText!,
+              errorText,
               style: const TextStyle(color: Colors.red, fontSize: 12),
             ),
           ),

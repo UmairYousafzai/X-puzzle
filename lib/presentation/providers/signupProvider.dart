@@ -14,7 +14,7 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
     } else if (!RegExp(r"^[a-zA-Z\s'-]+$").hasMatch(value)) {
       state = state.copyWith(firstName: value, firstNameError: 'First Name can only contain letters, spaces, apostrophes, and hyphens');
     } else {
-      state = state.copyWith(firstName: value, firstNameError: null);
+      state = state.copyWith(firstName: value, firstNameError: "");
     }
   }
 
@@ -28,7 +28,7 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
     } else if (!RegExp(r"^[a-zA-Z\s'-]+$").hasMatch(value)) {
       state = state.copyWith(lastName: value, lastNameError: 'Last Name can only contain letters, spaces, apostrophes, and hyphens');
     } else {
-      state = state.copyWith(lastName: value, lastNameError: null);
+      state = state.copyWith(lastName: value, lastNameError: "");
     }
   }
 
@@ -41,7 +41,7 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
     } else if (!RegExp(r'^\d{4}-\d{2}-\d{2}$').hasMatch(value)) { // Updated regex to match YYYY-MM-DD
       state = state.copyWith(dobError: 'Date of Birth must be in the format YYYY-MM-DD');
     } else {
-      state = state.copyWith(dob: value, dobError: null); // Clear error if valid
+      state = state.copyWith(dob: value, dobError: ""); // Clear error if valid
     }
   }
 
@@ -50,11 +50,11 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
   void updateEmail(String value) {
     value = value.trim();
     if (value.isEmpty) {
-      state = state.copyWith(email: value, emailError: null);
+      state = state.copyWith(email: value, emailError: "");
     } else if (!RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$').hasMatch(value)) {
       state = state.copyWith(emailError: 'Enter a valid email address');
     } else {
-      state = state.copyWith(email: value, emailError: null); // Clear error if valid
+      state = state.copyWith(email: value, emailError: ""); // Clear error if valid
     }
   }
 

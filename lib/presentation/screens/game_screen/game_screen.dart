@@ -2,9 +2,11 @@ import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:xpuzzle/data/models/local/question_time_model.dart';
+import 'package:xpuzzle/main.dart';
 import 'package:xpuzzle/presentation/providers/question/question_provider.dart';
 import 'package:xpuzzle/presentation/providers/question/question_state.dart';
 import 'package:xpuzzle/presentation/providers/result_provider.dart';
@@ -363,8 +365,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         body: SingleChildScrollView(
           reverse: true,
           child: Padding(
-            padding: EdgeInsets.fromLTRB(
-                screenPadding, screenPadding, screenPadding, screenPadding),
+            padding: EdgeInsets.all(10.r),
             child: Column(
               children: [
                 Gap(context.screenHeight * 0.02),

@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:xpuzzle/domain/use_cases/check_is_pp_and_ps_exist_use_case.dart';
+import 'package:xpuzzle/domain/use_cases/delete_database.dart';
 import 'package:xpuzzle/domain/use_cases/delete_questions.dart';
 import 'package:xpuzzle/domain/use_cases/get_questions.dart';
 import 'package:xpuzzle/domain/use_cases/store_questions.dart';
@@ -26,3 +27,5 @@ final isNPAndNSUseCaseProvider =
     Provider((ref) => CheckNpAndNsExist(ref.watch(questionRepositoryProvider)));
 final deleteQuestionsUseCaseProvider =
     Provider((ref) => DeleteQuestions(ref.watch(questionRepositoryProvider)));
+final deleteDatabaseUseCaseProvider =
+    Provider((ref) => DeleteDatabase(ref.watch(questionRepositoryProvider)));

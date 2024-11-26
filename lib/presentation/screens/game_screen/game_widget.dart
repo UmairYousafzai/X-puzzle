@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:xpuzzle/main.dart';
 
 import 'package:xpuzzle/utils/constants.dart';
 
@@ -23,105 +25,131 @@ class GameWidget extends ConsumerWidget {
     final gameNotifier = ref.read(gameProvider.notifier);
     final firstNumberFocus = ref.watch(gameProvider).firstNumberFocus;
     final secondNumberFocus = ref.watch(gameProvider).secondNumberFocus;
-
+print("game widget  ${context.screenWidth}");
+print("game widget cal ${context.screenWidth< smallDeviceThreshold ?45:65}");
     return Container(
-      width: MediaQuery.of(context).size.width * 0.9,
-      height: MediaQuery.of(context).size.height * 0.5,
+      width: 306.w,
+      height: 340.h,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(25),
         color: MColors().colorPrimary,
       ),
-
       child: LayoutBuilder(
         builder: (context, constraints) {
-          double containerWidth = constraints.maxWidth;
-          double containerHeight = constraints.maxHeight;
+
+          var widgetTopPosition= 0.0;
+          if(context.screenHeight<smallDeviceThreshold){
+            widgetTopPosition= 45.h;
+          }else if(context.screenHeight > 600 && context.screenHeight<800){
+            widgetTopPosition= 60.h;
+
+          }else if(context.screenHeight >800){
+            widgetTopPosition= 65.h;
+
+          }
+
 
           return Stack(
             alignment: Alignment.center,
+            fit: StackFit.expand,
             children: [
               Align(
                 child: SvgPicture.asset(
                   'assets/icons/svg/purple_cross.svg',
                   fit: BoxFit.contain,
-                  height: containerHeight * 0.4,
+                  height: 134.h,
+                  width: 134.w,
                 ),
               ),
               Positioned(
-                top: containerHeight * 0.14,
+                top: 22.r,
                 child: Column(
                   children: [
                     Text(
                       'Enter Number',
                       style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                          color: MColors().colorSecondaryBlueDark, fontSize: containerWidth * 0.05),
+                          color: MColors().colorSecondaryBlueDark,
+                          fontSize: 19.sp),
                     ),
                   ],
                 ),
               ),
+
               Positioned(
-                top: smallDeviceThreshold>context.screenHeight?containerHeight * 0.21:containerHeight*0.245,
+
+                top: widgetTopPosition,
                 right: 0,
                 left: 0,
                 child: Column(
                   children: [
-                    SizedBox(height: containerHeight * 0.040),
+                    8.verticalSpace,
+                    // SizedBox(height: containerHeight * 0.040),
                     Text(
                       'X',
                       style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                          fontSize: containerWidth * 0.06,
+                          fontSize: 28.sp,
                           fontWeight: FontWeight.w700,
                           color: MColors().colorSecondaryOrangeDark),
                     ),
                     Text(
                       gameState.question?.topNum ?? "",
                       style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                          fontSize: containerWidth * 0.07,
+                          fontSize: 32.sp,
                           fontWeight: FontWeight.w700,
                           color: Colors.black),
                     ),
-                    SizedBox(height:smallDeviceThreshold>context.screenHeight?containerHeight * 0.0:containerHeight*0.02),
+                    5.verticalSpace,
+                    // SizedBox(height:smallDeviceThreshold>context.screenHeight?containerHeight * 0.0:containerHeight*0.02),
                     Padding(
-                      padding: EdgeInsets.symmetric(horizontal: containerWidth * 0.16),
+                      padding: EdgeInsets.symmetric(horizontal: 50.w),
                       child: Row(
                         mainAxisAlignment: MainAxisAlignment.spaceAround,
                         children: [
                           gameNumberTextField(
                               value: gameState.firstNumber,
                               context: context,
-                              fontSize: containerWidth * 0.05,
+                              fontSize: 28.sp,
                               onChanged: gameNotifier.updateFirstNumber,
                               focusNode: firstNumberFocus,
                               hasError: gameState.hasErrorOnTextFieldOne),
-                          SizedBox(width: containerWidth * 0.05),
+                          0.horizontalSpace,
+                          // SizedBox(width: containerWidth * 0.05),
                           gameNumberTextField(
                               value: gameState.secondNumber,
                               context: context,
-                              fontSize: containerWidth * 0.05,
+                              fontSize: 28.sp,
                               onChanged: gameNotifier.updateSecondNumber,
                               focusNode: secondNumberFocus,
                               hasError: gameState.hasErrorOnTextFieldTwo),
                         ],
                       ),
                     ),
+                    5.verticalSpace,
 
-                    SizedBox(height: containerHeight * 0.01),
+                    // SizedBox(height: containerHeight * 0.01),
 
                     Text(
                       gameState.question?.bottomNum ?? "",
                       style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                          fontSize: containerWidth * 0.07,
+                          fontSize: 32.sp,
                           fontWeight: FontWeight.w700,
                           color: Colors.black),
                     ),
-                    SizedBox(height: containerHeight * 0.10),
+                    // SizedBox(height: containerHeight * 0.10),
 
-                    gameDoneButton(
-                      onMarkDonePressed,
-                      context,
-                      "Mark Done",
-                    ),
-                    SizedBox(height: containerHeight * 0.01),
+                    25.verticalSpace,
+                    Align(
+                      alignment: Alignment.bottomCenter,
+                      child:  gameDoneButton(
+                        onMarkDonePressed,
+                        context,
+                        "Mark Done",
+                      )
+                      ,
+                    )
+                   ,
+                    5.verticalSpace
+                    // SizedBox(height: containerHeight * 0.01),
                   ],
                 ),
               ),
@@ -130,6 +158,5 @@ class GameWidget extends ConsumerWidget {
         },
       ),
     );
-
   }
 }

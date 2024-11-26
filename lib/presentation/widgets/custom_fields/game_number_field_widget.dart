@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:xpuzzle/main.dart';
 import 'package:xpuzzle/presentation/widgets/custom_number_input_formatter.dart';
 import 'package:xpuzzle/utils/constants.dart';
 
@@ -15,13 +17,15 @@ Widget gameNumberTextField({
 }) {
   return IntrinsicWidth(
     child: Container(
-      constraints: BoxConstraints(
-        minWidth: context.screenWidth * 0.12,
-        maxWidth: context.screenWidth * 0.18,
-        minHeight: context.screenWidth * 0.12,
-        maxHeight: context.screenWidth * 0.18,
-
-      ),
+      width: 40.w,
+      height: 40.h,
+      // constraints: BoxConstraints(
+      //   minWidth: context.screenWidth * 0.12,
+      //   maxWidth: context.screenWidth * 0.18,
+      //   minHeight: context.screenWidth * 0.12,
+      //   maxHeight: context.screenWidth * 0.18,
+      //
+      // ),
       // height: context.screenHeight * 0.068,
       decoration: BoxDecoration(
         borderRadius: BorderRadius.circular(6),
@@ -52,9 +56,9 @@ Widget gameNumberTextField({
               color: MColors().colorSecondaryBlueDark,
               fontSize: fontSize,
             ),
-        decoration: const InputDecoration(
+        decoration:  InputDecoration(
           border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(horizontal: 8),
+          contentPadding: EdgeInsets.symmetric(horizontal: 8.w),
         ),
         onChanged: onChanged,
       ),

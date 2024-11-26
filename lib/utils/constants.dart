@@ -6,7 +6,8 @@ extension ScreenSize on BuildContext {
 }
 
 //UI
-int smallDeviceThreshold = 700;
+int smallDeviceThreshold = 600;
+int mediumDeviceThreshold = 600;
 int largeDeviceThreshold = 800;
 
 

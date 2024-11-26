@@ -12,6 +12,7 @@ abstract class QuestionRepository {
   Future<bool> checkIfIsNPAndPSExists();
 
   Future<bool> checkIfIsNPAndNSExists();
+  Future<bool> deleteDatabase();
 
   Future<void> deleteQuestions({
     bool isPPAndPS = false,

@@ -24,6 +24,7 @@ class DatabaseHelper {
   }
 
   static void _onCreate(Database db, int version) async {
+
     await db.execute('''
     CREATE TABLE $TABLE_QUESTION (
       id INTEGER PRIMARY KEY AUTOINCREMENT,

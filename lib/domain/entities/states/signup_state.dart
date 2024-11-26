@@ -34,10 +34,10 @@ class SignUpState {
       lastName: lastName ?? this.lastName,
       dob: dob ?? this.dob,
       email: email ?? this.email,
-      firstNameError: firstNameError,
-      lastNameError: lastNameError,
-      dobError: dobError,
-      emailError: emailError,
+      firstNameError: firstNameError??this.firstNameError,
+      lastNameError: lastNameError??this.lastNameError,
+      dobError: dobError??this.dobError,
+      emailError: emailError??this.emailError,
     );
   }
 }
