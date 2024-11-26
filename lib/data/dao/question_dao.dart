@@ -1,4 +1,5 @@
 import 'package:flutter/foundation.dart';
+import 'package:path/path.dart';
 import 'package:sqflite/sqflite.dart';
 import 'package:xpuzzle/data/models/local/question_model.dart';
 
@@ -123,11 +124,13 @@ class QuestionDao {
     final db = await _databaseHelper.database;
 
     if (kDebugMode) {
-      print("questions deleted:${isPPAndPS ? 1 : 0}, ${isPPAndNS ? 1 : 0}, ${isNPAndNS ? 1 : 0},${isNPAndPS ? 1 : 0},${isComplete ? 1 : 0 } ");
+      print(
+          "questions deleted:${isPPAndPS ? 1 : 0}, ${isPPAndNS ? 1 : 0}, ${isNPAndNS ? 1 : 0},${isNPAndPS ? 1 : 0},${isComplete ? 1 : 0} ");
     }
     await db?.delete(
       DatabaseHelper.TABLE_QUESTION,
-      where: 'is_pp_and_ps=? AND is_pp_and_ns=? AND is_np_and_ns=? AND is_np_and_ps=? AND is_complete=?',
+      where:
+          'is_pp_and_ps=? AND is_pp_and_ns=? AND is_np_and_ns=? AND is_np_and_ps=? AND is_complete=?',
       whereArgs: [
         isPPAndPS ? 1 : 0,
         isPPAndNS ? 1 : 0,
@@ -136,5 +139,18 @@ class QuestionDao {
         isComplete ? 1 : 0
       ],
     );
+  }
+
+  Future<bool> deleteAppDatabase() async {
+    String databasePath = await getDatabasesPath();
+    String dbPath = join(databasePath, 'x_puzzle.db');
+
+    try {
+      await deleteDatabase(dbPath);
+      return true;
+    } catch (e) {
+      print(e.toString());
+      return false;
+    }
   }
 }

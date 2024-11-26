@@ -1,14 +1,12 @@
 import 'dart:io';
-
-import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:xpuzzle/presentation/providers/question/question_usecase_provider.dart';
 import 'package:xpuzzle/presentation/screens/user_details_screen.dart';
 import 'package:xpuzzle/presentation/widgets/text_widget.dart';
 import 'package:xpuzzle/utils/navigation/navigate.dart';
-
 import '../providers/shared_pref_provider.dart';
 import '../providers/signupProvider.dart';
 import '../theme/colors.dart';
@@ -27,6 +25,7 @@ class CustomNavigationDrawer extends ConsumerWidget {
 
     // Access SharedPreferences using the provider
     final sharedPreferencesAsyncValue = ref.watch(sharedPreferencesProvider);
+    final deleteDatabaseUseCase = ref.watch(deleteDatabaseUseCaseProvider);
     final signUpNotifier = ref.read(signUpProvider.notifier);
 
     return sharedPreferencesAsyncValue.when(
@@ -136,13 +135,12 @@ class CustomNavigationDrawer extends ConsumerWidget {
                     fontWeight: FontWeight.w500,
                   ),
                   onTap: () async {
-                    if (kDebugMode) {
-                      print('Loggin out user------------');
-                    }
-                    await signUpNotifier.resetState();
-                    await sharedPreferencesHelper.clear().then((value) {
+                    signUpNotifier.resetState();
+                    await deleteDatabaseUseCase.questionRepository
+                        .deleteDatabase();
+                    sharedPreferencesHelper.clear().then((value) {
                       navigatePushAndRemoveUntil(
-                          context, UserDetailsScreen(), false);
+                          context, const UserDetailsScreen(), false);
                     });
                   },
                 ),

@@ -80,4 +80,9 @@ class QuestionRepositoryImpl extends QuestionRepository {
       isNPAndNS: isNPAndNS,
     );
   }
+
+  @override
+  Future<bool> deleteDatabase() async {
+    return await _questionDao.deleteAppDatabase();
+  }
 }
