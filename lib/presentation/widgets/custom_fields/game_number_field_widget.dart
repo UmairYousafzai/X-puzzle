@@ -17,8 +17,8 @@ Widget gameNumberTextField({
 }) {
   return IntrinsicWidth(
     child: Container(
-      width: 40.w,
-      height: 40.h,
+      width: 45.h,
+      height: 45.h,
       // constraints: BoxConstraints(
       //   minWidth: context.screenWidth * 0.12,
       //   maxWidth: context.screenWidth * 0.18,
