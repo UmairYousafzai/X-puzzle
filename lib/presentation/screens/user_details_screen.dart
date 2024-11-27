@@ -9,6 +9,7 @@ import 'package:xpuzzle/presentation/widgets/custom_textfield_widget.dart';
 import 'package:xpuzzle/presentation/widgets/text_widget.dart';
 import 'package:xpuzzle/utils/constants.dart';
 import 'package:xpuzzle/utils/navigation/navigate.dart';
+
 import '../providers/shared_pref_provider.dart';
 import '../providers/signupProvider.dart';
 import '../widgets/background_image_container.dart';
@@ -41,16 +42,23 @@ class _UserDetailsScreen extends ConsumerState<UserDetailsScreen> {
     var signUpState = ref.watch(signUpProvider);
     var signUpNotifier = ref.read(signUpProvider.notifier);
 
+    signUpNotifier.updateFirstName(signUpState.firstName);
     signUpNotifier.updateLastName(signUpState.lastName);
     signUpNotifier.updateDOB(signUpState.dob);
     signUpNotifier.updateEmail(signUpState.email);
+
+    String firstNameError = signUpState.firstNameError ?? "";
+    String lastNameError = signUpState.lastNameError ?? "";
+    String dobError = signUpState.dobError ?? "";
+    String emailError = signUpState.emailError ?? "";
+
     if (signUpState.firstName.isNotEmpty &&
         signUpState.lastName.isNotEmpty &&
         signUpState.dob.isNotEmpty &&
-        signUpState.firstNameError == "" &&
-        signUpState.lastNameError == "" &&
-        signUpState.dobError == "" &&
-        signUpState.emailError == "") {
+        firstNameError.isEmpty &&
+        lastNameError.isEmpty &&
+        dobError.isEmpty &&
+        emailError.isEmpty) {
       User user = User(
         firstName: signUpState.firstName,
         lastName: signUpState.lastName,
