@@ -1,12 +1,10 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:xpuzzle/data/models/local/question_time_model.dart';
-import 'package:xpuzzle/main.dart';
 import 'package:xpuzzle/presentation/providers/question/question_provider.dart';
 import 'package:xpuzzle/presentation/providers/question/question_state.dart';
 import 'package:xpuzzle/presentation/providers/result_provider.dart';
@@ -157,8 +155,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
           isCorrectAnswer: isCorrectQuestion(gameState),
           context: context,
           onNext: () async {
-            if (questionState.questions.length == 1)
-              Navigator.pop(context);
+            if (questionState.questions.length == 1) Navigator.pop(context);
             await updateQuestion(
                 gameState, questionState, questionNotifier, gameNotifier);
             checkIfQuestionsCompleted(gameState, questionState, gameNotifier);
@@ -358,9 +355,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
               height: 25,
             ),
             null,
-            onPressedLeading: (buildContext) {
-
-            },
+            onPressedLeading: (buildContext) {},
             titleColor: const Color(0xFF1E2D7C)),
         body: SingleChildScrollView(
           reverse: true,
