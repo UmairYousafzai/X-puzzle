@@ -2,9 +2,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:gap/gap.dart';
-import 'package:xpuzzle/main.dart';
-
 import 'package:xpuzzle/utils/constants.dart';
 
 import '../../providers/game_provider.dart';
@@ -25,8 +22,12 @@ class GameWidget extends ConsumerWidget {
     final gameNotifier = ref.read(gameProvider.notifier);
     final firstNumberFocus = ref.watch(gameProvider).firstNumberFocus;
     final secondNumberFocus = ref.watch(gameProvider).secondNumberFocus;
-print("game widget  ${context.screenWidth}");
-print("game widget cal ${context.screenWidth< smallDeviceThreshold ?45:65}");
+    print("game widget  ${context.screenWidth}");
+    print("Screen height  ${context.screenHeight}");
+    print("Medium Device Threshold  $mediumDeviceThreshold");
+
+    print(
+        "game widget cal ${context.screenWidth < smallDeviceThreshold ? 45 : 65}");
     return Container(
       width: 306.w,
       height: 340.h,
@@ -36,18 +37,14 @@ print("game widget cal ${context.screenWidth< smallDeviceThreshold ?45:65}");
       ),
       child: LayoutBuilder(
         builder: (context, constraints) {
-
-          var widgetTopPosition= 0.0;
-          if(context.screenHeight<smallDeviceThreshold){
-            widgetTopPosition= 45.h;
-          }else if(context.screenHeight > 600 && context.screenHeight<800){
-            widgetTopPosition= 60.h;
-
-          }else if(context.screenHeight >800){
-            widgetTopPosition= 65.h;
-
+          var widgetTopPosition = 0.0;
+          if (context.screenHeight < smallDeviceThreshold) {
+            widgetTopPosition = 45.h;
+          } else if (context.screenHeight > 600 && context.screenHeight < 800) {
+            widgetTopPosition = 60.h;
+          } else if (context.screenHeight > 800) {
+            widgetTopPosition = 65.h;
           }
-
 
           return Stack(
             alignment: Alignment.center,
@@ -74,15 +71,14 @@ print("game widget cal ${context.screenWidth< smallDeviceThreshold ?45:65}");
                   ],
                 ),
               ),
-
               Positioned(
-
                 top: widgetTopPosition,
                 right: 0,
                 left: 0,
                 child: Column(
                   children: [
-                    8.verticalSpace,
+                    if (context.screenHeight > mediumDeviceThreshold)
+                      6.verticalSpace,
                     // SizedBox(height: containerHeight * 0.040),
                     Text(
                       'X',
@@ -98,7 +94,8 @@ print("game widget cal ${context.screenWidth< smallDeviceThreshold ?45:65}");
                           fontWeight: FontWeight.w700,
                           color: Colors.black),
                     ),
-                    5.verticalSpace,
+                    if (context.screenHeight > mediumDeviceThreshold)
+                      5.verticalSpace,
                     // SizedBox(height:smallDeviceThreshold>context.screenHeight?containerHeight * 0.0:containerHeight*0.02),
                     Padding(
                       padding: EdgeInsets.symmetric(horizontal: 50.w),
@@ -140,14 +137,12 @@ print("game widget cal ${context.screenWidth< smallDeviceThreshold ?45:65}");
                     25.verticalSpace,
                     Align(
                       alignment: Alignment.bottomCenter,
-                      child:  gameDoneButton(
+                      child: gameDoneButton(
                         onMarkDonePressed,
                         context,
                         "Mark Done",
-                      )
-                      ,
-                    )
-                   ,
+                      ),
+                    ),
                     5.verticalSpace
                     // SizedBox(height: containerHeight * 0.01),
                   ],
