@@ -3,6 +3,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
+import 'package:xpuzzle/presentation/providers/level_provider.dart';
 import 'package:xpuzzle/presentation/providers/question/question_usecase_provider.dart';
 import 'package:xpuzzle/presentation/screens/user_details_screen.dart';
 import 'package:xpuzzle/presentation/widgets/text_widget.dart';
@@ -26,6 +27,7 @@ class CustomNavigationDrawer extends ConsumerWidget {
     // Access SharedPreferences using the provider
     final sharedPreferencesAsyncValue = ref.watch(sharedPreferencesProvider);
     final deleteDatabaseUseCase = ref.watch(deleteDatabaseUseCaseProvider);
+    final levelProviderNotifier = ref.watch(levelProvider.notifier);
     final signUpNotifier = ref.read(signUpProvider.notifier);
 
     return sharedPreferencesAsyncValue.when(
@@ -138,6 +140,7 @@ class CustomNavigationDrawer extends ConsumerWidget {
                     signUpNotifier.resetState();
                     await deleteDatabaseUseCase.questionRepository
                         .deleteDatabase();
+                    levelProviderNotifier.updateLevel("");
                     sharedPreferencesHelper.clear().then((value) {
                       navigatePushAndRemoveUntil(
                           context, const UserDetailsScreen(), false);

@@ -1,23 +1,24 @@
 import 'package:flutter/foundation.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
+
 import '../../../data/data_source/local/question_generator.dart';
 import '../../../data/data_source/local/shared_preference_helper.dart';
 import '../../../domain/entities/question.dart';
 import '../../../domain/use_cases/get_questions.dart';
 import '../../../domain/use_cases/store_questions.dart';
+import '../../../utils/navigation/navigate.dart';
 import '../../providers/home_screen_providers.dart';
 import '../../providers/question/question_provider.dart';
 import '../../providers/question/question_usecase_provider.dart';
+import '../../providers/result_provider.dart';
 import '../../providers/shared_pref_provider.dart';
 import '../../providers/time/time_use_case_provider.dart';
 import '../../theme/colors.dart';
-import '../../widgets/snackBar_messages.dart';
 import '../dialogs/style_completed_custom_dialog.dart';
 import '../game_screen/game_screen.dart';
 import '../results_screen.dart';
 import 'home_screen_list_card.dart';
-import 'home_screen_grid_card.dart';
 
 class HomeScreenListView extends ConsumerStatefulWidget {
   const HomeScreenListView({super.key});
@@ -56,13 +57,13 @@ class HomeScreenListViewState extends ConsumerState<HomeScreenListView> {
   }
 
   Future<List<Question>> getQuestions(
-    GetQuestions getQuestion,
-    QuestionProviderNotifier questionNotifier, {
-    bool isPPAndPS = false,
-    bool isPPAndNS = false,
-    bool isNPAndPS = false,
-    bool isNPAndNS = false,
-  }) async {
+      GetQuestions getQuestion,
+      QuestionProviderNotifier questionNotifier, {
+        bool isPPAndPS = false,
+        bool isPPAndNS = false,
+        bool isNPAndPS = false,
+        bool isNPAndNS = false,
+      }) async {
     var questions = await getQuestion.execute(
         isPPAndPS: isPPAndPS,
         isPPAndNS: isPPAndNS,
@@ -95,26 +96,23 @@ class HomeScreenListViewState extends ConsumerState<HomeScreenListView> {
     return true;
   }
 
-  void onResult(Map<String, dynamic> screenState) async {
-    await getQuestionsForResult(screenState);
+  void onResult() async {
+    await getQuestionsForResult();
 
     Navigator.push(
         context, MaterialPageRoute(builder: (ctx) => const ResultsScreen()));
   }
 
   void onTryAgain(
-    Map<String, dynamic> screenState,
-    GetQuestions getQuestionUseCase,
-    StoreQuestions storeQuestionsUseCase,
-    QuestionProviderNotifier questionNotifier,
-    HomeScreenViewNotifier screenStateNotifier,
-  ) async {
+      Map<String, dynamic> screenState,
+      GetQuestions getQuestionUseCase,
+      StoreQuestions storeQuestionsUseCase,
+      QuestionProviderNotifier questionNotifier,
+      HomeScreenViewNotifier screenStateNotifier,
+      ) async {
     print("ontry again============>()");
-    var isPPAndPS = screenState["style"] == 0 ? true : false;
-    var isPPAndNS = screenState["style"] == 1 ? true : false;
-    var isNPAndPS = screenState["style"] == 2 ? true : false;
-    var isNPAndNS = screenState["style"] == 3 ? true : false;
 
+    var screenState = ref.watch(homeViewTypeProvider);
     ref.watch(sharedPreferencesProvider).when(
         data: (sharedPreference) async {
           resetSpecificQuestionData(
@@ -133,7 +131,8 @@ class HomeScreenListViewState extends ConsumerState<HomeScreenListView> {
         loading: () {});
   }
 
-  Future<void> resetSpecificQuestionData(Map<String, dynamic> screenState,
+  Future<void> resetSpecificQuestionData(
+      Map<String, dynamic> screenState,
       GetQuestions getQuestionUseCase,
       StoreQuestions storeQuestionsUseCase,
       QuestionProviderNotifier questionNotifier,
@@ -166,23 +165,37 @@ class HomeScreenListViewState extends ConsumerState<HomeScreenListView> {
         isNPAndPS: isNPAndPS,
         isNPAndNS: isNPAndNS);
 
-    generateQuestionAndNavigate(true, getQuestionUseCase,
-        storeQuestionsUseCase, questionNotifier, screenStateNotifier);
+    generateQuestionAndNavigate(true, getQuestionUseCase, storeQuestionsUseCase,
+        questionNotifier, screenStateNotifier);
   }
 
-  Future<void> getQuestionsForResult(Map<String, dynamic> screenState) async {
+  Future<void> getQuestionsForResult() async {
+    var screenState = ref.watch(homeViewTypeProvider);
     await ref.watch(questionProvider.notifier).fetchQuestion(
+        isPPAndPS: screenState["style"] == 0 ? true : false,
+        isPPAndNS: screenState["style"] == 1 ? true : false,
+        isNPAndPS: screenState["style"] == 2 ? true : false,
+        isNPAndNS: screenState["style"] == 3 ? true : false);
+    setQuestionTypeForResults(screenState);
+  }
+
+  void setQuestionTypeForResults(
+      Map<String, dynamic> screenState,
+      ) {
+    ref.read(resultProvider.notifier).setQuestionType(
         isPPAndPS: screenState["style"] == 0 ? true : false,
         isPPAndNS: screenState["style"] == 1 ? true : false,
         isNPAndPS: screenState["style"] == 2 ? true : false,
         isNPAndNS: screenState["style"] == 3 ? true : false);
   }
 
-  void generateQuestionAndNavigate(bool shouldGetQuestion,
+  void generateQuestionAndNavigate(
+      bool shouldGetQuestion,
       GetQuestions getQuestionUseCase,
       StoreQuestions storeQuestionsUseCase,
       QuestionProviderNotifier questionNotifier,
-      HomeScreenViewNotifier screenStateNotifier,) async {
+      HomeScreenViewNotifier screenStateNotifier,
+      ) async {
     var screenState = ref.watch(homeViewTypeProvider);
     if (shouldGetQuestion) {
       await generateAndStoreQuestion(
@@ -195,11 +208,11 @@ class HomeScreenListViewState extends ConsumerState<HomeScreenListView> {
           isNPAndNS: screenState["style"] == 3 ? true : false);
     }
     screenStateNotifier.setLoading(false);
-    Navigator.push(
-        context, MaterialPageRoute(builder: (ctx) => const GameScreen()));
+
+    navigateToScreen(context, const GameScreen());
   }
 
-  void onItemClicked(int index,BuildContext context) async{
+  void onItemClicked(int index, BuildContext context) async {
     final screenState = ref.watch(homeViewTypeProvider);
     final screenStateNotifier = ref.read(homeViewTypeProvider.notifier);
     final storeQuestionsUseCase = ref.watch(storeQuestionUseCaseProvider);
@@ -211,30 +224,25 @@ class HomeScreenListViewState extends ConsumerState<HomeScreenListView> {
     var questionNotifier = ref.read(questionProvider.notifier);
     screenStateNotifier.setStyle(index);
     screenStateNotifier.setLoading(true);
-    var questions = await getQuestions(
-        getQuestionUseCase, questionNotifier,
+    var questions = await getQuestions(getQuestionUseCase, questionNotifier,
         isPPAndPS: index == 0,
         isPPAndNS: index == 1,
         isNPAndPS: index == 2,
         isNPAndNS: index == 3);
     var isQuestionsExist = false;
     if (index == 0) {
-      isQuestionsExist =
-          await isPPAndPSQuestionUseCase.execute();
+      isQuestionsExist = await isPPAndPSQuestionUseCase.execute();
     } else if (index == 1) {
-      isQuestionsExist =
-          await isPPAndNSQuestionUseCase.execute();
+      isQuestionsExist = await isPPAndNSQuestionUseCase.execute();
     } else if (index == 2) {
-      isQuestionsExist =
-          await isNPAndPSQuestionUseCase.execute();
+      isQuestionsExist = await isNPAndPSQuestionUseCase.execute();
     } else if (index == 3) {
-      isQuestionsExist =
-          await isNPAndNSQuestionUseCase.execute();
+      isQuestionsExist = await isNPAndNSQuestionUseCase.execute();
     }
     if (isQuestionsExist && questions.isEmpty) {
       screenStateNotifier.setLoading(false);
       showStyleCompletedCustomDialog(context, () {
-        onResult(screenState);
+        onResult();
       }, () {
         screenStateNotifier.setLoading(true);
         onTryAgain(
@@ -255,45 +263,40 @@ class HomeScreenListViewState extends ConsumerState<HomeScreenListView> {
       );
     }
   }
+
   @override
   Widget build(BuildContext context) {
     final screenState = ref.watch(homeViewTypeProvider);
-    final screenStateNotifier = ref.read(homeViewTypeProvider.notifier);
-    final storeQuestionsUseCase = ref.watch(storeQuestionUseCaseProvider);
-    final isPPAndPSQuestionUseCase = ref.watch(isPPAndPSUseCaseProvider);
-    final isPPAndNSQuestionUseCase = ref.watch(isPPAndNSUseCaseProvider);
-    final isNPAndPSQuestionUseCase = ref.watch(isNPAndPSUseCaseProvider);
-    final isNPAndNSQuestionUseCase = ref.watch(isNPAndNSUseCaseProvider);
-    final getQuestionUseCase = ref.watch(getQuestionUseCaseProvider);
-    var questionNotifier = ref.read(questionProvider.notifier);
     final ctxt = context;
     final cards = ref.watch(homeScreenStylesProvider);
 
     return screenState["is_loading"]
         ? Center(
-            child: CircularProgressIndicator(
-              color: MColors().colorSecondaryBlueLight,
-            ),
-          )
+      child: CircularProgressIndicator(
+        color: MColors().colorSecondaryBlueLight,
+      ),
+    )
         : SizedBox(
-            width: MediaQuery.of(context).size.width,
-            height: MediaQuery.of(context).size.height * 0.715,
-            child: ListView.builder(
-              itemCount: cards.length,
-              itemBuilder: (BuildContext context, int index) {
-                return GestureDetector(
-                  onTap: ()  {
+      width: MediaQuery.of(context).size.width,
+      height: MediaQuery.of(context).size.height * 0.715,
+      child: ListView.builder(
+        itemCount: cards.length,
+        itemBuilder: (BuildContext context, int index) {
+          return GestureDetector(
+            onTap: () {
+              onItemClicked(index, ctxt);
+            },
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 8.0),
+              child: ListStyleCard(
+                  item: cards[index],
+                  onClicked: () {
                     onItemClicked(index, ctxt);
-                  },
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8.0),
-                    child: ListStyleCard(item: cards[index],onClicked: (){
-                      onItemClicked(index, ctxt);
-                    }),
-                  ),
-                );
-              },
+                  }),
             ),
           );
+        },
+      ),
+    );
   }
 }

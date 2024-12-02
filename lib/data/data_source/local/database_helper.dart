@@ -23,8 +23,11 @@ class DatabaseHelper {
     return _database;
   }
 
-  static void _onCreate(Database db, int version) async {
+  void setDBNull() {
+    _database = null;
+  }
 
+  static void _onCreate(Database db, int version) async {
     await db.execute('''
     CREATE TABLE $TABLE_QUESTION (
       id INTEGER PRIMARY KEY AUTOINCREMENT,

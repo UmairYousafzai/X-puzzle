@@ -108,7 +108,7 @@ print("game widget cal ${context.screenWidth< smallDeviceThreshold ?45:65}");
                           gameNumberTextField(
                               value: gameState.firstNumber,
                               context: context,
-                              fontSize: 22.sp,
+                              fontSize: 22,
                               onChanged: gameNotifier.updateFirstNumber,
                               focusNode: firstNumberFocus,
                               hasError: gameState.hasErrorOnTextFieldOne),
@@ -117,7 +117,7 @@ print("game widget cal ${context.screenWidth< smallDeviceThreshold ?45:65}");
                           gameNumberTextField(
                               value: gameState.secondNumber,
                               context: context,
-                              fontSize: 22.sp,
+                              fontSize: 22,
                               onChanged: gameNotifier.updateSecondNumber,
                               focusNode: secondNumberFocus,
                               hasError: gameState.hasErrorOnTextFieldTwo),

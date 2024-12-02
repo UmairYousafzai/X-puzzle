@@ -15,8 +15,20 @@ Widget gameNumberTextField({
   required FocusNode focusNode,
   required bool hasError,
 }) {
+
+  var widgetBottomPadding= 0.0;
+  if(context.screenHeight<smallDeviceThreshold){
+    widgetBottomPadding= 10.r;
+  }else if(context.screenHeight > 600 && context.screenHeight<800){
+    widgetBottomPadding= 12.r;
+
+  }else if(context.screenHeight >800){
+    widgetBottomPadding= 10.r;
+
+  }
   return IntrinsicWidth(
     child: Container(
+      padding: EdgeInsets.only(bottom: widgetBottomPadding),
       width: 45.h,
       height: 45.h,
       // constraints: BoxConstraints(
@@ -35,32 +47,35 @@ Widget gameNumberTextField({
           width: 1,
         ),
       ),
-      child: TextField(
-        enableInteractiveSelection: false,
-        cursorColor: MColors().colorSecondaryBlueDark,
-        focusNode: focusNode,
-        inputFormatters: [
-          // FilteringTextInputFormatter.
-          CustomNumberInputFormatter(),
-          LengthLimitingTextInputFormatter(5),
-        ],
-        keyboardType: const TextInputType.numberWithOptions(signed: true,decimal: true),
-        controller: TextEditingController.fromValue(
-          TextEditingValue(
-            text: value,
-            selection: TextSelection.collapsed(offset: value.length),
-          ),
-        ),
-        textAlign: TextAlign.center,
-        style: Theme.of(context).textTheme.titleSmall!.copyWith(
-              color: MColors().colorSecondaryBlueDark,
-              fontSize: fontSize,
+      child: Center(
+        child: TextField(
+          enableInteractiveSelection: false,
+          cursorColor: MColors().colorSecondaryBlueDark,
+          focusNode: focusNode,
+          inputFormatters: [
+            // FilteringTextInputFormatter.
+            CustomNumberInputFormatter(),
+            LengthLimitingTextInputFormatter(5),
+          ],
+          keyboardType: const TextInputType.numberWithOptions(
+              signed: true, decimal: true),
+          controller: TextEditingController.fromValue(
+            TextEditingValue(
+              text: value,
+              selection: TextSelection.collapsed(offset: value.length),
             ),
-        decoration:  InputDecoration(
-          border: InputBorder.none,
-          contentPadding: EdgeInsets.symmetric(horizontal: 8.w),
+          ),
+          textAlign: TextAlign.center,
+          style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                color: MColors().colorSecondaryBlueDark,
+                fontSize: fontSize.h,
+              ),
+          decoration: InputDecoration(
+            border: InputBorder.none,
+            // contentPadding: EdgeInsets.symmetric(horizontal: 8.w),
+          ),
+          onChanged: onChanged,
         ),
-        onChanged: onChanged,
       ),
     ),
   );

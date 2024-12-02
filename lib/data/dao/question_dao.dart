@@ -147,9 +147,12 @@ class QuestionDao {
 
     try {
       await deleteDatabase(dbPath);
+      _databaseHelper.setDBNull();
       return true;
     } catch (e) {
-      print(e.toString());
+      if (kDebugMode) {
+        print(e.toString());
+      }
       return false;
     }
   }
