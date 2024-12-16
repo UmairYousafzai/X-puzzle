@@ -9,7 +9,7 @@ final homeScreenStylesProvider = Provider<List<StyleCardItemModel>>((ref) {
         product: "Positive product",
         sum: "Positive sum",
         styleName: "Level 1",
-        imageSrc: "assets/icons/svg/style_icon.svg"),
+        imageSrc: "assets/icons/svg/style_one.svg"),
     StyleCardItemModel(
         style: Styles.style2,
         product: "Positive product",
@@ -35,7 +35,7 @@ enum ViewType { list, grid }
 
 class HomeScreenViewNotifier extends StateNotifier<Map<String, dynamic>> {
   HomeScreenViewNotifier()
-      : super({"view_type": ViewType.list, "is_loading": false,"style":0});
+      : super({"view_type": ViewType.list, "is_loading": false, "style": 0});
 
   void toggleView() {
     if (state["view_type"] == ViewType.list) {
@@ -52,8 +52,6 @@ class HomeScreenViewNotifier extends StateNotifier<Map<String, dynamic>> {
   void setStyle(int style) {
     state = {...state, "style": style};
   }
-
-
 }
 
 final homeViewTypeProvider =
