@@ -21,6 +21,7 @@ import '../../theme/colors.dart';
 import '../dialogs/style_completed_custom_dialog.dart';
 import '../game_screen/game_screen.dart';
 import '../results_screen.dart';
+import '../start_quiz_screen.dart';
 import 'home_screen_grid_card.dart';
 
 class HomeScreenGridView extends ConsumerStatefulWidget {
@@ -211,7 +212,7 @@ class HomeScreenGridViewState extends ConsumerState<HomeScreenGridView> {
     }
     screenStateNotifier.setLoading(false);
 
-    navigateToScreen(context, const GameScreen());
+    navigateToScreen(context, const StartQuizScreen());
   }
 
   @override

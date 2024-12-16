@@ -19,8 +19,10 @@ levelButton(VoidCallback onPress, String level, BuildContext context) {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 4, horizontal: 16),
         child: Text(level,
-            style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                color: MColors().colorSecondaryOrangeDark, fontSize: 14)),
+            style: TextStyle(
+                fontFamily: 'BalooDa2',
+                color: MColors().colorSecondaryOrangeDark,
+                fontSize: 14)),
       ),
     ),
   );
@@ -39,10 +41,8 @@ startButton(VoidCallback onPress, BuildContext context) {
       child: Padding(
         padding: const EdgeInsets.symmetric(vertical: 2, horizontal: 10),
         child: Text('Start',
-            style: Theme.of(context)
-                .textTheme
-                .titleMedium!
-                .copyWith(color: MColors().white, fontSize: 14)),
+            style: TextStyle(
+                fontFamily: 'BalooDa2', color: MColors().white, fontSize: 14)),
       ),
     ),
   );
@@ -120,7 +120,8 @@ gameNumberButton(VoidCallback onPressed, Color backgroundColor, String text,
       child: Center(
         child: Text(
           text,
-          style: Theme.of(context).textTheme.titleSmall!.copyWith(
+          style: TextStyle(
+              fontFamily: 'BalooDa2',
               color: black ? Colors.black : MColors().colorSecondaryBlueDark,
               fontSize:
                   MediaQuery.of(context).size.height > smallDeviceThreshold
@@ -132,8 +133,14 @@ gameNumberButton(VoidCallback onPressed, Color backgroundColor, String text,
   );
 }
 
-gameDoneButton(VoidCallback onPressed, BuildContext context, String title,
-    {double borderRadius = 30, double paddingHorizontal =70,double? fontSize,}) {
+gameDoneButton(
+  VoidCallback onPressed,
+  BuildContext context,
+  String title, {
+  double borderRadius = 30,
+  double paddingHorizontal = 70,
+  double? fontSize,
+}) {
   return InkWell(
     onTap: onPressed,
     child: Container(
@@ -148,8 +155,7 @@ gameDoneButton(VoidCallback onPressed, BuildContext context, String title,
       ),
       child: Padding(
         padding: EdgeInsets.symmetric(
-            horizontal:  paddingHorizontal.r,
-            vertical:14.r),
+            horizontal: paddingHorizontal.r, vertical: 12.r),
         child: Text(
           title,
           textAlign: TextAlign.center,
@@ -157,7 +163,7 @@ gameDoneButton(VoidCallback onPressed, BuildContext context, String title,
           style: GoogleFonts.poppins(
               fontWeight: FontWeight.w600,
               color: MColors().colorSecondaryOrangeDark,
-              fontSize: fontSize??15.32),
+              fontSize: fontSize ?? 15.32),
         ),
       ),
     ),

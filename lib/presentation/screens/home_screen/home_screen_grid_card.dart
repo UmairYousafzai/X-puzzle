@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:flutter_svg/svg.dart';
+import 'package:xpuzzle/main.dart';
 import 'package:xpuzzle/presentation/providers/shared_pref_provider.dart';
 import 'package:xpuzzle/utils/constants.dart';
 
@@ -26,7 +28,7 @@ class _StyleCard extends ConsumerState<GridStyleCard> {
   Widget build(BuildContext context) {
     final sharedPref = ref.watch(sharedPreferencesProvider);
     return Padding(
-      padding: const EdgeInsets.only(top:8),
+      padding: const EdgeInsets.only(top: 8),
       child: Container(
         width: context.screenWidth * 0.445,
         height: context.screenHeight * 0.29,
@@ -46,10 +48,11 @@ class _StyleCard extends ConsumerState<GridStyleCard> {
           mainAxisAlignment: MainAxisAlignment.center,
           children: <Widget>[
             Text(widget.styleItemModel.styleName,
-                style: Theme.of(context)
-                    .textTheme
-                    .titleMedium
-                    ?.copyWith(color: MColors().colorSecondaryBlueLight)),
+                style: TextStyle(
+                    fontFamily: 'BalooDa2',
+                    fontSize: 19.sp,
+                    fontWeight: FontWeight.w600,
+                    color: MColors().colorSecondaryBlueLight)),
             const SizedBox(height: 8),
             SvgPicture.asset(widget.styleItemModel.imageSrc),
             const SizedBox(height: 10),
@@ -77,9 +80,10 @@ class _StyleCard extends ConsumerState<GridStyleCard> {
               return isAttempted ?? false
                   ? Text(
                       "Completed",
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleSmall?.copyWith(color: MColors().colorSecondaryOrangeDark,fontWeight: FontWeight.w600),
+                      style: TextStyle(
+                          fontFamily: 'BalooDa2',
+                          color: MColors().colorSecondaryOrangeDark,
+                          fontWeight: FontWeight.w600),
                     )
                   : Container();
             }, error: (err, stack) {

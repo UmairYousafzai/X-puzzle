@@ -1,10 +1,6 @@
 import 'package:flutter/foundation.dart';
 import 'package:sqflite/sqflite.dart';
-import 'package:xpuzzle/data/models/local/question_model.dart';
 import 'package:xpuzzle/data/models/local/question_time_model.dart';
-import 'package:xpuzzle/domain/entities/time.dart';
-
-import '../../domain/entities/question.dart';
 import '../data_source/local/database_helper.dart';
 
 class TimeDao {
@@ -28,7 +24,6 @@ class TimeDao {
             isPPAndNS ? 1 : 0,
             isNPAndNS ? 1 : 0,
             isNPAndPS ? 1 : 0,
-
           ]);
       if (kDebugMode) {
         print("saves time values==============> ${result.toString()}");
@@ -67,7 +62,6 @@ class TimeDao {
     }
   }
 
-
   Future<void> deleteEntry({
     bool isPPAndPS = false,
     bool isPPAndNS = false,
@@ -79,7 +73,8 @@ class TimeDao {
 
     await db?.delete(
       DatabaseHelper.TABLE_QUESTION_TIME,
-      where: 'is_pp_and_ps=? AND is_pp_and_ns=? AND is_np_and_ns=? AND is_np_and_ps=?',
+      where:
+          'is_pp_and_ps=? AND is_pp_and_ns=? AND is_np_and_ns=? AND is_np_and_ps=?',
       whereArgs: [
         isPPAndPS ? 1 : 0,
         isPPAndNS ? 1 : 0,

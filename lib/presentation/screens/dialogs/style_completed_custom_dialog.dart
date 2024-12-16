@@ -8,7 +8,6 @@ import '../../widgets/buttons/buttons.dart';
 
 void showStyleCompletedCustomDialog(BuildContext context,
     void Function() onViewResult, void Function() onTryAgain) {
-
   final double headingTextSize =
       context.screenHeight > smallDeviceThreshold ? 18 : 14;
   final double bodyTextSize =
@@ -16,7 +15,7 @@ void showStyleCompletedCustomDialog(BuildContext context,
   final double bodyItemSpace =
       context.screenHeight > smallDeviceThreshold ? 10 : 8;
   final double buttonWidth = context.screenHeight * 0.33;
-  final double textFieldWidth =  context.screenWidth * 0.6;
+  final double textFieldWidth = context.screenWidth * 0.6;
 
   showGeneralDialog(
       context: context,
@@ -63,10 +62,10 @@ void showStyleCompletedCustomDialog(BuildContext context,
                         child: Text(
                           "Would you like to view your completed results",
                           textAlign: TextAlign.center,
-                          style:
-                              Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    fontSize: headingTextSize,
-                                  ),
+                          style: TextStyle(
+                            fontFamily: 'BalooDa2',
+                            fontSize: headingTextSize,
+                          ),
                         ),
                       ),
                     ),
@@ -75,17 +74,15 @@ void showStyleCompletedCustomDialog(BuildContext context,
                     ),
                     SizedBox(
                       width: buttonWidth,
-                      child: gameDoneButton(
-                        () {
-                          onViewResult();
-                          Navigator.pop(context);
-                        },
-                        context,
-                        "View Results",
-                        borderRadius: 15,
-                        paddingHorizontal: 0.06,
-                          fontSize: context.screenHeight>smallDeviceThreshold?15:13
-                      ),
+                      child: gameDoneButton(() {
+                        onViewResult();
+                        Navigator.pop(context);
+                      }, context, "View Results",
+                          borderRadius: 15,
+                          paddingHorizontal: 0.06,
+                          fontSize: context.screenHeight > smallDeviceThreshold
+                              ? 15
+                              : 13),
                     ),
                     SizedBox(
                       height: bodyItemSpace,
@@ -98,8 +95,9 @@ void showStyleCompletedCustomDialog(BuildContext context,
                           "or\n Would you like to try again",
                           textAlign: TextAlign.center,
                           style:
-                              Theme.of(context).textTheme.bodyMedium?.copyWith(
-                                    fontSize: bodyTextSize,
+                              TextStyle(
+                                fontFamily: 'BalooDa2',
+                                fontSize: bodyTextSize,
                                   ),
                         ),
                       ),
@@ -122,5 +120,4 @@ void showStyleCompletedCustomDialog(BuildContext context,
         );
       },
       transitionDuration: const Duration(milliseconds: 300));
-
 }

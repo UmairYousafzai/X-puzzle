@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:xpuzzle/presentation/screens/start_quiz_screen.dart';
 
 import '../../../data/data_source/local/question_generator.dart';
 import '../../../data/data_source/local/shared_preference_helper.dart';
@@ -209,7 +210,7 @@ class HomeScreenListViewState extends ConsumerState<HomeScreenListView> {
     }
     screenStateNotifier.setLoading(false);
 
-    navigateToScreen(context, const GameScreen());
+    navigateToScreen(context, const StartQuizScreen());
   }
 
   void onItemClicked(int index, BuildContext context) async {

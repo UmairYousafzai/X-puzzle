@@ -39,11 +39,11 @@ class GameWidget extends ConsumerWidget {
         builder: (context, constraints) {
           var widgetTopPosition = 0.0;
           if (context.screenHeight < smallDeviceThreshold) {
-            widgetTopPosition = 45.h;
+            widgetTopPosition = 83.h;
           } else if (context.screenHeight > 600 && context.screenHeight < 800) {
-            widgetTopPosition = 60.h;
+            widgetTopPosition = 87.h;
           } else if (context.screenHeight > 800) {
-            widgetTopPosition = 65.h;
+            widgetTopPosition = 88.h;
           }
 
           return Stack(
@@ -54,8 +54,8 @@ class GameWidget extends ConsumerWidget {
                 child: SvgPicture.asset(
                   'assets/icons/svg/purple_cross.svg',
                   fit: BoxFit.contain,
-                  height: 134.h,
-                  width: 134.w,
+                  height: 150.h,
+                  width: 150.w,
                 ),
               ),
               Positioned(
@@ -64,7 +64,9 @@ class GameWidget extends ConsumerWidget {
                   children: [
                     Text(
                       'Enter Number',
-                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                      style: TextStyle(
+                          fontFamily: 'BalooDa2',
+                          fontWeight: FontWeight.w600,
                           color: MColors().colorSecondaryBlueDark,
                           fontSize: 19.sp),
                     ),
@@ -76,21 +78,25 @@ class GameWidget extends ConsumerWidget {
                 right: 0,
                 left: 0,
                 child: Column(
+                  mainAxisSize: MainAxisSize.min,
                   children: [
                     if (context.screenHeight > mediumDeviceThreshold)
                       6.verticalSpace,
                     // SizedBox(height: containerHeight * 0.040),
                     Text(
                       'X',
-                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
+                      style: TextStyle(
+                          fontFamily: 'BalooDa2',
                           fontSize: 28.sp,
+                          height: 0.5,
                           fontWeight: FontWeight.w700,
                           color: MColors().colorSecondaryOrangeDark),
                     ),
                     Text(
                       gameState.question?.topNum ?? "",
-                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                          fontSize: 32.sp,
+                      style: TextStyle(
+                          fontFamily: 'BalooDa2',
+                          fontSize: 30.sp,
                           fontWeight: FontWeight.w700,
                           color: Colors.black),
                     ),
@@ -127,20 +133,30 @@ class GameWidget extends ConsumerWidget {
 
                     Text(
                       gameState.question?.bottomNum ?? "",
-                      style: Theme.of(context).textTheme.titleLarge!.copyWith(
-                          fontSize: 32.sp,
+                      style: TextStyle(
+                          fontFamily: 'BalooDa2',
+                          fontSize: 30.sp,
                           fontWeight: FontWeight.w700,
                           color: Colors.black),
                     ),
                     // SizedBox(height: containerHeight * 0.10),
+                    Text(
+                      '+',
+                      style: TextStyle(
+                          fontFamily: 'BalooDa2',
+                          fontSize: 30.sp,
+                          height: 0.5.h,
 
+                          fontWeight: FontWeight.w700,
+                          color: MColors().colorSecondaryOrangeDark),
+                    ),
                     25.verticalSpace,
                     Align(
                       alignment: Alignment.bottomCenter,
                       child: gameDoneButton(
                         onMarkDonePressed,
                         context,
-                        "Mark Done",
+                        "Submit",
                       ),
                     ),
                     5.verticalSpace

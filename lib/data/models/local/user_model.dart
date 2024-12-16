@@ -1,28 +1,20 @@
-
 import '../../../domain/entities/user.dart';
 
 class UserModel extends User {
   UserModel({
-    required String firstName,
-    required String lastName,
-    required String dob,
-    required String email,
-  }) : super(
-    firstName: firstName,
-    lastName: lastName,
-    dob: dob,
-    email: email,
-  );
+    required super.firstName,
+    required super.lastName,
+    required super.dob,
+    required super.email,
+  });
 
-  // Method to convert UserModel to JSON
   Map<String, dynamic> toJson() => {
-    'firstName': firstName,
-    'lastName': lastName,
-    'dob': dob,
-    'email': email,
-  };
+        'firstName': firstName,
+        'lastName': lastName,
+        'dob': dob,
+        'email': email,
+      };
 
-  // Factory method to create UserModel from JSON
   factory UserModel.fromJson(Map<String, dynamic> json) {
     return UserModel(
       firstName: json['firstName'],

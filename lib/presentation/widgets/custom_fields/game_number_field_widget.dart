@@ -66,8 +66,10 @@ Widget gameNumberTextField({
             ),
           ),
           textAlign: TextAlign.center,
-          style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                color: MColors().colorSecondaryBlueDark,
+          style: TextStyle(
+            fontFamily: 'BalooDa2',
+            fontWeight: FontWeight.w700,
+            color: MColors().colorSecondaryBlueDark,
                 fontSize: fontSize.h,
               ),
           decoration: InputDecoration(

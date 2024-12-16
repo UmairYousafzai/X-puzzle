@@ -9,7 +9,8 @@ class ResultNotifier extends StateNotifier<Map<String, dynamic>> {
           "isPPAndNS": false,
           "isNPAndPS": false,
           "isNPAndNS": false,
-          "is_loading": false
+          "is_loading": false,
+          "time": ""
         });
 
   void setQuestionType(
@@ -28,6 +29,9 @@ class ResultNotifier extends StateNotifier<Map<String, dynamic>> {
 
   void setLoading(bool isLoading) {
     state = {...state, "is_loading": isLoading};
+  }
+  void setTime(String time) {
+    state = {...state, "time": time};
   }
 }
 

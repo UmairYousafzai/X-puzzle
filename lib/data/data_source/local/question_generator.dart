@@ -1,5 +1,4 @@
 import 'dart:math';
-
 import 'package:flutter/foundation.dart';
 import 'package:xpuzzle/domain/entities/question.dart';
 
@@ -28,7 +27,7 @@ List<Question> generatePositiveMultipleAndPositiveInteger({
       left = random.nextInt(7) + 2;
       right = -(random.nextInt(left - 1) + 1);
     } else if (isNPAndNS) {
-      left = random.nextInt(5) + 2; // 0 = 2
+      left = random.nextInt(5) + 2;
       right = -(random.nextInt(left) + left + 1);
     }
 
@@ -67,10 +66,9 @@ List<Question> generatePositiveMultipleAndPositiveInteger({
 
 List<Question> generatePPAndPS() {
   var random = Random();
-  Set<int> usedRoots = {}; // Set to store already used roots
+  Set<int> usedRoots = {};
   List<Question> questions = [];
 
-  // Generate 10 unique valid equations
   while (questions.length < 10) {
     int c = random.nextInt(9) + 2; // Random c between 1 and 81
 

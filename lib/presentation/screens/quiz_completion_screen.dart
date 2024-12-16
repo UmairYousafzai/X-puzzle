@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:gap/gap.dart';
 import 'package:xpuzzle/presentation/providers/result_provider.dart';
 import 'package:xpuzzle/presentation/screens/results_screen.dart';
@@ -9,6 +10,7 @@ import '../../domain/entities/question.dart';
 import '../../utils/constants.dart';
 import '../providers/level_provider.dart';
 import '../providers/question/question_provider.dart';
+import '../providers/time/time_use_case_provider.dart';
 import '../widgets/buttons/buttons.dart';
 import '../widgets/levels_header.dart';
 
@@ -28,6 +30,7 @@ class _QuizCompletionScreen extends ConsumerState<QuizCompletionScreen> {
 
     Future(() {
       fetchQuestions();
+        getTime();
     });
   }
 
@@ -64,6 +67,21 @@ class _QuizCompletionScreen extends ConsumerState<QuizCompletionScreen> {
       return "";
     }
   }
+  void getTime() async {
+    final timeUseCaseProvider = ref.watch(getTimeUseCaseProvider);
+    var state = ref.watch(resultProvider);
+
+    var result = await timeUseCaseProvider.execute(
+        isPPAndPS: state["isPPAndPS"],
+        isPPAndNS: state["isPPAndNS"],
+        isNPAndPS: state["isNPAndPS"],
+        isNPAndNS: state["isNPAndNS"]);
+    String time = result!.minutes != 0
+        ? "Time ${(5-result.minutes)}min"
+        : "Time ${result.seconds}sec";
+
+    ref.watch(resultProvider.notifier).setTime(time);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +94,7 @@ class _QuizCompletionScreen extends ConsumerState<QuizCompletionScreen> {
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: 10),
+          padding: const EdgeInsets.symmetric(horizontal: 8),
           child: SingleChildScrollView(
             child: Column(children: [
               Row(
@@ -97,7 +115,13 @@ class _QuizCompletionScreen extends ConsumerState<QuizCompletionScreen> {
                           child: Center(
                             child: Text(
                               "Result",
-                              style: Theme.of(context).textTheme.titleLarge,
+                              style: TextStyle(
+                                fontFamily: 'BalooDa2',
+                                color: Colors.black,
+                                fontSize: 30.sp,
+
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
                           ),
                         ),
@@ -112,25 +136,25 @@ class _QuizCompletionScreen extends ConsumerState<QuizCompletionScreen> {
                   ),
                 ],
               ),
-              Gap(context.screenHeight * 0.03),
+              8.verticalSpace,
               level.when(data: (data) {
                 return LevelsHeader(
                   level: data ?? "",
-                  style: getStyle(resultScreen),
+                  style: resultScreen["time"],
                   totalQuestions: questions.length,
                   correct: totalCorrectAns(questions),
                 );
               }, error: (err, stack) {
                 return LevelsHeader(
                   level: "",
-                  style: getStyle(resultScreen),
+                  style: resultScreen["time"],
                   totalQuestions: questions.length,
                   correct: totalCorrectAns(questions),
                 );
               }, loading: () {
                 return LevelsHeader(
                   level: "Loading....",
-                  style: getStyle(resultScreen),
+                  style: resultScreen["time"],
                   totalQuestions: questions.length,
                   correct: totalCorrectAns(questions),
                 );
@@ -157,11 +181,9 @@ class _QuizCompletionScreen extends ConsumerState<QuizCompletionScreen> {
                         child: Text(
                           quizCompletedLabel,
                           textAlign: TextAlign.center,
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleSmall!
-                              .copyWith(
-                                  fontSize: 24,
+                          style: TextStyle(
+                              fontFamily: 'BalooDa2',
+                              fontSize: 24,
                                   fontWeight: FontWeight.w600,
                                   color: Colors.black.withOpacity(0.8)),
                         ),
@@ -171,11 +193,9 @@ class _QuizCompletionScreen extends ConsumerState<QuizCompletionScreen> {
                         child: Text(
                           playMoreQuizLabel,
                           textAlign: TextAlign.center,
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleSmall!
-                              .copyWith(
-                                  fontSize: 16,
+                          style: TextStyle(
+                              fontFamily: 'BalooDa2',
+                              fontSize: 16,
                                   fontWeight: FontWeight.w400,
                                   height: 2,
                                   color: Colors.black.withOpacity(0.6)),

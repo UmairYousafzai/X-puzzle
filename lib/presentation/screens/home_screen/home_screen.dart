@@ -1,11 +1,11 @@
-import 'package:flutter/cupertino.dart';
-import 'package:flutter/foundation.dart';
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:xpuzzle/presentation/providers/level_provider.dart';
 import 'package:xpuzzle/presentation/providers/shared_pref_provider.dart';
-import 'package:xpuzzle/presentation/screens/select_level_screen.dart';
 import 'package:xpuzzle/presentation/widgets/custom_app_bar.dart';
 import 'package:xpuzzle/presentation/widgets/custom_navigation_drawer.dart';
 import 'package:xpuzzle/utils/constants.dart';
@@ -27,20 +27,22 @@ class HomeScreen extends ConsumerWidget {
     // Access SharedPreferences using the provider
     final sharedPreferencesAsyncValue = ref.watch(sharedPreferencesProvider);
 
-    return PopScope(
-      canPop: true,
-      onPopInvokedWithResult: (didPop, result) {
-        if (kDebugMode) {
-          print("canPop===========> $didPop");
-        }
-
-        ref.watch(homeViewTypeProvider.notifier).setLoading(false);
-        Navigator.push(context, MaterialPageRoute(builder: (ctx) => const SelectLevelScreen()));
-      },
-      child: Scaffold(
-        // key: _scaffoldKey,
-        drawer:  const CustomNavigationDrawer(),
-        body: Container(
+    return Scaffold(
+      // key: _scaffoldKey,
+      drawer: const CustomNavigationDrawer(),
+      body: GestureDetector(
+        onHorizontalDragEnd: (details) {
+          if (Platform.isIOS) {
+            if (details.primaryVelocity != null &&
+                details.primaryVelocity! > 0) {
+              exit(0);
+              // if (kDebugMode) {
+              //   print("Left to right swipe detected");
+              // }
+            }
+          }
+        },
+        child: Container(
           width: MediaQuery.of(context).size.width,
           height: MediaQuery.of(context).size.height,
           decoration: const BoxDecoration(
@@ -65,11 +67,9 @@ class HomeScreen extends ConsumerWidget {
                         "assets/images/place_holder_profile.png",
                         width: 50,
                         height: 50,
-                      ),
-                      onPressedLeading: (buildContext) {
-                        Scaffold.of(buildContext).openDrawer();
-                      },
-                      onPressedAction: () {}),
+                      ), onPressedLeading: (buildContext) {
+                    Scaffold.of(buildContext).openDrawer();
+                  }, onPressedAction: () {}),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.01,
                   ),
@@ -81,16 +81,20 @@ class HomeScreen extends ConsumerWidget {
                         sharedPreferencesAsyncValue.when(
                           data: (sharedPreferencesHelper) {
                             final user = sharedPreferencesHelper.getUser();
-                            final userName = '${user?.firstName ?? 'User'} ${user?.lastName ?? ''}'.trim();
+                            final userName =
+                                '${user?.firstName ?? 'User'} ${user?.lastName ?? ''}'
+                                    .trim();
                             // Fallback to "User" if null
                             return Text(
                               "Hi, $userName",
-                              style: Theme.of(context).textTheme.titleSmall?.copyWith(
+                              style:const TextStyle(
+                                fontFamily: 'BalooDa2',
                                 fontSize: 18,
-                              ),
+                                  ),
                             );
                           },
-                          loading: () => const CircularProgressIndicator(), // Show loading indicator
+                          loading: () => const CircularProgressIndicator(),
+                          // Show loading indicator
                           error: (error, stack) => Text(
                             'Error: $error',
                             style: const TextStyle(color: Colors.red),
@@ -99,31 +103,30 @@ class HomeScreen extends ConsumerWidget {
                         Row(
                           mainAxisAlignment: MainAxisAlignment.spaceBetween,
                           children: [
-                            Text(
+                             Text(
                               "Let's Start",
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleLarge!
-                                  .copyWith(fontWeight: FontWeight.w700),
+                              style: TextStyle(
+                                  fontFamily: 'BalooDa2',
+                                  fontSize: 28.sp,
+                                  fontWeight: FontWeight.w700),
                             ),
                             IconButton(
                                 onPressed: () {
                                   viewNotifier.toggleView();
                                 },
-                                icon: Icon(screenState["view_type"] == ViewType.list
-                                    ? Icons.grid_view
-                                    : Icons.list))
+                                icon: Icon(
+                                    screenState["view_type"] == ViewType.list
+                                        ? Icons.grid_view
+                                        : Icons.list))
                           ],
                         ),
                         Text(
                           "Please select the session you'd \nlike to begin",
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodySmall!
-                              .copyWith(
+                          style: TextStyle(
+                              fontFamily: 'BalooDa2',
                               fontWeight: FontWeight.w400,
-                              color: Colors.grey,
-                              fontSize: context.screenHeight * 0.021),
+                                  color: Colors.grey,
+                                  fontSize: context.screenHeight * 0.021),
                         ),
                       ],
                     ),

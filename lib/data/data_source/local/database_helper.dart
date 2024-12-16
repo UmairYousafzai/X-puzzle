@@ -4,8 +4,8 @@ import 'package:path/path.dart' as path;
 class DatabaseHelper {
   static const _databaseName = 'x_puzzle.db';
   static const _databaseVersion = 1;
-  static final TABLE_QUESTION = "question";
-  static final TABLE_QUESTION_TIME = "question_time";
+  static const TABLE_QUESTION = "question";
+  static const TABLE_QUESTION_TIME = "question_time";
 
   static Future<Database?>? _database;
 

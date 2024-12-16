@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:xpuzzle/utils/constants.dart';
@@ -57,8 +58,11 @@ class ListStyleCard extends StatelessWidget {
             children: <Widget>[
               Text(
                 item.styleName,
-                style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                      color: MColors().colorSecondaryOrangeDark,
+                style: TextStyle(
+                  fontFamily: 'BalooDa2',
+                  fontSize: 19.sp,
+                  fontWeight: FontWeight.w600,
+                  color: MColors().colorSecondaryOrangeDark,
                     ),
               ),
               const SizedBox(height: 4),

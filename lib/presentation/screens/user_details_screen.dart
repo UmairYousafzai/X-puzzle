@@ -130,13 +130,14 @@ class _UserDetailsScreen extends ConsumerState<UserDetailsScreen> {
                   alignment: Alignment.centerLeft,
                   child: RichText(
                     textAlign: TextAlign.left,
-                    text: TextSpan(
-                      style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                            color: const Color(0xFF1E2D7C),
+                    text: const TextSpan(
+                      style: TextStyle(
+                        fontFamily: 'BalooDa2',
+                        color: Color(0xFF1E2D7C),
                             fontWeight: FontWeight.w700,
                             fontSize: 22,
                           ),
-                      children: const [
+                      children: [
                         TextSpan(text: "Sign up to\n"),
                         TextSpan(text: "unlock the world of X Puzzle"),
                       ],

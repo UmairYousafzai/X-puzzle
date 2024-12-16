@@ -1,10 +1,18 @@
+import 'dart:io';
+
 import 'package:flutter/cupertino.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
+import 'package:xpuzzle/data/models/local/question_time_model.dart';
 import 'package:xpuzzle/domain/entities/question.dart';
+import 'package:xpuzzle/domain/entities/time.dart';
+import 'package:xpuzzle/domain/use_cases/get_time.dart';
 import 'package:xpuzzle/presentation/providers/result_provider.dart';
+import 'package:xpuzzle/presentation/providers/time/time_use_case_provider.dart';
 import '../../data/models/remote/style_card_model.dart';
 import '../providers/level_provider.dart';
 import '../providers/question/question_provider.dart';
@@ -25,6 +33,9 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
   @override
   void initState() {
     super.initState();
+    Future(() {
+      getTime();
+    });
   }
 
   String getStyle(Map<String, dynamic> state) {
@@ -41,95 +52,124 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
     }
   }
 
+  int totalCorrectAns() {
+    int totalCorrect = 0;
+    for (Question question in ref.watch(questionProvider).questions) {
+      if (question.isCorrect) {
+        totalCorrect++;
+      }
+    }
+    return totalCorrect;
+  }
+
+  void getTime() async {
+    final timeUseCaseProvider = ref.watch(getTimeUseCaseProvider);
+    var state = ref.watch(resultProvider);
+
+    var result = await timeUseCaseProvider.execute(
+        isPPAndPS: state["isPPAndPS"],
+        isPPAndNS: state["isPPAndNS"],
+        isNPAndPS: state["isNPAndPS"],
+        isNPAndNS: state["isNPAndNS"]);
+    String time = result!.minutes != 0
+        ? "Time ${(5-result.minutes)}min"
+        : "Time ${result.seconds}sec";
+
+    ref.watch(resultProvider.notifier).setTime(time);
+  }
+
   @override
   Widget build(BuildContext context) {
     final questions = ref.watch(questionProvider).questions;
     final level = ref.read(levelProvider);
     var resultScreen = ref.watch(resultProvider);
 
-    int totalCorrectAns() {
-      int totalCorrect = 0;
-      for (Question question in questions) {
-        if (question.isCorrect) {
-          totalCorrect++;
-        }
-      }
-      return totalCorrect;
-    }
-
     return Scaffold(
-      body: Container(
-        width: MediaQuery.of(context).size.width,
-        height: MediaQuery.of(context).size.height,
-        decoration: const BoxDecoration(
-          image: DecorationImage(
-            image: AssetImage("assets/images/background_1.jpeg"),
-            fit: BoxFit.fill,
+      body: GestureDetector(
+        onHorizontalDragEnd: (details) {
+          if (Platform.isIOS) {
+            if (details.primaryVelocity != null &&
+                details.primaryVelocity! > 0) {
+              Navigator.pop(context);
+              if (kDebugMode) {
+                print("Left to right swipe detected");
+              }
+            }
+          }
+        },
+        child: Container(
+          width: MediaQuery.of(context).size.width,
+          height: MediaQuery.of(context).size.height,
+          decoration: const BoxDecoration(
+            image: DecorationImage(
+              image: AssetImage("assets/images/background_1.jpeg"),
+              fit: BoxFit.fill,
+            ),
           ),
-        ),
-        child: SafeArea(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 8),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                customAppBar(
-                    context,
-                    "All Result", // Pass the current level here
-                    null,
-                    Image.asset("assets/images/print_icon.png"),
-                    onPressedLeading: null,
-                    titleColor: Colors.black),
-                SizedBox(
-                  height: MediaQuery.of(context).size.height * 0.01,
-                ),
-                level.when(data: (data) {
-                  return LevelsHeader(
-                    level: data ?? "",
-                    style: getStyle(resultScreen),
-                    totalQuestions: questions.length,
-                    correct: totalCorrectAns(),
-                  );
-                }, error: (err, stack) {
-                  return LevelsHeader(
-                    level: "",
-                    style: getStyle(resultScreen),
-                    totalQuestions: questions.length,
-                    correct: totalCorrectAns(),
-                  );
-                }, loading: () {
-                  return LevelsHeader(
-                    level: "Loading....",
-                    style: getStyle(resultScreen),
-                    totalQuestions: questions.length,
-                    correct: totalCorrectAns(),
-                  );
-                }),
-                Gap(MediaQuery.of(context).size.height * 0.02),
-                Expanded(
-                  child: questions.isEmpty
-                      ? Center(
-                          child: CircularProgressIndicator(
-                              color: MColors().colorSecondaryBlueLight),
-                        )
-                      : GridView.builder(
-                          gridDelegate:
-                              const SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: 3,
-                            childAspectRatio: 0.75,
+          child: SafeArea(
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 8),
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  customAppBar(
+                      context,
+                      "All Result", // Pass the current level here
+                      null,
+                      Image.asset("assets/images/print_icon.png"),
+                      onPressedLeading: null,
+                      titleColor: Colors.black),
+                  SizedBox(
+                    height: MediaQuery.of(context).size.height * 0.01,
+                  ),
+                  level.when(data: (data) {
+                    return LevelsHeader(
+                      level: data ?? "",
+                      style: resultScreen["time"],
+                      totalQuestions: questions.length,
+                      correct: totalCorrectAns(),
+                    );
+                  }, error: (err, stack) {
+                    return LevelsHeader(
+                      level: "",
+                      style: resultScreen["time"],
+                      totalQuestions: questions.length,
+                      correct: totalCorrectAns(),
+                    );
+                  }, loading: () {
+                    return LevelsHeader(
+                      level: "Loading....",
+                      style: resultScreen["time"],
+                      totalQuestions: questions.length,
+                      correct: totalCorrectAns(),
+                    );
+                  }),
+                  Gap(MediaQuery.of(context).size.height * 0.02),
+                  Expanded(
+                    child: questions.isEmpty
+                        ? Center(
+                            child: CircularProgressIndicator(
+                                color: MColors().colorSecondaryBlueLight),
+                          )
+                        : GridView.builder(
+                            gridDelegate:
+                                 SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: 3,
+                              childAspectRatio: 0.63.h,
+                            ),
+                            itemCount: questions.length,
+                            itemBuilder: (BuildContext context, int index) {
+                              var question = questions[index];
+                              return ResultSingleCard(question: question);
+                            },
                           ),
-                          itemCount: questions.length,
-                          itemBuilder: (BuildContext context, int index) {
-                            var question = questions[index];
-                            return ResultSingleCard(question: question);
-                          },
-                        ),
-                ),
-                primaryButton(() {
-                  Navigator.pop(context);
-                }, 'Explore More', Colors.white, context),
-                Gap(MediaQuery.of(context).size.height * 0.01),
-              ],
+                  ),
+                  primaryButton(() {
+                    Navigator.pop(context);
+                  }, 'Explore More', Colors.white, context),
+                  Gap(MediaQuery.of(context).size.height * 0.01),
+                ],
+              ),
             ),
           ),
         ),

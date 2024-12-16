@@ -34,9 +34,10 @@ class _SelectLevelScreenState extends ConsumerState<SelectLevelScreen> {
             'assets/logos/X-Puzzles-logo.png',
           ),
           const Gap(18),
-          Text("Welcome to the X Puzzle",
-              style: Theme.of(context).textTheme.titleMedium?.copyWith(
-                  color: const Color(0xFF1E2D7C),
+          const Text("Welcome to the X Puzzle",
+              style: TextStyle(
+                  fontFamily: 'BalooDa2',
+                  color: Color(0xFF1E2D7C),
                   fontWeight: FontWeight.w700,
                   fontSize: 22)),
           Gap(context.screenHeight * 0.13),
@@ -52,10 +53,10 @@ class _SelectLevelScreenState extends ConsumerState<SelectLevelScreen> {
           Gap(context.screenHeight * 0.04),
           primaryButton(() {
             print("selectedValue========> $selectedValue");
-            if (selectedValue.isNotEmpty && selectedValue!= "Select Level") {
+            if (selectedValue.isNotEmpty && selectedValue != "Select Level") {
               ref.read(levelProvider.notifier).updateLevel(selectedValue);
-             navigatePushAndRemoveUntil(context, const HomeScreen(),false);
-            }else{
+              navigatePushAndRemoveUntil(context, const HomeScreen(), false);
+            } else {
               showErrorSnackBar(context, "Please select level");
             }
           }, 'Continue', Colors.black, context)

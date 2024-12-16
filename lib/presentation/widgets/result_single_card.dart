@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:xpuzzle/domain/entities/question.dart';
+import 'package:xpuzzle/main.dart';
 import 'package:xpuzzle/utils/constants.dart';
 
 import '../theme/colors.dart';
@@ -14,7 +16,7 @@ class ResultSingleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 10),
+      padding:  EdgeInsets.symmetric(horizontal: 4, vertical: 15.h),
       child: Container(
         height: 150,
         decoration: BoxDecoration(
@@ -32,8 +34,11 @@ class ResultSingleCard extends StatelessWidget {
         child: Column(
           mainAxisSize: MainAxisSize.min,
           children: [
+            6.5.verticalSpace,
             Text(question.isCorrect ? "Correct" : "wrong",
-                style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                style: TextStyle(
+                    fontFamily: 'BalooDa2',
+                    fontSize: 16.sp,
                     color: question.isCorrect
                         ? MColors().colorSecondaryBlueDark
                         : MColors().colorSecondaryOrangeDark,
@@ -60,7 +65,9 @@ class ResultSingleCard extends StatelessWidget {
                                       fontWeight: FontWeight.bold)),
                               Text(
                                 question.topNum,
-                                style: TextStyle(fontWeight: FontWeight.bold),
+                                style: const TextStyle(
+                                    fontFamily: 'BalooDa2',
+                                    fontWeight: FontWeight.bold),
                               )
                             ],
                           )
@@ -80,18 +87,17 @@ class ResultSingleCard extends StatelessWidget {
                                 child: Padding(
                                   padding: const EdgeInsets.only(
                                       left: 3.0, top: 3, right: 3, bottom: 3),
-                                  child:  Text(
-                                      question.inputNumOne,
-                                      textAlign: TextAlign.center,
-                                      style: TextStyle(
-                                          fontWeight: FontWeight.bold,
-                                          color:
-                                              MColors().colorSecondaryBlueDark),
-                                      // Add ellipsis for long text
+                                  child: Text(
+                                    question.inputNumOne,
+                                    textAlign: TextAlign.center,
+                                    style: TextStyle(
+                                        fontWeight: FontWeight.bold,
+                                        color:
+                                            MColors().colorSecondaryBlueDark),
+                                    // Add ellipsis for long text
                                     overflow: TextOverflow.ellipsis,
-                                      maxLines: 1,
-                                    ),
-
+                                    maxLines: 1,
+                                  ),
                                 ),
                               ),
                             ),
@@ -129,10 +135,17 @@ class ResultSingleCard extends StatelessWidget {
                         children: [
                           Text(
                             question.bottomNum,
-                            style: TextStyle(fontWeight: FontWeight.bold),
+                            style: const TextStyle(
+                                fontFamily: 'BalooDa2',
+                                fontWeight: FontWeight.bold),
                           )
                         ],
                       )
+                      ,
+                      Text("x",
+                          style: TextStyle(
+                              color: MColors().colorSecondaryOrangeDark,
+                              fontWeight: FontWeight.bold)),
                     ],
                   )
                 ],

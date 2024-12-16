@@ -62,11 +62,9 @@ class CustomNavigationDrawer extends ConsumerWidget {
                         const Gap(10),
                         Text(
                           'Hi! $userName', // Display the user's name
-                          style: Theme.of(context)
-                              .textTheme
-                              .titleSmall!
-                              .copyWith(
-                                  fontSize: screenWidth * 0.045,
+                          style: TextStyle(
+                              fontFamily: 'BalooDa2',
+                              fontSize: screenWidth * 0.045,
                                   fontWeight: FontWeight.w400),
                         ),
                       ],

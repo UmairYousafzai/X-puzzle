@@ -75,11 +75,9 @@ void showOnQuestionCompleteDialog(
                               ? "You've completed this\nchallenge!"
                               : "Almost There!\nNot quite, but keep going!",
                           textAlign: TextAlign.center,
-                          style: Theme.of(context)
-                              .textTheme
-                              .bodyMedium
-                              ?.copyWith(
-                                  fontSize: headingTextSize,
+                          style:TextStyle(
+                              fontFamily: 'BalooDa2',
+                              fontSize: headingTextSize,
                                   fontWeight: FontWeight.w600),
                         ),
                       ),
@@ -92,11 +90,9 @@ void showOnQuestionCompleteDialog(
                                 ? "Keep challenging yourself with more questions to deepen your knowledge!"
                                 : "Try another question to keep learning.",
                             textAlign: TextAlign.center,
-                            style: Theme.of(context)
-                                .textTheme
-                                .bodyMedium
-                                ?.copyWith(
-                                    fontSize: 14, fontWeight: FontWeight.w400),
+                            style: const TextStyle(
+                                fontFamily: 'BalooDa2',
+                                fontSize: 14, fontWeight: FontWeight.w400),
                           ),
                         ),
                       ),

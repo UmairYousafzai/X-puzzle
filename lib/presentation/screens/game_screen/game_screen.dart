@@ -1,5 +1,9 @@
+import 'dart:async';
+import 'dart:io';
+
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_keyboard_visibility/flutter_keyboard_visibility.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
@@ -38,14 +42,30 @@ class GameScreen extends ConsumerStatefulWidget {
 
 class _GameScreenState extends ConsumerState<GameScreen> {
   int questionIndex = 0;
+  late StreamSubscription<bool> keyboardSubscription;
 
   @override
   void initState() {
     super.initState();
+    var keyboardVisibilityController = KeyboardVisibilityController();
 
+    // Subscribe
+    keyboardSubscription =
+        keyboardVisibilityController.onChange.listen((bool visible) {
+      ref.read(gameProvider.notifier).setKeyboardVisibility(visible);
+      if (kDebugMode) {
+        print('Keyboard visibility update. Is visible: $visible');
+      }
+    });
     Future(() {
       setGameState();
     });
+  }
+
+  @override
+  void dispose() {
+    keyboardSubscription.cancel();
+    super.dispose();
   }
 
   void setGameState() {
@@ -68,6 +88,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
         isPPAndNS: question.isPPAndNS,
         isNPAndPS: question.isNPAndPS,
         isNPAndNS: question.isNPAndNS);
+    gameNotifier.playTimer();
   }
 
   void getQuestionProgress(
@@ -324,10 +345,6 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     final questionsProvider = ref.watch(questionProvider.notifier);
     final gameState = ref.watch(gameProvider);
     final gameNotifier = ref.read(gameProvider.notifier);
-    final level = ref.read(levelProvider);
-
-    double screenPadding =
-        MediaQuery.of(context).size.height > smallDeviceThreshold ? 10 : 5;
 
     ref.listen<GameState>(gameProvider, (prev, next) {
       if (next.isTimerFinished) {
@@ -339,26 +356,34 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       }
     });
 
-    return PopScope(
-      onPopInvoked: (canPop) {
-        gameNotifier.resetGame();
-      },
-      child: Scaffold(
-        backgroundColor: MColors().white,
-        resizeToAvoidBottomInset: true,
-        appBar: customAppBar(
-            context,
-            gameState.getLevel(), // Pass the current level here
-            SvgPicture.asset(
-              "assets/icons/svg/hamburger_menu_icon.svg",
-              width: 40,
-              height: 25,
-            ),
-            null,
-            onPressedLeading: (buildContext) {},
-            titleColor: const Color(0xFF1E2D7C)),
-        body: SingleChildScrollView(
-          reverse: true,
+    return Scaffold(
+      backgroundColor: MColors().white,
+      resizeToAvoidBottomInset: true,
+      appBar: customAppBar(
+          context,
+          gameState.getLevel(), // Pass the current level here
+          SvgPicture.asset(
+            "assets/icons/svg/hamburger_menu_icon.svg",
+            width: 40,
+            height: 25,
+          ),
+          null,
+          onPressedLeading: (buildContext) {},
+          titleColor: const Color(0xFF1E2D7C)),
+      body: SingleChildScrollView(
+        child: GestureDetector(
+          onHorizontalDragEnd: (details) {
+            if (Platform.isIOS) {
+              if (details.primaryVelocity != null &&
+                  details.primaryVelocity! > 0) {
+                gameNotifier.resetGame();
+                Navigator.pop(context);
+                if (kDebugMode) {
+                  print("Left to right swipe detected");
+                }
+              }
+            }
+          },
           child: Padding(
             padding: EdgeInsets.all(10.r),
             child: Column(
@@ -371,12 +396,12 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                           '${gameState.minutes.toString().padLeft(2, '0')}:${gameState.seconds.toString().padLeft(2, '0')}',
                     ),
                     const Spacer(),
-                    gameState.isTimerRunning
-                        ? Container()
-                        : gameStartResetButton(context, () {
-                            gameNotifier.playTimer(); // Button to start timer
-                          }, 'assets/icons/svg/play_icon.svg',
-                            MColors().colorPrimary),
+                    // gameState.isTimerRunning
+                    //     ? Container()
+                    //     : gameStartResetButton(context, () {
+                    //         gameNotifier.playTimer(); // Button to start timer
+                    //       }, 'assets/icons/svg/play_icon.svg',
+                    //         MColors().colorPrimary),
                     Gap(MediaQuery.of(context).size.height >
                             smallDeviceThreshold
                         ? 20
@@ -414,42 +439,42 @@ class _GameScreenState extends ConsumerState<GameScreen> {
                             smallDeviceThreshold
                         ? context.screenHeight * 0.09
                         : context.screenHeight * 0.1),
-                    Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        gameBacknNextButton(context, () {
-                          Navigator.pop(context);
-                          // if (questionIndex >= 0) {
-                          //   if (mounted) {
-                          //     questionIndex--;
-                          //     if (!questions
-                          //         .questions[questionIndex].isComplete) {
-                          //       gameNotifier.updateQuestion(
-                          //           questions.questions[questionIndex]);
-                          //     }
-                          //   }
-                          // } else {
-                          //   Navigator.pop(context);
-                          // }
-                        }, false, !gameState.isTimerRunning), // Back button
-                        Gap(MediaQuery.of(context).size.height >
-                                smallDeviceThreshold
-                            ? 50
-                            : 25),
-                        gameBacknNextButton(context, () {
-                          onMarkDone(gameNotifier, gameState, questionsState,
-                              questionsProvider, true);
-                          // if (questionIndex <= questions.questions.length - 1) {
-                          //   if (mounted) {
-                          //     questionIndex++;
-                          //
-                          //     gameNotifier.updateQuestion(
-                          //         questions.questions[questionIndex]);
-                          //   }
-                          // }
-                        }, true, true), // Next Button
-                      ],
-                    ),
+                    // Row(
+                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    //   children: [
+                    //     gameBacknNextButton(context, () {
+                    //       Navigator.pop(context);
+                    //       // if (questionIndex >= 0) {
+                    //       //   if (mounted) {
+                    //       //     questionIndex--;
+                    //       //     if (!questions
+                    //       //         .questions[questionIndex].isComplete) {
+                    //       //       gameNotifier.updateQuestion(
+                    //       //           questions.questions[questionIndex]);
+                    //       //     }
+                    //       //   }
+                    //       // } else {
+                    //       //   Navigator.pop(context);
+                    //       // }
+                    //     }, false, !gameState.isTimerRunning), // Back button
+                    //     Gap(MediaQuery.of(context).size.height >
+                    //             smallDeviceThreshold
+                    //         ? 50
+                    //         : 25),
+                    //     gameBacknNextButton(context, () {
+                    //       onMarkDone(gameNotifier, gameState, questionsState,
+                    //           questionsProvider, true);
+                    //       // if (questionIndex <= questions.questions.length - 1) {
+                    //       //   if (mounted) {
+                    //       //     questionIndex++;
+                    //       //
+                    //       //     gameNotifier.updateQuestion(
+                    //       //         questions.questions[questionIndex]);
+                    //       //   }
+                    //       // }
+                    //     }, true, true), // Next Button
+                    //   ],
+                    // ),
                     Gap(context.screenHeight * 0.01)
                   ],
                 ),

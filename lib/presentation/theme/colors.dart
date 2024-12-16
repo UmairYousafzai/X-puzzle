@@ -9,6 +9,8 @@ class     MColors {
   var beigeColor=const Color(0xFFFFFBF3);
   var brightCyan=const Color(0xFF38E8F3);
   var vividSkyBlue=const Color(0xFF09D3F8);
+  var vividReddishPink =const Color(0xFFFF3E66);
+  var brightOrange =const Color(0xFFF78C0C);
 
   var white = Colors.white;
   var grey = Colors.grey;

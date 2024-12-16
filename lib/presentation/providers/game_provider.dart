@@ -23,6 +23,7 @@ class GameState {
   bool isTimerFinished;
   bool hasErrorOnTextFieldOne;
   bool hasErrorOnTextFieldTwo;
+  bool isKeyboardVisible;
   FocusNode firstNumberFocus;
   FocusNode secondNumberFocus;
   Question? question;
@@ -41,6 +42,7 @@ class GameState {
     this.isTimerFinished = false,
     this.hasErrorOnTextFieldOne = false,
     this.hasErrorOnTextFieldTwo = false,
+    this.isKeyboardVisible = false,
     required this.firstNumberFocus,
     required this.secondNumberFocus,
     this.question,
@@ -60,6 +62,7 @@ class GameState {
     bool? isTimerFinished,
     bool? hasErrorOnTextFieldOne,
     bool? hasErrorOnTextFieldTwo,
+    bool? isKeyboardVisible,
     FocusNode? firstNumberFocus,
     FocusNode? secondNumberFocus,
     Question? question,
@@ -80,6 +83,7 @@ class GameState {
           hasErrorOnTextFieldOne ?? this.hasErrorOnTextFieldOne,
       hasErrorOnTextFieldTwo:
           hasErrorOnTextFieldTwo ?? this.hasErrorOnTextFieldTwo,
+      isKeyboardVisible: isKeyboardVisible ?? this.isKeyboardVisible,
       firstNumberFocus: firstNumberFocus ?? this.firstNumberFocus,
       secondNumberFocus: secondNumberFocus ?? this.secondNumberFocus,
       question: question ?? this.question,
@@ -126,8 +130,8 @@ class GameNotifier extends StateNotifier<GameState> {
   }
 
   void updateQuestion(Question question) {
-    state = state.copyWith(question: question, firstNumber: "", secondNumber: "");
-    // state = state.copyWith(question: question);
+    // state = state.copyWith(question: question, firstNumber: "", secondNumber: "");
+    state = state.copyWith(question: question);
   }
 
   void updateTimer(int seconds) {
@@ -155,6 +159,10 @@ class GameNotifier extends StateNotifier<GameState> {
 
   void setErrorOnInputTwo(bool error) {
     state = state.copyWith(hasErrorOnTextFieldTwo: error);
+  }
+
+  void setKeyboardVisibility(bool flag) {
+    state = state.copyWith(isKeyboardVisible: flag);
   }
 
   void playTimer() {

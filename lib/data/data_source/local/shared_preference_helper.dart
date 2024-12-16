@@ -165,20 +165,6 @@ class SharedPreferencesHelper {
     return _sharedPreferences.getInt("$keyPrefix-$QUESTION_PROGRESS_KEY");
   }
 
-  Future<void> savePreviousShuffle(Set<List<dynamic>> switchedIndices) async {
-    var json = jsonEncode(switchedIndices);
-    if (kDebugMode) {
-      print("Set<int> switchedIndices value==============> $json");
-    }
-    await _sharedPreferences.setString(SWITCH_INDICES_KEY, json);
-  }
 
-  Set<List<dynamic>>? getPreviousShuffle() {
-    var json = _sharedPreferences.getString(SWITCH_INDICES_KEY);
-    if (json != null) {
-      return jsonDecode(json) as Set<List<dynamic>>;
-    } else {
-      return null;
-    }
-  }
+
 }
