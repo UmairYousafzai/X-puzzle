@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:xpuzzle/domain/entities/question.dart';
-import 'package:xpuzzle/main.dart';
 import 'package:xpuzzle/utils/constants.dart';
 
 import '../theme/colors.dart';
@@ -16,7 +15,7 @@ class ResultSingleCard extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Padding(
-      padding:  EdgeInsets.symmetric(horizontal: 4, vertical: 15.h),
+      padding: EdgeInsets.symmetric(horizontal: 4, vertical: 15.h),
       child: Container(
         height: 150,
         decoration: BoxDecoration(
@@ -140,17 +139,16 @@ class ResultSingleCard extends StatelessWidget {
                                 fontWeight: FontWeight.bold),
                           )
                         ],
-                      )
-                      ,
-                      Text("x",
-                          style: TextStyle(
-                              color: MColors().colorSecondaryOrangeDark,
-                              fontWeight: FontWeight.bold)),
+                      ),
                     ],
                   )
                 ],
               ),
-            )
+            ),
+            Text("+",
+                style: TextStyle(
+                    color: MColors().colorSecondaryOrangeDark,
+                    fontWeight: FontWeight.bold)),
           ],
         ),
       ),
