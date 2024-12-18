@@ -113,7 +113,9 @@ class HomeScreenGridViewState extends ConsumerState<HomeScreenGridView> {
     QuestionProviderNotifier questionNotifier,
     HomeScreenViewNotifier screenStateNotifier,
   ) async {
-    print("ontry again============>()");
+    if (kDebugMode) {
+      print("ontry again============>()");
+    }
 
     var screenState = ref.watch(homeViewTypeProvider);
     ref.watch(sharedPreferencesProvider).when(
@@ -162,14 +164,14 @@ class HomeScreenGridViewState extends ConsumerState<HomeScreenGridView> {
         isPPAndNS: isPPAndNS,
         isNPAndPS: isNPAndPS,
         isNPAndNS: isNPAndNS);
-    ref.watch(deleteQuestionTimeUseCaseProvider).execute(
-        isPPAndPS: isPPAndPS,
-        isPPAndNS: isPPAndNS,
-        isNPAndPS: isNPAndPS,
-        isNPAndNS: isNPAndNS);
+    // ref.watch(deleteQuestionTimeUseCaseProvider).execute(
+    //     isPPAndPS: isPPAndPS,
+    //     isPPAndNS: isPPAndNS,
+    //     isNPAndPS: isNPAndPS,
+    //     isNPAndNS: isNPAndNS);
 
-    generateQuestionAndNavigate(true, getQuestionUseCase, storeQuestionsUseCase,
-        questionNotifier, screenStateNotifier);
+    generateQuestionAndNavigate(true, true, getQuestionUseCase,
+        storeQuestionsUseCase, questionNotifier, screenStateNotifier);
   }
 
   Future<void> getQuestionsForResult() async {
@@ -194,6 +196,7 @@ class HomeScreenGridViewState extends ConsumerState<HomeScreenGridView> {
 
   void generateQuestionAndNavigate(
     bool shouldGetQuestion,
+    bool isNewAttempt,
     GetQuestions getQuestionUseCase,
     StoreQuestions storeQuestionsUseCase,
     QuestionProviderNotifier questionNotifier,
@@ -212,7 +215,11 @@ class HomeScreenGridViewState extends ConsumerState<HomeScreenGridView> {
     }
     screenStateNotifier.setLoading(false);
 
-    navigateToScreen(context, const StartQuizScreen());
+    navigateToScreen(
+        context,
+        StartQuizScreen(
+          isNewTest: isNewAttempt,
+        ));
   }
 
   @override
@@ -287,6 +294,7 @@ class HomeScreenGridViewState extends ConsumerState<HomeScreenGridView> {
                         } else {
                           generateQuestionAndNavigate(
                             questions.isEmpty,
+                            false,
                             getQuestionUseCase,
                             storeQuestionsUseCase,
                             questionNotifier,

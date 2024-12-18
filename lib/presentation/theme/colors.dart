@@ -12,6 +12,7 @@ class     MColors {
   var vividReddishPink =const Color(0xFFFF3E66);
   var brightOrange =const Color(0xFFF78C0C);
 
+
   var white = Colors.white;
   var grey = Colors.grey;
 }

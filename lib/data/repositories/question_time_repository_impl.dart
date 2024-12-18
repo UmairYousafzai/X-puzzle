@@ -56,4 +56,17 @@ class QuestionTimeRepositoryImpl extends QuestionTimeRepository {
       isNPAndNS: isNPAndNS,
     );
   }
+
+  @override
+  Future<List<QuestionTime>?> getQuestionTimeByType(
+      {bool isPPAndPS = false,
+      bool isPPAndNS = false,
+      bool isNPAndPS = false,
+      bool isNPAndNS = false}) async {
+    return await _timeDao.getQuestionTimeByType(
+        isPPAndPS: isPPAndPS,
+        isPPAndNS: isPPAndNS,
+        isNPAndPS: isNPAndPS,
+        isNPAndNS: isNPAndNS);
+  }
 }

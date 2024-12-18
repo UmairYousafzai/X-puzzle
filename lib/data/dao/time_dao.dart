@@ -24,13 +24,51 @@ class TimeDao {
             isPPAndNS ? 1 : 0,
             isNPAndNS ? 1 : 0,
             isNPAndPS ? 1 : 0,
-          ]);
+          ],
+          orderBy: 'id DESC',
+          limit: 1);
       if (kDebugMode) {
         print("saves time values==============> ${result.toString()}");
       }
 
       if (result != null && result.isNotEmpty) {
         return QuestionTimeModel.fromJson(result.first);
+      }
+
+      return null;
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+      return null;
+    }
+  }
+
+  Future<List<QuestionTimeModel>?> getQuestionTimeByType({
+    bool isPPAndPS = false,
+    bool isPPAndNS = false,
+    bool isNPAndPS = false,
+    bool isNPAndNS = false,
+  }) async {
+    try {
+      final db = await _databaseHelper.database;
+      final result = await db?.query(
+        DatabaseHelper.TABLE_QUESTION_TIME,
+        where:
+            'is_pp_and_ps=? AND is_pp_and_ns=? AND is_np_and_ns=? AND is_np_and_ps=?',
+        whereArgs: [
+          isPPAndPS ? 1 : 0,
+          isPPAndNS ? 1 : 0,
+          isNPAndNS ? 1 : 0,
+          isNPAndPS ? 1 : 0,
+        ],
+      );
+      if (kDebugMode) {
+        print("saves time values==============> ${result.toString()}");
+      }
+
+      if (result != null && result.isNotEmpty) {
+        return result.map((row) => QuestionTimeModel.fromJson(row)).toList();
       }
 
       return null;

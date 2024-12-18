@@ -90,6 +90,7 @@ flutter:
   assets:
     - assets/icons/svg/
     - assets/images/
+    - assets/svgs/
     - assets/images/svgs/
     - assets/icons/
     - assets/logos/

@@ -11,7 +11,9 @@ import '../theme/colors.dart';
 import 'game_screen/game_screen.dart';
 
 class StartQuizScreen extends StatelessWidget {
-  const StartQuizScreen({super.key});
+  final bool isNewTest;
+
+  const StartQuizScreen({super.key, required this.isNewTest});
 
   @override
   Widget build(BuildContext context) {
@@ -77,10 +79,9 @@ class StartQuizScreen extends StatelessWidget {
                 "Let's Test",
                 textAlign: TextAlign.center,
                 style: TextStyle(
-                  fontFamily: 'BalooDa2',
-                  fontSize: 28.sp,
-                  fontWeight: FontWeight.w700
-                ),
+                    fontFamily: 'BalooDa2',
+                    fontSize: 28.sp,
+                    fontWeight: FontWeight.w700),
               ),
               Text(
                 "Your Speed And Sharpness!",
@@ -106,7 +107,11 @@ class StartQuizScreen extends StatelessWidget {
                 child: ElevatedButton(
                     onPressed: () {
                       navigatePushAndRemoveUntil(
-                          context, const GameScreen(), true);
+                          context,
+                          GameScreen(
+                            isNewTest: isNewTest,
+                          ),
+                          true);
                     },
                     style: ElevatedButton.styleFrom(
                         padding: EdgeInsets.symmetric(

@@ -32,7 +32,9 @@ import 'game_time_widget.dart';
 import 'game_widget.dart';
 
 class GameScreen extends ConsumerStatefulWidget {
-  const GameScreen({super.key});
+  final bool isNewTest;
+
+  const GameScreen({super.key, required this.isNewTest});
 
   @override
   ConsumerState<GameScreen> createState() {
@@ -111,22 +113,25 @@ class _GameScreenState extends ConsumerState<GameScreen> {
   }
 
   void getQuestionsTime(Question question, GameNotifier gameNotifier) async {
-    var time = await ref.read(getTimeUseCaseProvider).execute(
-        isNPAndNS: question.isNPAndNS,
-        isNPAndPS: question.isNPAndPS,
-        isPPAndNS: question.isPPAndNS,
-        isPPAndPS: question.isPPAndPS);
 
-    if (time != null) {
-      if (kDebugMode) {
-        print(
-            "question time=============> ${QuestionTimeModel.copy(time).toJson()}");
-      }
+    if (!widget.isNewTest) {
+      var time = await ref.read(getTimeUseCaseProvider).execute(
+          isNPAndNS: question.isNPAndNS,
+          isNPAndPS: question.isNPAndPS,
+          isPPAndNS: question.isPPAndNS,
+          isPPAndPS: question.isPPAndPS);
 
-      gameNotifier.setTime(time.minutes, time.seconds, time.id);
-    } else {
-      if (kDebugMode) {
-        print("question time=============> null");
+      if (time != null && time.minutes <= 5) {
+        if (kDebugMode) {
+          print(
+              "question time=============> ${QuestionTimeModel.copy(time).toJson()}");
+        }
+
+        gameNotifier.setTime(time.minutes, time.seconds, time.id);
+      } else {
+        if (kDebugMode) {
+          print("question time=============> null");
+        }
       }
     }
   }
@@ -356,129 +361,135 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       }
     });
 
-    return Scaffold(
-      backgroundColor: MColors().white,
-      resizeToAvoidBottomInset: true,
-      appBar: customAppBar(
-          context,
-          gameState.getLevel(), // Pass the current level here
-          SvgPicture.asset(
-            "assets/icons/svg/hamburger_menu_icon.svg",
-            width: 40,
-            height: 25,
-          ),
-          null,
-          onPressedLeading: (buildContext) {},
-          titleColor: const Color(0xFF1E2D7C)),
-      body: SingleChildScrollView(
-        child: GestureDetector(
-          onHorizontalDragEnd: (details) {
-            if (Platform.isIOS) {
-              if (details.primaryVelocity != null &&
-                  details.primaryVelocity! > 0) {
-                gameNotifier.resetGame();
-                Navigator.pop(context);
-                if (kDebugMode) {
-                  print("Left to right swipe detected");
+    return PopScope(
+      onPopInvokedWithResult: (didPop, ctx) {
+        gameNotifier.resetGame();
+        // Navigator.pop(context);
+      },
+      child: Scaffold(
+        backgroundColor: MColors().white,
+        resizeToAvoidBottomInset: true,
+        appBar: customAppBar(
+            context,
+            gameState.getLevel(), // Pass the current level here
+            SvgPicture.asset(
+              "assets/icons/svg/hamburger_menu_icon.svg",
+              width: 40,
+              height: 25,
+            ),
+            null,
+            onPressedLeading: (buildContext) {},
+            titleColor: const Color(0xFF1E2D7C)),
+        body: SingleChildScrollView(
+          child: GestureDetector(
+            onHorizontalDragEnd: (details) {
+              if (Platform.isIOS) {
+                if (details.primaryVelocity != null &&
+                    details.primaryVelocity! > 0) {
+                  gameNotifier.resetGame();
+                  Navigator.pop(context);
+                  if (kDebugMode) {
+                    print("Left to right swipe detected");
+                  }
                 }
               }
-            }
-          },
-          child: Padding(
-            padding: EdgeInsets.all(10.r),
-            child: Column(
-              children: [
-                Gap(context.screenHeight * 0.02),
-                Row(
-                  children: [
-                    GameTimeWidget(
-                      time:
-                          '${gameState.minutes.toString().padLeft(2, '0')}:${gameState.seconds.toString().padLeft(2, '0')}',
-                    ),
-                    const Spacer(),
-                    // gameState.isTimerRunning
-                    //     ? Container()
-                    //     : gameStartResetButton(context, () {
-                    //         gameNotifier.playTimer(); // Button to start timer
-                    //       }, 'assets/icons/svg/play_icon.svg',
-                    //         MColors().colorPrimary),
-                    Gap(MediaQuery.of(context).size.height >
-                            smallDeviceThreshold
-                        ? 20
-                        : 10),
-                    Opacity(
-                      opacity: gameState.isTimerRunning ? 1.0 : 0.33,
-                      child: gameStartResetButton(context, () {
-                        if (gameState.isTimerRunning) {
-                          switchQuestion(
-                              questionsState, gameState, gameNotifier);
-                        }
-                      }, 'assets/icons/svg/reset_icon.svg',
-                          MColors().colorSecondaryBlueDark),
-                    ),
-                  ],
-                ),
-                Gap(MediaQuery.of(context).size.height > smallDeviceThreshold
-                    ? context.screenHeight * 0.03
-                    : context.screenHeight * 0.02),
-                CustomProgressBar(
-                  progress:
-                      calculateCompletionPercentage(gameState.questionProgress),
-                ),
-                Gap(MediaQuery.of(context).size.height > smallDeviceThreshold
-                    ? context.screenHeight * 0.07
-                    : context.screenHeight * 0.1),
-                Column(
-                  mainAxisAlignment: MainAxisAlignment.spaceAround,
-                  children: [
-                    GameWidget(onMarkDonePressed: () {
-                      onMarkDone(gameNotifier, gameState, questionsState,
-                          questionsProvider, true);
-                    }),
-                    Gap(MediaQuery.of(context).size.height >
-                            smallDeviceThreshold
-                        ? context.screenHeight * 0.09
-                        : context.screenHeight * 0.1),
-                    // Row(
-                    //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                    //   children: [
-                    //     gameBacknNextButton(context, () {
-                    //       Navigator.pop(context);
-                    //       // if (questionIndex >= 0) {
-                    //       //   if (mounted) {
-                    //       //     questionIndex--;
-                    //       //     if (!questions
-                    //       //         .questions[questionIndex].isComplete) {
-                    //       //       gameNotifier.updateQuestion(
-                    //       //           questions.questions[questionIndex]);
-                    //       //     }
-                    //       //   }
-                    //       // } else {
-                    //       //   Navigator.pop(context);
-                    //       // }
-                    //     }, false, !gameState.isTimerRunning), // Back button
-                    //     Gap(MediaQuery.of(context).size.height >
-                    //             smallDeviceThreshold
-                    //         ? 50
-                    //         : 25),
-                    //     gameBacknNextButton(context, () {
-                    //       onMarkDone(gameNotifier, gameState, questionsState,
-                    //           questionsProvider, true);
-                    //       // if (questionIndex <= questions.questions.length - 1) {
-                    //       //   if (mounted) {
-                    //       //     questionIndex++;
-                    //       //
-                    //       //     gameNotifier.updateQuestion(
-                    //       //         questions.questions[questionIndex]);
-                    //       //   }
-                    //       // }
-                    //     }, true, true), // Next Button
-                    //   ],
-                    // ),
-                    Gap(context.screenHeight * 0.01)
-                  ],
-                ),
-              ],
+            },
+            child: Padding(
+              padding: EdgeInsets.all(10.r),
+              child: Column(
+                children: [
+                  Gap(context.screenHeight * 0.02),
+                  Row(
+                    children: [
+                      GameTimeWidget(
+                        time:
+                            '${gameState.minutes.toString().padLeft(2, '0')}:${gameState.seconds.toString().padLeft(2, '0')}',
+                      ),
+                      const Spacer(),
+                      // gameState.isTimerRunning
+                      //     ? Container()
+                      //     : gameStartResetButton(context, () {
+                      //         gameNotifier.playTimer(); // Button to start timer
+                      //       }, 'assets/icons/svg/play_icon.svg',
+                      //         MColors().colorPrimary),
+                      Gap(MediaQuery.of(context).size.height >
+                              smallDeviceThreshold
+                          ? 20
+                          : 10),
+                      Opacity(
+                        opacity: gameState.isTimerRunning ? 1.0 : 0.33,
+                        child: gameStartResetButton(context, () {
+                          if (gameState.isTimerRunning) {
+                            switchQuestion(
+                                questionsState, gameState, gameNotifier);
+                          }
+                        }, 'assets/icons/svg/reset_icon.svg',
+                            MColors().colorSecondaryBlueDark),
+                      ),
+                    ],
+                  ),
+                  Gap(MediaQuery.of(context).size.height > smallDeviceThreshold
+                      ? context.screenHeight * 0.03
+                      : context.screenHeight * 0.02),
+                  CustomProgressBar(
+                    progress: calculateCompletionPercentage(
+                        gameState.questionProgress),
+                  ),
+                  Gap(MediaQuery.of(context).size.height > smallDeviceThreshold
+                      ? context.screenHeight * 0.07
+                      : context.screenHeight * 0.1),
+                  Column(
+                    mainAxisAlignment: MainAxisAlignment.spaceAround,
+                    children: [
+                      GameWidget(onMarkDonePressed: () {
+                        onMarkDone(gameNotifier, gameState, questionsState,
+                            questionsProvider, true);
+                      }),
+                      Gap(MediaQuery.of(context).size.height >
+                              smallDeviceThreshold
+                          ? context.screenHeight * 0.09
+                          : context.screenHeight * 0.1),
+                      // Row(
+                      //   mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      //   children: [
+                      //     gameBacknNextButton(context, () {
+                      //       Navigator.pop(context);
+                      //       // if (questionIndex >= 0) {
+                      //       //   if (mounted) {
+                      //       //     questionIndex--;
+                      //       //     if (!questions
+                      //       //         .questions[questionIndex].isComplete) {
+                      //       //       gameNotifier.updateQuestion(
+                      //       //           questions.questions[questionIndex]);
+                      //       //     }
+                      //       //   }
+                      //       // } else {
+                      //       //   Navigator.pop(context);
+                      //       // }
+                      //     }, false, !gameState.isTimerRunning), // Back button
+                      //     Gap(MediaQuery.of(context).size.height >
+                      //             smallDeviceThreshold
+                      //         ? 50
+                      //         : 25),
+                      //     gameBacknNextButton(context, () {
+                      //       onMarkDone(gameNotifier, gameState, questionsState,
+                      //           questionsProvider, true);
+                      //       // if (questionIndex <= questions.questions.length - 1) {
+                      //       //   if (mounted) {
+                      //       //     questionIndex++;
+                      //       //
+                      //       //     gameNotifier.updateQuestion(
+                      //       //         questions.questions[questionIndex]);
+                      //       //   }
+                      //       // }
+                      //     }, true, true), // Next Button
+                      //   ],
+                      // ),
+                      Gap(context.screenHeight * 0.01)
+                    ],
+                  ),
+                ],
+              ),
             ),
           ),
         ),

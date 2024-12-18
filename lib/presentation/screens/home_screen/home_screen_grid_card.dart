@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -71,7 +72,9 @@ class _StyleCard extends ConsumerState<GridStyleCard> {
                   .apply(color: Colors.black87),
             ),
             sharedPref.when(data: (pref) {
-              print("share pref invoke");
+              if (kDebugMode) {
+                print("share pref invoke");
+              }
               var isAttempted = pref.isStyleAttempted(
                   isPPAndPS: widget.index == 0,
                   isPPAndNS: widget.index == 1,

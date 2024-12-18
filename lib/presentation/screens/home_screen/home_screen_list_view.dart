@@ -166,7 +166,7 @@ class HomeScreenListViewState extends ConsumerState<HomeScreenListView> {
         isNPAndPS: isNPAndPS,
         isNPAndNS: isNPAndNS);
 
-    generateQuestionAndNavigate(true, getQuestionUseCase, storeQuestionsUseCase,
+    generateQuestionAndNavigate(true,true, getQuestionUseCase, storeQuestionsUseCase,
         questionNotifier, screenStateNotifier);
   }
 
@@ -192,6 +192,7 @@ class HomeScreenListViewState extends ConsumerState<HomeScreenListView> {
 
   void generateQuestionAndNavigate(
       bool shouldGetQuestion,
+      bool isNewAttempt,
       GetQuestions getQuestionUseCase,
       StoreQuestions storeQuestionsUseCase,
       QuestionProviderNotifier questionNotifier,
@@ -210,7 +211,7 @@ class HomeScreenListViewState extends ConsumerState<HomeScreenListView> {
     }
     screenStateNotifier.setLoading(false);
 
-    navigateToScreen(context, const StartQuizScreen());
+    navigateToScreen(context,  StartQuizScreen(isNewTest: isNewAttempt,));
   }
 
   void onItemClicked(int index, BuildContext context) async {
@@ -257,6 +258,7 @@ class HomeScreenListViewState extends ConsumerState<HomeScreenListView> {
     } else {
       generateQuestionAndNavigate(
         questions.isEmpty,
+        false,
         getQuestionUseCase,
         storeQuestionsUseCase,
         questionNotifier,

@@ -10,7 +10,8 @@ class ResultNotifier extends StateNotifier<Map<String, dynamic>> {
           "isNPAndPS": false,
           "isNPAndNS": false,
           "is_loading": false,
-          "time": ""
+          "time": "",
+          "best_time": ""
         });
 
   void setQuestionType(
@@ -32,6 +33,8 @@ class ResultNotifier extends StateNotifier<Map<String, dynamic>> {
   }
   void setTime(String time) {
     state = {...state, "time": time};
+  } void setBestTime(String time) {
+    state = {...state, "best_time": time};
   }
 }
 

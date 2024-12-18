@@ -1,9 +1,12 @@
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:xpuzzle/presentation/providers/result_provider.dart';
 import 'package:xpuzzle/presentation/screens/results_screen.dart';
+import 'package:xpuzzle/presentation/theme/colors.dart';
 
 import '../../data/models/remote/style_card_model.dart';
 import '../../domain/entities/question.dart';
@@ -30,7 +33,8 @@ class _QuizCompletionScreen extends ConsumerState<QuizCompletionScreen> {
 
     Future(() {
       fetchQuestions();
-        getTime();
+      getTime();
+      getPersonalBestTime();
     });
   }
 
@@ -67,6 +71,7 @@ class _QuizCompletionScreen extends ConsumerState<QuizCompletionScreen> {
       return "";
     }
   }
+
   void getTime() async {
     final timeUseCaseProvider = ref.watch(getTimeUseCaseProvider);
     var state = ref.watch(resultProvider);
@@ -77,10 +82,37 @@ class _QuizCompletionScreen extends ConsumerState<QuizCompletionScreen> {
         isNPAndPS: state["isNPAndPS"],
         isNPAndNS: state["isNPAndNS"]);
     String time = result!.minutes != 0
-        ? "Time ${(5-result.minutes)}min"
+        ? "Time ${(5 - result.minutes)}min"
         : "Time ${result.seconds}sec";
 
     ref.watch(resultProvider.notifier).setTime(time);
+  }
+
+  void getPersonalBestTime() async {
+    final timeByTypeUseCaseProvider = ref.watch(getTimeByTypeUseCaseProvider);
+    var state = ref.watch(resultProvider);
+    var result = await timeByTypeUseCaseProvider.execute(
+        isPPAndPS: state["isPPAndPS"],
+        isPPAndNS: state["isPPAndNS"],
+        isNPAndPS: state["isNPAndPS"],
+        isNPAndNS: state["isNPAndNS"]);
+    result?.sort((a, b) {
+      int totalSecondsA = a.minutes * 60 + a.seconds;
+      int totalSecondsB = b.minutes * 60 + b.seconds;
+      return totalSecondsB.compareTo(totalSecondsA); // Descending order
+    });
+    try {
+      var time = (((result?.first.minutes ?? 0) * 60) + result!.first.seconds)
+              / 60;
+      String timeString =
+              "$time min";
+      ref.watch(resultProvider.notifier).setBestTime(timeString);
+    } catch (e) {
+      if (kDebugMode) {
+        print(e);
+      }
+    }
+
   }
 
   @override
@@ -88,9 +120,10 @@ class _QuizCompletionScreen extends ConsumerState<QuizCompletionScreen> {
     var resultScreen = ref.watch(resultProvider);
     final level = ref.read(levelProvider);
 
-    final questions = ref.watch(questionProvider).questions;
+    final questions = ref
+        .watch(questionProvider)
+        .questions;
     return Scaffold(
-
       backgroundColor: Colors.white,
       body: SafeArea(
         child: Padding(
@@ -119,7 +152,6 @@ class _QuizCompletionScreen extends ConsumerState<QuizCompletionScreen> {
                                 fontFamily: 'BalooDa2',
                                 color: Colors.black,
                                 fontSize: 30.sp,
-
                                 fontWeight: FontWeight.w700,
                               ),
                             ),
@@ -161,22 +193,84 @@ class _QuizCompletionScreen extends ConsumerState<QuizCompletionScreen> {
               }),
               const Gap(10),
               Container(
-                width: context.screenWidth * 0.95,
-                height: context.screenHeight * 0.8,
+                width: 334.w,
+                height: 585.h,
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
-                    image: const DecorationImage(
-                        image: AssetImage(
-
-                            "assets/images/background_congratulations.png"),
-                        fit: BoxFit.cover)),
+                    color: MColors().beigeColor
+                  // image: const DecorationImage(
+                  //     image: AssetImage(
+                  //         "assets/images/background_congratulations.png"),
+                  //     fit: BoxFit.cover)
+                ),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: Column(
                     children: [
-                      Gap(context.screenHeight * 0.15),
-                      Image.asset(width:context.screenWidth*0.74,'assets/images/great_job.png'),
-                      Gap(context.screenHeight * 0.14),
+                      Stack(
+                        children: [
+                          SvgPicture.asset(
+                            width: 234.w,
+                            height: 69.h,
+                            'assets/svgs/personal_best_time_bg.svg',
+                            fit: BoxFit.cover,
+                          ),
+                          Positioned(
+                            top: 15.h,
+                            bottom: 0,
+                            left: 25.w,
+                            right: 25.w,
+                            child: Row(
+                              // mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                              children: [
+                                Text(
+                                  "Your Personal Best",
+                                  style: TextStyle(
+                                    fontFamily: 'BalooDa2',
+                                    color: Colors.black,
+                                    fontSize: 13.sp,
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
+                                15.horizontalSpace,
+                                Text(
+                                  resultScreen["best_time"]??"",
+                                  style: TextStyle(
+                                    fontFamily: 'BalooDa2',
+                                    color: MColors().colorSecondaryOrangeDark,
+                                    fontSize: 19.sp,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
+                              ],
+                            ),
+                          )
+                        ],
+                      ),
+                      12.verticalSpace,
+                      Stack(
+                        children: [
+                          Align(
+                            alignment: Alignment.center,
+                            child: SvgPicture.asset(
+                              width: 266.5.w,
+                              height: 241.h,
+                              'assets/svgs/party_sparkle.svg',
+                              fit: BoxFit.cover,
+                            ),
+                          ),
+                          Positioned(
+                            top: 0,
+                            bottom: 0,
+                            left: 0,
+                            right: 0,
+                            child: Image.asset(
+                                width: 241.w,
+                                height: 90.h,
+                                'assets/images/great_job.png'),
+                          ),
+                        ],
+                      ),
                       Center(
                         child: Text(
                           quizCompletedLabel,
@@ -184,8 +278,8 @@ class _QuizCompletionScreen extends ConsumerState<QuizCompletionScreen> {
                           style: TextStyle(
                               fontFamily: 'BalooDa2',
                               fontSize: 24,
-                                  fontWeight: FontWeight.w600,
-                                  color: Colors.black.withOpacity(0.8)),
+                              fontWeight: FontWeight.w600,
+                              color: Colors.black.withOpacity(0.8)),
                         ),
                       ),
                       const Gap(15),
@@ -196,9 +290,9 @@ class _QuizCompletionScreen extends ConsumerState<QuizCompletionScreen> {
                           style: TextStyle(
                               fontFamily: 'BalooDa2',
                               fontSize: 16,
-                                  fontWeight: FontWeight.w400,
-                                  height: 2,
-                                  color: Colors.black.withOpacity(0.6)),
+                              fontWeight: FontWeight.w400,
+                              height: 2,
+                              color: Colors.black.withOpacity(0.6)),
                         ),
                       ),
                       const Gap(15),
@@ -208,7 +302,6 @@ class _QuizCompletionScreen extends ConsumerState<QuizCompletionScreen> {
                           MaterialPageRoute(
                               builder: (context) => const ResultsScreen()),
                               (Route<dynamic> route) {
-
                             return route.isFirst;
                           },
                         );
