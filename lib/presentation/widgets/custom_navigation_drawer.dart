@@ -13,7 +13,7 @@ import '../providers/signupProvider.dart';
 import '../theme/colors.dart';
 
 class CustomNavigationDrawer extends ConsumerWidget {
-  const CustomNavigationDrawer({Key? key}) : super(key: key);
+  const CustomNavigationDrawer({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -27,7 +27,7 @@ class CustomNavigationDrawer extends ConsumerWidget {
     // Access SharedPreferences using the provider
     final sharedPreferencesAsyncValue = ref.watch(sharedPreferencesProvider);
     final deleteDatabaseUseCase = ref.watch(deleteDatabaseUseCaseProvider);
-    final levelProviderNotifier = ref.watch(levelProvider.notifier);
+    // final levelProviderNotifier = ref.watch(levelProvider.notifier);
     final signUpNotifier = ref.read(signUpProvider.notifier);
 
     return sharedPreferencesAsyncValue.when(
@@ -138,7 +138,7 @@ class CustomNavigationDrawer extends ConsumerWidget {
                     signUpNotifier.resetState();
                     await deleteDatabaseUseCase.questionRepository
                         .deleteDatabase();
-                    levelProviderNotifier.updateLevel("");
+                    // levelProviderNotifier.updateLevel("");
                     sharedPreferencesHelper.clear().then((value) {
                       navigatePushAndRemoveUntil(
                           context, const UserDetailsScreen(), false);

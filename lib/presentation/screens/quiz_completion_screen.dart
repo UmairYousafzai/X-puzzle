@@ -60,13 +60,13 @@ class _QuizCompletionScreen extends ConsumerState<QuizCompletionScreen> {
 
   String getStyle(Map<String, dynamic> state) {
     if (state["isPPAndPS"]) {
-      return "Style 1";
+      return "Level 1";
     } else if (state["isPPAndNS"]) {
-      return "Style 2";
+      return "Level 2";
     } else if (state["isNPAndPS"]) {
-      return "Style 3";
+      return "Level 3";
     } else if (state["isNPAndNS"]) {
-      return "Style 4";
+      return "Level 4";
     } else {
       return "";
     }
@@ -102,27 +102,25 @@ class _QuizCompletionScreen extends ConsumerState<QuizCompletionScreen> {
       return totalSecondsB.compareTo(totalSecondsA); // Descending order
     });
     try {
-      var time = (((result?.first.minutes ?? 0) * 60) + result!.first.seconds)
-              / 60;
-      String timeString =
-              "$time min";
+      var timeInSeconds =
+          (((result?.first.minutes ?? 0) * 60) + result!.first.seconds);
+      var actualTime = 300 - timeInSeconds;
+      var time = actualTime / 60;
+      String timeString = "${time.toStringAsFixed(1)} min";
       ref.watch(resultProvider.notifier).setBestTime(timeString);
     } catch (e) {
       if (kDebugMode) {
         print(e);
       }
     }
-
   }
 
   @override
   Widget build(BuildContext context) {
     var resultScreen = ref.watch(resultProvider);
-    final level = ref.read(levelProvider);
+    // final level = ref.read(levelProvider);
 
-    final questions = ref
-        .watch(questionProvider)
-        .questions;
+    final questions = ref.watch(questionProvider).questions;
     return Scaffold(
       backgroundColor: Colors.white,
       body: SafeArea(
@@ -169,28 +167,34 @@ class _QuizCompletionScreen extends ConsumerState<QuizCompletionScreen> {
                 ],
               ),
               8.verticalSpace,
-              level.when(data: (data) {
-                return LevelsHeader(
-                  level: data ?? "",
-                  style: resultScreen["time"],
-                  totalQuestions: questions.length,
-                  correct: totalCorrectAns(questions),
-                );
-              }, error: (err, stack) {
-                return LevelsHeader(
-                  level: "",
-                  style: resultScreen["time"],
-                  totalQuestions: questions.length,
-                  correct: totalCorrectAns(questions),
-                );
-              }, loading: () {
-                return LevelsHeader(
-                  level: "Loading....",
-                  style: resultScreen["time"],
-                  totalQuestions: questions.length,
-                  correct: totalCorrectAns(questions),
-                );
-              }),
+          LevelsHeader(
+            level: getStyle(resultScreen) ,
+            style: resultScreen["time"],
+            totalQuestions: questions.length,
+            correct: totalCorrectAns(questions),
+          ),
+              // level.when(data: (data) {
+              //   return LevelsHeader(
+              //     level: data ?? "",
+              //     style: resultScreen["time"],
+              //     totalQuestions: questions.length,
+              //     correct: totalCorrectAns(questions),
+              //   );
+              // }, error: (err, stack) {
+              //   return LevelsHeader(
+              //     level: "",
+              //     style: resultScreen["time"],
+              //     totalQuestions: questions.length,
+              //     correct: totalCorrectAns(questions),
+              //   );
+              // }, loading: () {
+              //   return LevelsHeader(
+              //     level: "Loading....",
+              //     style: resultScreen["time"],
+              //     totalQuestions: questions.length,
+              //     correct: totalCorrectAns(questions),
+              //   );
+              // }),
               const Gap(10),
               Container(
                 width: 334.w,
@@ -198,11 +202,11 @@ class _QuizCompletionScreen extends ConsumerState<QuizCompletionScreen> {
                 decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(15),
                     color: MColors().beigeColor
-                  // image: const DecorationImage(
-                  //     image: AssetImage(
-                  //         "assets/images/background_congratulations.png"),
-                  //     fit: BoxFit.cover)
-                ),
+                    // image: const DecorationImage(
+                    //     image: AssetImage(
+                    //         "assets/images/background_congratulations.png"),
+                    //     fit: BoxFit.cover)
+                    ),
                 child: Padding(
                   padding: const EdgeInsets.symmetric(horizontal: 15),
                   child: Column(
@@ -234,7 +238,7 @@ class _QuizCompletionScreen extends ConsumerState<QuizCompletionScreen> {
                                 ),
                                 15.horizontalSpace,
                                 Text(
-                                  resultScreen["best_time"]??"",
+                                  resultScreen["best_time"] ?? "",
                                   style: TextStyle(
                                     fontFamily: 'BalooDa2',
                                     color: MColors().colorSecondaryOrangeDark,
@@ -282,7 +286,7 @@ class _QuizCompletionScreen extends ConsumerState<QuizCompletionScreen> {
                               color: Colors.black.withOpacity(0.8)),
                         ),
                       ),
-                      const Gap(15),
+                      10.verticalSpace,
                       Center(
                         child: Text(
                           playMoreQuizLabel,
@@ -291,22 +295,22 @@ class _QuizCompletionScreen extends ConsumerState<QuizCompletionScreen> {
                               fontFamily: 'BalooDa2',
                               fontSize: 16,
                               fontWeight: FontWeight.w400,
-                              height: 2,
+                              height: 1,
                               color: Colors.black.withOpacity(0.6)),
                         ),
                       ),
-                      const Gap(15),
+                      10.verticalSpace,
                       viewCompleteResultsButton(() {
                         Navigator.pushAndRemoveUntil(
                           context,
                           MaterialPageRoute(
                               builder: (context) => const ResultsScreen()),
-                              (Route<dynamic> route) {
+                          (Route<dynamic> route) {
                             return route.isFirst;
                           },
                         );
                       }, context),
-                      const Gap(15),
+                      10.verticalSpace,
                       primaryButton(() {
                         Navigator.pop(context);
                       }, 'Explore More', Colors.white, context),

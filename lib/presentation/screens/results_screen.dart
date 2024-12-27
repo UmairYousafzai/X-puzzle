@@ -40,13 +40,13 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
 
   String getStyle(Map<String, dynamic> state) {
     if (state["isPPAndPS"]) {
-      return "Style 1";
+      return "Level 1";
     } else if (state["isPPAndNS"]) {
-      return "Style 2";
+      return "Level 2";
     } else if (state["isNPAndPS"]) {
-      return "Style 3";
+      return "Level 3";
     } else if (state["isNPAndNS"]) {
-      return "Style 4";
+      return "Level 4";
     } else {
       return "";
     }
@@ -81,7 +81,7 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
   @override
   Widget build(BuildContext context) {
     final questions = ref.watch(questionProvider).questions;
-    final level = ref.read(levelProvider);
+    // final level = ref.read(levelProvider);
     var resultScreen = ref.watch(resultProvider);
 
     return Scaffold(
@@ -122,28 +122,34 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.01,
                   ),
-                  level.when(data: (data) {
-                    return LevelsHeader(
-                      level: data ?? "",
-                      style: resultScreen["time"],
-                      totalQuestions: questions.length,
-                      correct: totalCorrectAns(),
-                    );
-                  }, error: (err, stack) {
-                    return LevelsHeader(
-                      level: "",
-                      style: resultScreen["time"],
-                      totalQuestions: questions.length,
-                      correct: totalCorrectAns(),
-                    );
-                  }, loading: () {
-                    return LevelsHeader(
-                      level: "Loading....",
-                      style: resultScreen["time"],
-                      totalQuestions: questions.length,
-                      correct: totalCorrectAns(),
-                    );
-                  }),
+                LevelsHeader(
+                  level: getStyle(resultScreen),
+                  style: resultScreen["time"],
+                  totalQuestions: questions.length,
+                  correct: totalCorrectAns(),
+                ),
+                  // level.when(data: (data) {
+                  //   return LevelsHeader(
+                  //     level: data ?? "",
+                  //     style: resultScreen["time"],
+                  //     totalQuestions: questions.length,
+                  //     correct: totalCorrectAns(),
+                  //   );
+                  // }, error: (err, stack) {
+                  //   return LevelsHeader(
+                  //     level: "",
+                  //     style: resultScreen["time"],
+                  //     totalQuestions: questions.length,
+                  //     correct: totalCorrectAns(),
+                  //   );
+                  // }, loading: () {
+                  //   return LevelsHeader(
+                  //     level: "Loading....",
+                  //     style: resultScreen["time"],
+                  //     totalQuestions: questions.length,
+                  //     correct: totalCorrectAns(),
+                  //   );
+                  // }),
                   Gap(MediaQuery.of(context).size.height * 0.02),
                   Expanded(
                     child: questions.isEmpty

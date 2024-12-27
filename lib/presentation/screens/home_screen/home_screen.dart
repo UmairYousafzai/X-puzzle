@@ -21,8 +21,7 @@ class HomeScreen extends ConsumerWidget {
   Widget build(BuildContext context, WidgetRef ref) {
     final screenState = ref.watch(homeViewTypeProvider);
     final viewNotifier = ref.read(homeViewTypeProvider.notifier);
-    final levels = ref.watch(levelProvider);
-    final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
+    // final levels = ref.watch(levelProvider);
 
     // Access SharedPreferences using the provider
     final sharedPreferencesAsyncValue = ref.watch(sharedPreferencesProvider);
@@ -134,19 +133,19 @@ class HomeScreen extends ConsumerWidget {
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.03,
                   ),
-                  levels.when(data: (data) {
-                    return Padding(
-                        padding: const EdgeInsets.fromLTRB(18, 0, 0, 18),
-                        child: levelWithBackground(data ?? ""));
-                  }, error: (err, stack) {
-                    return Padding(
-                        padding: const EdgeInsets.fromLTRB(18, 0, 0, 18),
-                        child: levelWithBackground(""));
-                  }, loading: () {
-                    return Padding(
-                        padding: const EdgeInsets.fromLTRB(18, 0, 0, 18),
-                        child: levelWithBackground(""));
-                  }),
+                  // levels.when(data: (data) {
+                  //   return Padding(
+                  //       padding: const EdgeInsets.fromLTRB(18, 0, 0, 18),
+                  //       child: levelWithBackground(data ?? ""));
+                  // }, error: (err, stack) {
+                  //   return Padding(
+                  //       padding: const EdgeInsets.fromLTRB(18, 0, 0, 18),
+                  //       child: levelWithBackground(""));
+                  // }, loading: () {
+                  //   return Padding(
+                  //       padding: const EdgeInsets.fromLTRB(18, 0, 0, 18),
+                  //       child: levelWithBackground(""));
+                  // }),
                   screenState["view_type"] == ViewType.list
                       ? const Expanded(child: HomeScreenGridView())
                       : const Expanded(child: HomeScreenListView()),

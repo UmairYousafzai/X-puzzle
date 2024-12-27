@@ -6,6 +6,7 @@ import 'package:flutter_native_splash/flutter_native_splash.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:xpuzzle/presentation/providers/shared_pref_provider.dart';
 import 'package:xpuzzle/presentation/screens/dialogs/show_on_question_complete_dialog.dart';
+import 'package:xpuzzle/presentation/screens/home_screen/home_screen.dart';
 import 'package:xpuzzle/presentation/screens/select_level_screen.dart';
 import 'package:xpuzzle/presentation/screens/user_details_screen.dart';
 import 'package:xpuzzle/presentation/theme/app_theme.dart';
@@ -57,7 +58,7 @@ class MyApp extends ConsumerWidget {
             },
             home: user == null
                 ? const UserDetailsScreen()
-                : const SelectLevelScreen(),
+                : const HomeScreen(),
           );
         },
         loading: () => Container(

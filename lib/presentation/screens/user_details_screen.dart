@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:xpuzzle/domain/entities/user.dart';
+import 'package:xpuzzle/presentation/screens/home_screen/home_screen.dart';
 import 'package:xpuzzle/presentation/screens/select_level_screen.dart';
 import 'package:xpuzzle/presentation/theme/colors.dart';
 import 'package:xpuzzle/presentation/widgets/custom_textfield_widget.dart';
@@ -67,7 +68,7 @@ class _UserDetailsScreen extends ConsumerState<UserDetailsScreen> {
       );
 
       await sharedPreferencesHelper.saveUser(user).then((value) {
-        navigatePushReplacement(context, const SelectLevelScreen());
+        navigatePushReplacement(context, const HomeScreen());
       });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
