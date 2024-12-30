@@ -145,7 +145,7 @@ class _QuizCompletionScreen extends ConsumerState<QuizCompletionScreen> {
                         Expanded(
                           child: Center(
                             child: Text(
-                              "Result",
+                              "Results",
                               style: TextStyle(
                                 fontFamily: 'BalooDa2',
                                 color: Colors.black,

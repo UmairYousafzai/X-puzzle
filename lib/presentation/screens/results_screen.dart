@@ -117,7 +117,7 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
                 children: [
                   customAppBar(
                       context,
-                      "All Result", // Pass the current level here
+                      "All Results", // Pass the current level here
                       null,
                       Image.asset("assets/images/print_icon.png"),
                       onPressedLeading: null, onPressedAction: () async {

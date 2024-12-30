@@ -1,4 +1,3 @@
-import 'package:xpuzzle/domain/entities/question.dart';
 import 'package:xpuzzle/domain/repositories/question_repository.dart';
 
 class DeleteQuestions {

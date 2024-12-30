@@ -125,8 +125,8 @@ class _UserDetailsScreen extends ConsumerState<UserDetailsScreen> {
               children: [
                 Align(
                     alignment: Alignment.center,
-                    child: Image.asset('assets/logos/X-Puzzles-logo.png')),
-                const Gap(18),
+                    child: Image.asset('assets/images/app_name.png')),
+                const Gap(15),
                 Align(
                   alignment: Alignment.centerLeft,
                   child: RichText(

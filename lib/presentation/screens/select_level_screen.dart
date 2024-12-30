@@ -31,7 +31,7 @@ class _SelectLevelScreenState extends ConsumerState<SelectLevelScreen> {
         children: [
           Gap(context.screenHeight * 0.01),
           Image.asset(
-            'assets/logos/X-Puzzles-logo.png',
+            'assets/images/app_name.png',
           ),
           const Gap(18),
           const Text("Welcome to the X Puzzle",
