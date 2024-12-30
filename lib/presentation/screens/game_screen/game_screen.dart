@@ -177,6 +177,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       QuestionProviderNotifier questionNotifier,
       bool shouldValidateData) async {
     if (validateQuestion(shouldValidateData)) {
+
       showOnQuestionCompleteDialog(
           isCorrectAnswer: isCorrectQuestion(gameState),
           context: context,

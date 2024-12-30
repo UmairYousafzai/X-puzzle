@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:xpuzzle/presentation/theme/colors.dart';
@@ -20,10 +22,22 @@ void showOnQuestionCompleteDialog(
   final double buttonWidth = context.screenHeight * 0.33;
   final double textFieldWidth = context.screenWidth * 0.7;
 
+
+  Timer? _timer;
+
+  void closeDialog(){
+    if(Navigator.canPop(context)) {
+      Navigator.pop(context);
+      onNext();
+    }
+  }
+
+
   showGeneralDialog(
       context: context,
       pageBuilder: (ctx, anim1, anim2) => const SizedBox.shrink(),
       transitionBuilder: (ctx, anim1, anim2, child) {
+
         return FadeTransition(
           opacity: anim1,
           child: ScaleTransition(
@@ -40,7 +54,7 @@ void showOnQuestionCompleteDialog(
                   // height: context.screenHeight > smallDeviceThreshold
                   //     ? context.screenHeight * 0.48
                   //     : context.screenHeight * 0.44,
-                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 20),
+                  padding: const EdgeInsets.fromLTRB(0, 10, 0, 35),
                   decoration: BoxDecoration(
                       borderRadius: BorderRadius.circular(27),
                       color: MColors().beigeColor),
@@ -50,7 +64,12 @@ void showOnQuestionCompleteDialog(
                         alignment: Alignment.topRight,
                         child: IconButton(
                             onPressed: () {
-                              Navigator.pop(context);
+
+                              if (_timer != null && _timer.isActive) {
+                                _timer.cancel();
+                                // Cancel the timer before closing the dialog
+                              }
+                              closeDialog();
                             },
                             icon: SvgPicture.asset(
                                 "assets/icons/svg/icon_close.svg")),
@@ -61,19 +80,22 @@ void showOnQuestionCompleteDialog(
                       //       : 10,
                       // ),
                       SizedBox(
-                          height: isCorrectAnswer? context.screenHeight * 0.3: context.screenHeight * 0.3,
+                          height: context.screenHeight * 0.3,
                           width:isCorrectAnswer?  context.screenWidth * 0.5: context.screenWidth * 1,
                           child: SvgPicture.asset(
-                              fit: BoxFit.fill,
+                              fit: BoxFit.contain,
                               isCorrectAnswer
-                                  ? "assets/icons/svg/heading_correct_answer.svg"
+                                  ? "assets/icons/svg/correct_answer.svg"
                                   : "assets/icons/svg/heading_incorrect_answer.svg")),
-                      SizedBox(
+
+
+
+
+                      /*if(!isCorrectAnswer)
+                        SizedBox(
                         width: textFieldWidth,
                         child: Text(
-                          isCorrectAnswer
-                              ? "You've completed this\nchallenge!"
-                              : "Almost There!\nNot quite, but keep going!",
+                          "Almost There!\nNot quite, but keep going!",
                           textAlign: TextAlign.center,
                           style:TextStyle(
                               fontFamily: 'BalooDa2',
@@ -81,16 +103,16 @@ void showOnQuestionCompleteDialog(
                                   fontWeight: FontWeight.w600),
                         ),
                       ),
+
+                      if(!isCorrectAnswer)
                       SizedBox(
                         width: context.screenWidth * 0.7,
-                        child: Opacity(
+                        child: const Opacity(
                           opacity: 0.6,
                           child: Text(
-                            isCorrectAnswer
-                                ? "Keep challenging yourself with more questions to deepen your knowledge!"
-                                : "Try another question to keep learning.",
+                            "Try another question to keep learning.",
                             textAlign: TextAlign.center,
-                            style: const TextStyle(
+                            style:  TextStyle(
                                 fontFamily: 'BalooDa2',
                                 fontSize: 14, fontWeight: FontWeight.w400),
                           ),
@@ -118,6 +140,7 @@ void showOnQuestionCompleteDialog(
                         height: context.screenHeight * 0.02,
                       ),
 
+                      if(!isCorrectAnswer)
                       SizedBox(
                         width: buttonWidth,
                         child: gradientButton(context, () {
@@ -127,7 +150,7 @@ void showOnQuestionCompleteDialog(
                       ),
                       SizedBox(
                         height: isCorrectAnswer? context.screenHeight * 0.07 : context.screenHeight* 0.05,
-                      ),
+                      ),*/
                     ],
                   ),
                 ),
@@ -137,4 +160,10 @@ void showOnQuestionCompleteDialog(
         );
       },
       transitionDuration: const Duration(milliseconds: 200));
+
+
+  // Schedule the dialog to close after 2 seconds
+  _timer=Timer(const Duration(seconds: 2), () {
+    closeDialog();
+  });
 }
