@@ -65,8 +65,8 @@ class ResultSingleCard extends StatelessWidget {
                               Text(
                                 question.topNum,
                                 style: const TextStyle(
-                                    fontFamily: 'BalooDa2',
-                                    fontWeight: FontWeight.bold),
+                                      fontFamily: 'BalooDa2',
+                                      fontWeight: FontWeight.bold),
                               )
                             ],
                           )
