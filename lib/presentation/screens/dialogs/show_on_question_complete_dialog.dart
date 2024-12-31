@@ -2,6 +2,7 @@ import 'dart:async';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_svg/flutter_svg.dart';
+import 'package:google_fonts/google_fonts.dart';
 import 'package:xpuzzle/presentation/theme/colors.dart';
 import 'package:xpuzzle/utils/constants.dart';
 
@@ -82,11 +83,16 @@ void showOnQuestionCompleteDialog(
                       SizedBox(
                           height: context.screenHeight * 0.3,
                           width:isCorrectAnswer?  context.screenWidth * 0.5: context.screenWidth * 1,
-                          child: SvgPicture.asset(
-                              fit: BoxFit.contain,
-                              isCorrectAnswer
-                                  ? "assets/icons/svg/correct_answer.svg"
-                                  : "assets/icons/svg/heading_incorrect_answer.svg")),
+                          child: Center(
+                            child: Text(isCorrectAnswer?"CORRECT \nANSWER": "INCORRECT \nANSWER",
+                            textAlign: TextAlign.center,
+                            style:  const TextStyle(
+                              fontFamily: 'BalooDa2',
+                              fontWeight: FontWeight.w700,
+                              fontSize: 28,
+                              color: Colors.black, // Set the text color to black
+                            ),),
+                          )),
 
 
 
