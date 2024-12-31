@@ -1,4 +1,5 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:xpuzzle/domain/use_cases/delete_question_latest_time.dart';
 import 'package:xpuzzle/domain/use_cases/delete_question_time.dart';
 import 'package:xpuzzle/domain/use_cases/get_question_by_type.dart';
 import 'package:xpuzzle/domain/use_cases/get_time.dart';
@@ -13,3 +14,5 @@ final getTimeByTypeUseCaseProvider =
     Provider((ref) => GetTimeByType(ref.watch(timeRepositoryProvider)));
 final deleteQuestionTimeUseCaseProvider =
     Provider((ref) => DeleteQuestionsTime(ref.watch(timeRepositoryProvider)));
+final deleteQuestionLatestTimeUseCase = Provider(
+    (ref) => DeleteQuestionsLatestTime(ref.watch(timeRepositoryProvider)));

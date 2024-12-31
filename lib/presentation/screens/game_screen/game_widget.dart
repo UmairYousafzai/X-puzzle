@@ -22,12 +22,7 @@ class GameWidget extends ConsumerWidget {
     final gameNotifier = ref.read(gameProvider.notifier);
     final firstNumberFocus = ref.watch(gameProvider).firstNumberFocus;
     final secondNumberFocus = ref.watch(gameProvider).secondNumberFocus;
-    print("game widget  ${context.screenWidth}");
-    print("Screen height  ${context.screenHeight}");
-    print("Medium Device Threshold  $mediumDeviceThreshold");
 
-    print(
-        "game widget cal ${context.screenWidth < smallDeviceThreshold ? 45 : 65}");
     return Container(
       width: 306.w,
       height: 340.h,

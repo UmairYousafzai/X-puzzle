@@ -17,8 +17,12 @@ import 'package:xpuzzle/presentation/screens/dialogs/show_on_question_complete_d
 import 'package:xpuzzle/utils/constants.dart';
 import 'package:xpuzzle/utils/navigation/navigate.dart';
 
+import '../../../data/data_source/local/shared_preference_helper.dart';
 import '../../../domain/entities/question.dart';
+import '../../../domain/use_cases/get_questions.dart';
+import '../../../domain/use_cases/store_questions.dart';
 import '../../providers/game_provider.dart';
+import '../../providers/home_screen_providers.dart';
 import '../../providers/level_provider.dart';
 import '../../providers/question/question_usecase_provider.dart';
 import '../../providers/time/time_use_case_provider.dart';
@@ -26,6 +30,7 @@ import '../../theme/colors.dart';
 import '../../widgets/buttons/buttons.dart';
 import '../../widgets/custom_app_bar.dart';
 import '../../widgets/snackBar_messages.dart';
+import '../dialogs/go_back_confirmation_dialog.dart';
 import '../quiz_completion_screen.dart';
 import 'game_custom_progress_bar.dart';
 import 'game_time_widget.dart';
@@ -113,7 +118,6 @@ class _GameScreenState extends ConsumerState<GameScreen> {
   }
 
   void getQuestionsTime(Question question, GameNotifier gameNotifier) async {
-
     if (!widget.isNewTest) {
       var time = await ref.read(getTimeUseCaseProvider).execute(
           isNPAndNS: question.isNPAndNS,
@@ -141,9 +145,7 @@ class _GameScreenState extends ConsumerState<GameScreen> {
 
     percentage = percentage / 100;
 
-    if (kDebugMode) {
-      print("complete question percentage==============> $percentage");
-    }
+
     return percentage;
   }
 
@@ -177,7 +179,6 @@ class _GameScreenState extends ConsumerState<GameScreen> {
       QuestionProviderNotifier questionNotifier,
       bool shouldValidateData) async {
     if (validateQuestion(shouldValidateData)) {
-
       showOnQuestionCompleteDialog(
           isCorrectAnswer: isCorrectQuestion(gameState),
           context: context,
@@ -345,6 +346,71 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     }
   }
 
+  Future<void> resetSpecificQuestionData() async {
+    print("resetSpecificQuestionData");
+    ref.watch(sharedPreferencesProvider).when(
+        data: (pref) async {
+          var gameState = ref.watch(gameProvider);
+          var isPPAndPS = gameState.question?.isPPAndPS ?? false;
+          var isPPAndNS = gameState.question?.isPPAndNS ?? false;
+          var isNPAndPS = gameState.question?.isNPAndPS ?? false;
+          var isNPAndNS = gameState.question?.isNPAndNS ?? false;
+          print("resetSpecificQuestionData =====> pref");
+
+          await pref.saveQuestionProgress(
+              value: 0,
+              isPPAndPS: isPPAndPS,
+              isPPAndNS: isPPAndNS,
+              isNPAndPS: isNPAndPS,
+              isNPAndNS: isNPAndNS);
+          print("resetSpecificQuestionData =====> saveQuestionProgress");
+
+          await pref.setStyleStatus(
+              value: false,
+              isPPAndPS: isPPAndPS,
+              isPPAndNS: isPPAndNS,
+              isNPAndPS: isNPAndPS,
+              isNPAndNS: isNPAndNS);
+          print("resetSpecificQuestionData =====> setStyleStatus");
+
+          await ref.watch(deleteQuestionsUseCaseProvider).execute(
+              isPPAndPS: isPPAndPS,
+              isPPAndNS: isPPAndNS,
+              isNPAndPS: isNPAndPS,
+              isNPAndNS: isNPAndNS);
+          print("resetSpecificQuestionData =====> deleteQuestionsUseCaseProvider");
+
+          await ref.watch(deleteQuestionLatestTimeUseCase).execute(
+              isPPAndPS: isPPAndPS,
+              isPPAndNS: isPPAndNS,
+              isNPAndPS: isNPAndPS,
+              isNPAndNS: isNPAndNS);
+          if (kDebugMode) {
+            print("resetSpecificQuestionData =====> deleteQuestionLatestTimeUseCase");
+          }
+          ref.watch(gameProvider.notifier).resetGame();
+          //
+          Navigator.pop(context);
+
+          if(Navigator.canPop(context)){
+            await Future.delayed(const Duration(milliseconds: 200));
+            Navigator.pop(context);
+
+          }else
+            {
+              if (kDebugMode) {
+                print("resetSpecificQuestionData =====> cannot pop");
+              }
+            }
+        },
+        error: (err, stack) {
+          if (kDebugMode) {
+            print(err);
+          }
+        },
+        loading: () {});
+  }
+
   @override
   Widget build(BuildContext context) {
     final questionsState = ref.watch(questionProvider);
@@ -363,9 +429,13 @@ class _GameScreenState extends ConsumerState<GameScreen> {
     });
 
     return PopScope(
-      onPopInvokedWithResult: (didPop, ctx) {
-        gameNotifier.resetGame();
-        // Navigator.pop(context);
+      canPop: false,
+      onPopInvokedWithResult: (didPop, ctx) async{
+        if (didPop) {
+          return;
+        }
+        await Future.delayed(Duration(milliseconds: 300));
+        showStyleCompletedCustomDialog(context, resetSpecificQuestionData);
       },
       child: Scaffold(
         backgroundColor: MColors().white,
@@ -374,13 +444,13 @@ class _GameScreenState extends ConsumerState<GameScreen> {
             context,
             gameState.getLevel(), // Pass the current level here
             SvgPicture.asset(
-              "assets/icons/svg/hamburger_menu_icon.svg",
-              width: 40,
-              height: 25,
+              "assets/icons/svg/back_icon.svg",
+              width: 50.w,
+              height: 50.h,
             ),
-            null,
-            onPressedLeading: (buildContext) {},
-            titleColor: const Color(0xFF1E2D7C)),
+            null, onPressedLeading: (buildContext) {
+          showStyleCompletedCustomDialog(context, resetSpecificQuestionData);
+        }, titleColor: const Color(0xFF1E2D7C)),
         body: SingleChildScrollView(
           child: GestureDetector(
             onHorizontalDragEnd: (details) {

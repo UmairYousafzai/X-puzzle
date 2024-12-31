@@ -1,6 +1,4 @@
 import 'dart:io';
-import 'dart:math';
-
 import 'package:flutter/foundation.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
@@ -11,7 +9,6 @@ import 'package:pdf/widgets.dart' as pw;
 import 'package:permission_handler/permission_handler.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:xpuzzle/data/data_source/local/shared_preference_helper.dart';
-import 'package:xpuzzle/data/models/local/question_model.dart';
 import 'package:xpuzzle/domain/entities/question.dart';
 
 import '../../data/data_source/local/question_generator.dart';
@@ -23,8 +20,8 @@ Future<bool> generatePDF({
   bool isNPAndNS = false,
 }) async {
   var user =
-  SharedPreferencesHelper(await SharedPreferences.getInstance(), false)
-      .getUser();
+      SharedPreferencesHelper(await SharedPreferences.getInstance(), false)
+          .getUser();
 
   final pdf = pw.Document();
 
@@ -50,9 +47,9 @@ Future<bool> generatePDF({
       isNPAndPS: isNPAndPS,
       isNPAndNS: isNPAndNS);
 
-  var columnCount = 0;
-  pdf.addPage(
-      pw.Page(pageFormat: PdfPageFormat.a4, build: (pw.Context context) {
+  pdf.addPage(pw.Page(
+      pageFormat: PdfPageFormat.a4,
+      build: (pw.Context context) {
         return pw.Container(
             width: 615,
             height: 878,
@@ -115,7 +112,7 @@ Future<bool> generatePDF({
                                 pw.Padding(
                                     padding: const pw.EdgeInsets.only(left: 10),
                                     child: pw.Text(
-                                      "Level: 4",
+                                      "Level: ${getLevel(isPPAndPS: isPPAndPS, isPPAndNS: isPPAndNS, isNPAndPS: isNPAndPS, isNPAndNS: isNPAndNS)}",
                                       style: pw.TextStyle(
                                         font: baloodaMediumBoldFont,
                                         color: PdfColors.black,
@@ -142,7 +139,6 @@ Future<bool> generatePDF({
                   padding: const pw.EdgeInsets.all(0),
                   child: pw.Container(
                       padding: const pw.EdgeInsets.all(10),
-
                       decoration: pw.BoxDecoration(
                           color: PdfColors.white,
                           borderRadius: pw.BorderRadius.circular(12)),
@@ -162,34 +158,31 @@ Future<bool> generatePDF({
                           //     ]
                           // ) )
 
-                    // pw.SizedBox(height: 520,width: 680)
-                    pw.Wrap(
-                      runSpacing: 0,
-                        children: questions.map((item) {
-                          // print("Question===> ${QuestionModel.copy(item).toJson()}");
-                          return gridItemDesign(
-                              item, orangeTransparentColor, boldBalooda);
-                        }).toList())
-
-
-                  )
-              )
+                          // pw.SizedBox(height: 520,width: 680)
+                          pw.Wrap(
+                              runSpacing: 0,
+                              children: questions.map((item) {
+                                // print("Question===> ${QuestionModel.copy(item).toJson()}");
+                                return gridItemDesign(
+                                    item, orangeTransparentColor, boldBalooda);
+                              }).toList())))
             ]));
       }));
 
   // Save the PDF file
- return await savePdfToStorage(pdf);
-
+  return await savePdfToStorage(pdf);
 }
 
 Future<String> getExternalDocumentPath() async {
   // To check whether permission is given for this app or not.
-  var status = await Permission.storage.status;
-  print("request");
-  if (!status.isGranted) {
-    // If not we will ask for permission first
-    await Permission.storage.request();
-  }
+  // var status = await Permission.storage.status;
+  // if (kDebugMode) {
+  //   print("request");
+  // }
+  // if (!status.isGranted) {
+  //   // If not we will ask for permission first
+  //   await Permission.storage.request();
+  // }
   Directory _directory = Directory("");
   if (Platform.isAndroid) {
     // Redirects it to download folder in android
@@ -199,12 +192,33 @@ Future<String> getExternalDocumentPath() async {
   }
 
   final exPath = _directory.path;
-  print("Saved Path: $exPath");
+  if (kDebugMode) {
+    print("Saved Path: $exPath");
+  }
   await Directory(exPath).create(recursive: true);
   return exPath;
 }
 
-Future<bool> savePdfToStorage(pw.Document pdf, ) async {
+String getLevel({
+  bool isPPAndPS = false,
+  bool isPPAndNS = false,
+  bool isNPAndPS = false,
+  bool isNPAndNS = false,
+}) {
+  if (isPPAndPS) {
+    return " 1";
+  } else if (isPPAndNS) {
+    return " 2";
+  } else if (isNPAndPS) {
+    return " 3";
+  } else {
+    return " 4";
+  }
+}
+
+Future<bool> savePdfToStorage(
+  pw.Document pdf,
+) async {
   try {
     // Request permission to write to external storage
     // Get external directory path
@@ -229,9 +243,8 @@ Future<bool> savePdfToStorage(pw.Document pdf, ) async {
 
     var path = await getExternalDocumentPath();
     print("path =>>>>>>>>>>>>> $path");
-    String fileString = "${path}/puzzler_${DateTime
-        .now()
-        .millisecondsSinceEpoch}.pdf";
+    String fileString =
+        "${path}/puzzler_${DateTime.now().millisecondsSinceEpoch}.pdf";
     print("file path =>>>>>>>>>>>>> $fileString");
 
     // Save the PDF file
@@ -258,20 +271,18 @@ pw.Widget threeItemsInRow(List<Question> questions, PdfColor orangeColor,
   } else if (columnCount == 3) {
     index = 9;
   }
-  return pw.Row(
-      children: [
-        gridItemDesign(questions[index], orangeColor, boldBalooda),
-        gridItemDesign(questions[index + 1], orangeColor, boldBalooda),
-        gridItemDesign(questions[index + 2], orangeColor, boldBalooda)
-      ]
-  );
+  return pw.Row(children: [
+    gridItemDesign(questions[index], orangeColor, boldBalooda),
+    gridItemDesign(questions[index + 1], orangeColor, boldBalooda),
+    gridItemDesign(questions[index + 2], orangeColor, boldBalooda)
+  ]);
 }
 
-pw.Widget gridItemDesign(Question question, PdfColor orangeColor,
-    pw.Font boldBalooda) {
+pw.Widget gridItemDesign(
+    Question question, PdfColor orangeColor, pw.Font boldBalooda) {
   final svgImage = pw.SvgImage(
       svg:
-      '''<svg width="65" height="64" viewBox="0 0 65 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+          '''<svg width="65" height="64" viewBox="0 0 65 64" fill="none" xmlns="http://www.w3.org/2000/svg">
     <path d="M62.5503 2.13092L2.21376 62.4674" stroke="black" stroke-width="3" stroke-linecap="round"/>
     <path d="M2.21387 2.13092L62.5504 62.4674" stroke="black" stroke-width="3" stroke-linecap="round"/>
 </svg>
@@ -299,31 +310,31 @@ pw.Widget gridItemDesign(Question question, PdfColor orangeColor,
                   child: svgImage,
                 ),
                 pw.Positioned(
-                  bottom:45 ,
+                  bottom: 45,
                   child: pw.Row(
-                  mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
-                  crossAxisAlignment: pw.CrossAxisAlignment.end,
-                  children: [
-                    pw.Container(
-                      width: 15,
-                      decoration: const pw.BoxDecoration(
-                          border: pw.Border(
-                              bottom: pw.BorderSide(
-                                  color: PdfColors.grey, width: 0.1)),
-                          color: PdfColors.white),
-                    ),
-                    pw.SizedBox(width: 45),
-                    pw.Container(
-                      width: 15,
-                      decoration: const pw.BoxDecoration(
-                          border: pw.Border(
-                              bottom: pw.BorderSide(
-                                  color: PdfColors.grey, width: 0.1)),
-                          color: PdfColors.white),
-                    ),
-                  ],
-                ),),
-
+                    mainAxisAlignment: pw.MainAxisAlignment.spaceAround,
+                    crossAxisAlignment: pw.CrossAxisAlignment.end,
+                    children: [
+                      pw.Container(
+                        width: 15,
+                        decoration: const pw.BoxDecoration(
+                            border: pw.Border(
+                                bottom: pw.BorderSide(
+                                    color: PdfColors.grey, width: 0.1)),
+                            color: PdfColors.white),
+                      ),
+                      pw.SizedBox(width: 45),
+                      pw.Container(
+                        width: 15,
+                        decoration: const pw.BoxDecoration(
+                            border: pw.Border(
+                                bottom: pw.BorderSide(
+                                    color: PdfColors.grey, width: 0.1)),
+                            color: PdfColors.white),
+                      ),
+                    ],
+                  ),
+                ),
                 pw.Column(
                   children: [
                     pw.Row(
@@ -344,9 +355,7 @@ pw.Widget gridItemDesign(Question question, PdfColor orangeColor,
                       ],
                     ),
                     pw.SizedBox(height: 10),
-
                     pw.SizedBox(height: 10),
-
                     pw.Row(
                       mainAxisAlignment: pw.MainAxisAlignment.center,
                       children: [
@@ -376,21 +385,21 @@ pw.Widget gridItemDesign(Question question, PdfColor orangeColor,
 
 Future<pw.Font> getBaloodaSemiBoldFont() async {
   final ByteData fontData =
-  await rootBundle.load('assets/fonts/BalooDa2-Semibold.ttf');
+      await rootBundle.load('assets/fonts/BalooDa2-Semibold.ttf');
   final Uint8List fontBytes = fontData.buffer.asUint8List();
   return pw.Font.ttf(fontBytes.buffer.asByteData());
 }
 
 Future<pw.Font> getBaloodaBoldFont() async {
   final ByteData fontData =
-  await rootBundle.load('assets/fonts/BalooDa2-Bold.ttf');
+      await rootBundle.load('assets/fonts/BalooDa2-Bold.ttf');
   final Uint8List fontBytes = fontData.buffer.asUint8List();
   return pw.Font.ttf(fontBytes.buffer.asByteData());
 }
 
 Future<pw.Font> getBaloodaMediumFont() async {
   final ByteData fontData =
-  await rootBundle.load('assets/fonts/BalooDa2-Medium.ttf');
+      await rootBundle.load('assets/fonts/BalooDa2-Medium.ttf');
   final Uint8List fontBytes = fontData.buffer.asUint8List();
   return pw.Font.ttf(fontBytes.buffer.asByteData());
 }

@@ -1,22 +1,16 @@
 import 'dart:io';
-
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
-import 'package:xpuzzle/data/models/local/question_time_model.dart';
 import 'package:xpuzzle/domain/entities/question.dart';
-import 'package:xpuzzle/domain/entities/time.dart';
-import 'package:xpuzzle/domain/use_cases/get_time.dart';
+import 'package:xpuzzle/main.dart';
 import 'package:xpuzzle/presentation/providers/result_provider.dart';
 import 'package:xpuzzle/presentation/providers/time/time_use_case_provider.dart';
 import 'package:xpuzzle/presentation/screens/question_pdf.dart';
 import 'package:xpuzzle/presentation/widgets/snackBar_messages.dart';
-import '../../data/models/remote/style_card_model.dart';
-import '../providers/level_provider.dart';
+import 'package:xpuzzle/utils/constants.dart';
 import '../providers/question/question_provider.dart';
 import '../theme/colors.dart';
 import '../widgets/buttons/buttons.dart';
@@ -88,7 +82,9 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
     var resultScreenNotifier = ref.watch(resultProvider.notifier);
 
     return Scaffold(
-      body: GestureDetector(
+    body: Stack(
+      children: [
+        GestureDetector(
         onHorizontalDragEnd: (details) {
           if (Platform.isIOS) {
             if (details.primaryVelocity != null &&
@@ -121,7 +117,9 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
                       null,
                       Image.asset("assets/images/print_icon.png"),
                       onPressedLeading: null, onPressedAction: () async {
-                        print("loading value -=======> ${resultScreen["is_loading"]}");
+                        if (kDebugMode) {
+                          print("loading value -=======> ${resultScreen["is_loading"]}");
+                        }
                     if (!resultScreen["is_loading"]) {
                       resultScreenNotifier.setLoading(true);
                      var flag= await generatePDF(
@@ -194,9 +192,8 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
                           ),
                   ),
                   primaryButton(() {
-                    if (!resultScreen["is_loading"]) {
                       Navigator.pop(context);
-                    }
+
                   }, 'Explore More', Colors.white, context),
                   Gap(MediaQuery.of(context).size.height * 0.01),
                 ],
@@ -205,6 +202,15 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
           ),
         ),
       ),
-    );
+        if(resultScreen["is_loading"])Container(
+          color: Colors.white.withOpacity(0.5),
+          width: context.screenWidth,
+          height: context.screenHeight,
+          child: Center(
+            child: CircularProgressIndicator(color: MColors().colorSecondaryBlueDark,),
+          ),
+        ),],
+    ),
+          );
   }
 }

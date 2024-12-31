@@ -56,6 +56,20 @@ class QuestionTimeRepositoryImpl extends QuestionTimeRepository {
       isNPAndNS: isNPAndNS,
     );
   }
+  @override
+  Future<void> deleteQuestionLatestTime({
+    bool isPPAndPS = false,
+    bool isPPAndNS = false,
+    bool isNPAndPS = false,
+    bool isNPAndNS = false,
+  }) async {
+    await _timeDao.deleteLatestTime(
+      isPPAndPS: isPPAndPS,
+      isPPAndNS: isPPAndNS,
+      isNPAndPS: isNPAndPS,
+      isNPAndNS: isNPAndNS,
+    );
+  }
 
   @override
   Future<List<QuestionTime>?> getQuestionTimeByType(

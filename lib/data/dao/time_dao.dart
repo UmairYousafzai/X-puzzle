@@ -121,4 +121,25 @@ class TimeDao {
       ],
     );
   }
+  Future<void> deleteLatestTime({
+    bool isPPAndPS = false,
+    bool isPPAndNS = false,
+    bool isNPAndPS = false,
+    bool isNPAndNS = false,
+  }) async {
+    final db = await _databaseHelper.database;
+
+    await db?.delete(
+      DatabaseHelper.TABLE_QUESTION_TIME,
+      where: 'id = (SELECT MAX(id) FROM ${DatabaseHelper.TABLE_QUESTION_TIME} '
+          'WHERE is_pp_and_ps = ? AND is_pp_and_ns = ? AND is_np_and_ns = ? AND is_np_and_ps = ?)',
+      whereArgs: [
+        isPPAndPS ? 1 : 0,
+        isPPAndNS ? 1 : 0,
+        isNPAndNS ? 1 : 0,
+        isNPAndPS ? 1 : 0,
+      ],
+    );
+  }
+
 }
