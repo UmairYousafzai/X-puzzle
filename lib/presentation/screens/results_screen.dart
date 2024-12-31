@@ -13,6 +13,8 @@ import 'package:xpuzzle/domain/entities/time.dart';
 import 'package:xpuzzle/domain/use_cases/get_time.dart';
 import 'package:xpuzzle/presentation/providers/result_provider.dart';
 import 'package:xpuzzle/presentation/providers/time/time_use_case_provider.dart';
+import 'package:xpuzzle/presentation/screens/question_pdf.dart';
+import 'package:xpuzzle/presentation/widgets/snackBar_messages.dart';
 import '../../data/models/remote/style_card_model.dart';
 import '../providers/level_provider.dart';
 import '../providers/question/question_provider.dart';
@@ -72,7 +74,7 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
         isNPAndPS: state["isNPAndPS"],
         isNPAndNS: state["isNPAndNS"]);
     String time = result!.minutes != 0
-        ? "Time ${(5-result.minutes)}min"
+        ? "Time ${(5 - result.minutes)}min"
         : "Time ${result.seconds}sec";
 
     ref.watch(resultProvider.notifier).setTime(time);
@@ -83,6 +85,7 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
     final questions = ref.watch(questionProvider).questions;
     // final level = ref.read(levelProvider);
     var resultScreen = ref.watch(resultProvider);
+    var resultScreenNotifier = ref.watch(resultProvider.notifier);
 
     return Scaffold(
       body: GestureDetector(
@@ -117,17 +120,37 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
                       "All Results", // Pass the current level here
                       null,
                       Image.asset("assets/images/print_icon.png"),
-                      onPressedLeading: null,
-                      titleColor: Colors.black),
+                      onPressedLeading: null, onPressedAction: () async {
+                        print("loading value -=======> ${resultScreen["is_loading"]}");
+                    if (!resultScreen["is_loading"]) {
+                      resultScreenNotifier.setLoading(true);
+                     var flag= await generatePDF(
+                          isPPAndPS: resultScreen["isPPAndPS"],
+                          isPPAndNS: resultScreen["isPPAndNS"],
+                          isNPAndPS: resultScreen["isNPAndPS"],
+                          isNPAndNS: resultScreen["isNPAndNS"]);
+                      if (flag) {
+                        if (Platform.isAndroid) {
+                          showSuccessSnackBar(
+                              context, "File saved to downloads");
+                        }
+                      } else {
+                        showErrorSnackBar(
+                            context, "Failed to save file.");
+                      }
+                      resultScreenNotifier.setLoading(false);
+
+                    }
+                  }, titleColor: Colors.black),
                   SizedBox(
                     height: MediaQuery.of(context).size.height * 0.01,
                   ),
-                LevelsHeader(
-                  level: getStyle(resultScreen),
-                  style: resultScreen["time"],
-                  totalQuestions: questions.length,
-                  correct: totalCorrectAns(),
-                ),
+                  LevelsHeader(
+                    level: getStyle(resultScreen),
+                    style: resultScreen["time"],
+                    totalQuestions: questions.length,
+                    correct: totalCorrectAns(),
+                  ),
                   // level.when(data: (data) {
                   //   return LevelsHeader(
                   //     level: data ?? "",
@@ -159,7 +182,7 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
                           )
                         : GridView.builder(
                             gridDelegate:
-                                 SliverGridDelegateWithFixedCrossAxisCount(
+                                SliverGridDelegateWithFixedCrossAxisCount(
                               crossAxisCount: 3,
                               childAspectRatio: 0.63.h,
                             ),
@@ -171,7 +194,9 @@ class _ResultsScreenState extends ConsumerState<ResultsScreen> {
                           ),
                   ),
                   primaryButton(() {
-                    Navigator.pop(context);
+                    if (!resultScreen["is_loading"]) {
+                      Navigator.pop(context);
+                    }
                   }, 'Explore More', Colors.white, context),
                   Gap(MediaQuery.of(context).size.height * 0.01),
                 ],
