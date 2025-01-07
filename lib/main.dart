@@ -7,6 +7,7 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:xpuzzle/presentation/providers/shared_pref_provider.dart';
 import 'package:xpuzzle/presentation/screens/home_screen/home_screen.dart';
+import 'package:xpuzzle/presentation/screens/subscription_screen.dart';
 import 'package:xpuzzle/presentation/screens/user_details_screen.dart';
 import 'package:xpuzzle/presentation/theme/app_theme.dart';
 import 'package:xpuzzle/presentation/theme/colors.dart';
@@ -31,6 +32,7 @@ class MyApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final sharedPreferencesHelper = ref.watch(sharedPreferencesProvider);
+
     // var questions = generatePositiveMultipleAndPositiveInteger();
     return ScreenUtilInit(
       designSize: const Size(378.39, 787.41),
@@ -38,6 +40,8 @@ class MyApp extends ConsumerWidget {
       builder: (context, child) => sharedPreferencesHelper.when(
         data: (helper) {
           final user = helper.getUser();
+          final isSubscribed = helper.getBool("isSubscription") ?? false;
+
           if (kDebugMode) {
             print("heigth  size: ${MediaQuery.of(context).size.height}");
             print("width  size: ${MediaQuery.of(context).size.width}");
@@ -70,7 +74,11 @@ class MyApp extends ConsumerWidget {
             //             item);
             //       }).toList()),
             // )
-            home: user == null ? const UserDetailsScreen() : const HomeScreen(),
+            home: user == null
+                ? const UserDetailsScreen()
+                : isSubscribed
+                    ? const HomeScreen()
+                    : const SubscriptionScreen(),
           );
         },
         loading: () => Container(
