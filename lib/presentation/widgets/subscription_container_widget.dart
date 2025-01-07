@@ -19,7 +19,9 @@ class SubscriptionContainerWidget extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     return Container(
-      height: context.screenHeight * 0.5,
+      height: MediaQuery.of(context).size.height < mediumDeviceThreshold
+          ? context.screenHeight * 0.58
+          : context.screenHeight * 0.5,
       width: context.screenWidth * 0.87,
       decoration: BoxDecoration(
           color: MColors().colorPrimary,
@@ -160,7 +162,7 @@ class SubscriptionContainerWidget extends StatelessWidget {
             ),
           ),
           Gap(30.sp),
-          subscriptionButton(onPress, context, 'START FREE TRIAL')
+          subscriptionButton(onPress, context, 'START FREE TRIAL'),
         ],
       ),
     );
