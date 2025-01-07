@@ -140,7 +140,7 @@ class _UserDetailsScreen extends ConsumerState<UserDetailsScreen> {
                           ),
                       children: [
                         TextSpan(text: "Sign up to\n"),
-                        TextSpan(text: "unlock the world of X Puzzle"),
+                        TextSpan(text: "unlock the world of X Puzzler"),
                       ],
                     ),
                   ),

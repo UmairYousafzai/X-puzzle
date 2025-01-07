@@ -57,7 +57,7 @@ class MyApp extends ConsumerWidget {
               ));
               return MaterialApp(
                   debugShowCheckedModeBanner: false,
-                  title: 'X Puzzle',
+                  title: 'X Puzzler',
                   theme: theme,
                   builder: (context, child) {
                     return MediaQuery(

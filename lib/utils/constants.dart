@@ -14,4 +14,4 @@ int largeDeviceThreshold = 800;
 String quizCompletedLabel = "Congratulations you’ve\nCompleted this Quiz!";
 String playMoreQuizLabel =
     "keep testing your knowledge by playing more quizzes!";
-String signUpLabel = "Sign up to unlock the world of X Puzzle";
+String signUpLabel = "Sign up to unlock the world of X Puzzler";
