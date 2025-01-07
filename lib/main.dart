@@ -1,15 +1,12 @@
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_native_splash/flutter_native_splash.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
-import 'package:xpuzzle/data/data_source/local/question_generator.dart';
 import 'package:xpuzzle/presentation/providers/shared_pref_provider.dart';
-import 'package:xpuzzle/presentation/screens/dialogs/show_on_question_complete_dialog.dart';
 import 'package:xpuzzle/presentation/screens/home_screen/home_screen.dart';
-import 'package:xpuzzle/presentation/screens/select_level_screen.dart';
 import 'package:xpuzzle/presentation/screens/user_details_screen.dart';
 import 'package:xpuzzle/presentation/theme/app_theme.dart';
 import 'package:xpuzzle/presentation/theme/colors.dart';
@@ -38,61 +35,51 @@ class MyApp extends ConsumerWidget {
     return ScreenUtilInit(
       designSize: const Size(378.39, 787.41),
       minTextAdapt: true,
-      builder: (context, child) =>
-          sharedPreferencesHelper.when(
-            data: (helper) {
-              final user = helper.getUser();
-              if (kDebugMode) {
-                print("heigth  size: ${MediaQuery
-                    .of(context)
-                    .size
-                    .height}");
-                print("width  size: ${MediaQuery
-                    .of(context)
-                    .size
-                    .width}");
-              }
-              SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
-                statusBarColor: Colors.transparent,
-              ));
-              return MaterialApp(
-                  debugShowCheckedModeBanner: false,
-                  title: 'X Puzzler',
-                  theme: theme,
-                  builder: (context, child) {
-                    return MediaQuery(
-                      data: MediaQuery.of(context).copyWith(
-                        textScaler: TextScaler.noScaling,
-                      ),
-                      child: child!,
-                    );
-                  },
-                  // home: Container(
-                  //   width: 520,
-                  //   height: 520,
-                  //   child: GridView(
-                  //       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                  //         crossAxisCount: 3,
-                  //         childAspectRatio: 0.63.h,
-                  //       ),
-                  //       children: questions.map((item) {
-                  //         return gridItemDesign(
-                  //             item);
-                  //       }).toList()),
-                  // )
-                home:  user == null
-                   ? const UserDetailsScreen()
-                     : const HomeScreen(),
+      builder: (context, child) => sharedPreferencesHelper.when(
+        data: (helper) {
+          final user = helper.getUser();
+          if (kDebugMode) {
+            print("heigth  size: ${MediaQuery.of(context).size.height}");
+            print("width  size: ${MediaQuery.of(context).size.width}");
+          }
+          SystemChrome.setSystemUIOverlayStyle(const SystemUiOverlayStyle(
+            statusBarColor: Colors.transparent,
+          ));
+          return MaterialApp(
+            debugShowCheckedModeBanner: false,
+            title: 'X Puzzler',
+            theme: theme,
+            builder: (context, child) {
+              return MediaQuery(
+                data: MediaQuery.of(context).copyWith(
+                  textScaler: TextScaler.noScaling,
+                ),
+                child: child!,
               );
             },
-            loading: () =>
-                Container(
-                    width: context.screenWidth,
-                    height: context.screenHeight,
-                    color: Colors.white,
-                    child: const Center(child: CircularProgressIndicator())),
-            error: (err, stack) => Text('Error: $err'),
-          ),
+            // home: Container(
+            //   width: 520,
+            //   height: 520,
+            //   child: GridView(
+            //       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            //         crossAxisCount: 3,
+            //         childAspectRatio: 0.63.h,
+            //       ),
+            //       children: questions.map((item) {
+            //         return gridItemDesign(
+            //             item);
+            //       }).toList()),
+            // )
+            home: user == null ? const UserDetailsScreen() : const HomeScreen(),
+          );
+        },
+        loading: () => Container(
+            width: context.screenWidth,
+            height: context.screenHeight,
+            color: Colors.white,
+            child: const Center(child: CircularProgressIndicator())),
+        error: (err, stack) => Text('Error: $err'),
+      ),
     );
   }
 
@@ -203,7 +190,8 @@ class MyApp extends ConsumerWidget {
                         children: [
                           Text(
                             question.bottomNum,
-                            style: TextStyle(fontFamily: 'BalooDa2',
+                            style: TextStyle(
+                                fontFamily: 'BalooDa2',
                                 fontWeight: FontWeight.bold),
                           )
                         ],
@@ -213,10 +201,11 @@ class MyApp extends ConsumerWidget {
                 ],
               ),
             ),
-            Text(
-                "+", style: TextStyle(color: MColors().colorSecondaryOrangeDark,
-                fontFamily: 'BalooDa2',
-                fontWeight: FontWeight.bold)),
+            Text("+",
+                style: TextStyle(
+                    color: MColors().colorSecondaryOrangeDark,
+                    fontFamily: 'BalooDa2',
+                    fontWeight: FontWeight.bold)),
           ],
         ),
       ),

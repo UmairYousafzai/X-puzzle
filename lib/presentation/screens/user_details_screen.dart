@@ -3,8 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:gap/gap.dart';
 import 'package:intl/intl.dart';
 import 'package:xpuzzle/domain/entities/user.dart';
-import 'package:xpuzzle/presentation/screens/home_screen/home_screen.dart';
-import 'package:xpuzzle/presentation/screens/select_level_screen.dart';
+import 'package:xpuzzle/presentation/screens/subscription_screen.dart';
 import 'package:xpuzzle/presentation/theme/colors.dart';
 import 'package:xpuzzle/presentation/widgets/custom_textfield_widget.dart';
 import 'package:xpuzzle/presentation/widgets/text_widget.dart';
@@ -15,6 +14,7 @@ import '../providers/shared_pref_provider.dart';
 import '../providers/signupProvider.dart';
 import '../widgets/background_image_container.dart';
 import '../widgets/buttons/buttons.dart';
+import 'home_screen/home_screen.dart';
 
 class UserDetailsScreen extends ConsumerStatefulWidget {
   const UserDetailsScreen({super.key});
@@ -45,20 +45,20 @@ class _UserDetailsScreen extends ConsumerState<UserDetailsScreen> {
 
     signUpNotifier.updateFirstName(signUpState.firstName);
     signUpNotifier.updateLastName(signUpState.lastName);
-    signUpNotifier.updateDOB(signUpState.dob);
+    //signUpNotifier.updateDOB(signUpState.dob);
     signUpNotifier.updateEmail(signUpState.email);
 
     String firstNameError = signUpState.firstNameError ?? "";
     String lastNameError = signUpState.lastNameError ?? "";
-    String dobError = signUpState.dobError ?? "";
+    //String dobError = signUpState.dobError ?? "";
     String emailError = signUpState.emailError ?? "";
 
     if (signUpState.firstName.isNotEmpty &&
         signUpState.lastName.isNotEmpty &&
-        signUpState.dob.isNotEmpty &&
+        // signUpState.dob.isNotEmpty &&
         firstNameError.isEmpty &&
         lastNameError.isEmpty &&
-        dobError.isEmpty &&
+        // dobError.isEmpty &&
         emailError.isEmpty) {
       User user = User(
         firstName: signUpState.firstName,
@@ -67,8 +67,18 @@ class _UserDetailsScreen extends ConsumerState<UserDetailsScreen> {
         email: signUpState.email,
       );
 
-      await sharedPreferencesHelper.saveUser(user).then((value) {
-        navigatePushReplacement(context, const HomeScreen());
+      await sharedPreferencesHelper.saveUser(user).then((value) async {
+        // Retrieve the subscription status
+        bool? isSubscribed = sharedPreferencesHelper.getBool("isSubscription");
+
+        // Navigate based on the subscription status
+        if (isSubscribed == true) {
+          navigatePushReplacement(
+              context, const HomeScreen()); // Navigate to HomeScreen
+        } else {
+          navigatePushReplacement(context,
+              const SubscriptionScreen()); // Navigate to SubscriptionScreen
+        }
       });
     } else {
       ScaffoldMessenger.of(context).showSnackBar(
@@ -135,9 +145,9 @@ class _UserDetailsScreen extends ConsumerState<UserDetailsScreen> {
                       style: TextStyle(
                         fontFamily: 'BalooDa2',
                         color: Color(0xFF1E2D7C),
-                            fontWeight: FontWeight.w700,
-                            fontSize: 22,
-                          ),
+                        fontWeight: FontWeight.w700,
+                        fontSize: 22,
+                      ),
                       children: [
                         TextSpan(text: "Sign up to\n"),
                         TextSpan(text: "unlock the world of X Puzzler"),
@@ -178,29 +188,29 @@ class _UserDetailsScreen extends ConsumerState<UserDetailsScreen> {
                   onChanged: (value) => signUpNotifier.updateLastName(value),
                 ),
                 Gap(context.screenHeight * 0.01),
-                const Padding(
-                  padding: EdgeInsets.only(left: 12),
-                  child: TextWidget(
-                    text: 'DOB',
-                    fontSize: 14,
-                    fontWeight: FontWeight.w500,
-                  ),
-                ),
-                Gap(context.screenHeight * 0.01),
-                CustomTextField(
-                  hintText: 'Enter your DOB',
-                  showIconButton: true,
-                  errorText: signUpState.dobError ?? "",
-                  onChanged: (value) => signUpNotifier.updateDOB(value),
-                  onTap: () {
-                    openDatePicker(dobController);
-                  },
-                  onIconPressed: () {
-                    openDatePicker(dobController);
-                  },
-                  controller: dobController,
-                  disableField: true,
-                ),
+                // const Padding(
+                //   padding: EdgeInsets.only(left: 12),
+                //   child: TextWidget(
+                //     text: 'DOB',
+                //     fontSize: 14,
+                //     fontWeight: FontWeight.w500,
+                //   ),
+                // ),
+                // Gap(context.screenHeight * 0.01),
+                // CustomTextField(
+                //   hintText: 'Enter your DOB',
+                //   showIconButton: true,
+                //   errorText: signUpState.dobError ?? "",
+                //   onChanged: (value) => signUpNotifier.updateDOB(value),
+                //   onTap: () {
+                //     openDatePicker(dobController);
+                //   },
+                //   onIconPressed: () {
+                //     openDatePicker(dobController);
+                //   },
+                //   controller: dobController,
+                //   disableField: true,
+                // ),
                 Gap(context.screenHeight * 0.01),
                 const Padding(
                   padding: EdgeInsets.only(left: 12),
@@ -223,7 +233,7 @@ class _UserDetailsScreen extends ConsumerState<UserDetailsScreen> {
                   'Continue',
                   Colors.black,
                   context,
-                ),
+                )
               ],
             ),
           ),

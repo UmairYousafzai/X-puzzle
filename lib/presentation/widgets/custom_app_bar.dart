@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
-import 'package:xpuzzle/main.dart';
-import 'package:xpuzzle/presentation/theme/colors.dart';
 
 AppBar customAppBar(
   BuildContext context,
@@ -12,6 +10,7 @@ AppBar customAppBar(
   Function(BuildContext)? onPressedLeading,
   Function()? onPressedAction,
   Color titleColor = Colors.black,
+  double? fontSize, // New parameter for font size
 }) {
   return AppBar(
     backgroundColor: Colors.transparent,
@@ -20,8 +19,8 @@ AppBar customAppBar(
       style: TextStyle(
         fontFamily: 'BalooDa2',
         color: titleColor,
-        fontSize: 30.sp,
-
+        fontSize:
+            fontSize ?? 30.sp, // Use the passed fontSize or default to 30.sp
         fontWeight: FontWeight.w700,
       ),
     ),

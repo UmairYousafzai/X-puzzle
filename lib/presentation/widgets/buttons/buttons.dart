@@ -3,7 +3,6 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/flutter_svg.dart';
 import 'package:gap/gap.dart';
 import 'package:google_fonts/google_fonts.dart';
-import 'package:xpuzzle/main.dart';
 import 'package:xpuzzle/utils/constants.dart';
 
 import '../../theme/colors.dart';
@@ -310,6 +309,40 @@ viewCompleteResultsButton(VoidCallback onPressed, BuildContext context) {
               fontWeight: FontWeight.w500,
               fontSize: 18,
               color: MColors().colorSecondaryOrangeDark),
+        ),
+      ),
+    ),
+  );
+}
+
+subscriptionButton(
+  VoidCallback onPressed,
+  BuildContext context,
+  String title, {
+  double borderRadius = 30,
+  double paddingHorizontal = 50,
+  double? fontSize,
+}) {
+  return InkWell(
+    onTap: onPressed,
+    child: Container(
+      // padding: EdgeInsets.symmetric(vertical: scHeight(context)*0.02, horizontal:70),
+      decoration: BoxDecoration(
+        color: MColors().colorSecondaryOrangeDark, // #FFFBF3
+
+        borderRadius: BorderRadius.circular(borderRadius),
+      ),
+      child: Padding(
+        padding: EdgeInsets.symmetric(
+            horizontal: paddingHorizontal.r, vertical: 12.r),
+        child: Text(
+          title,
+          textAlign: TextAlign.center,
+          maxLines: 1,
+          style: GoogleFonts.poppins(
+              fontWeight: FontWeight.w600,
+              color: MColors().colorPrimary,
+              fontSize: 16),
         ),
       ),
     ),
