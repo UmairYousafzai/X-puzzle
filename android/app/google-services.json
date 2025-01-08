@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "875284291618",
+    "project_id": "xpuzzler-756a1",
+    "storage_bucket": "xpuzzler-756a1.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:875284291618:android:7c928d63ace55b46d1aa7b",
+        "android_client_info": {
+          "package_name": "com.example.xpuzzle"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyBs4aHs-mbEMtsqYZJPyo4Ov6xPIyrYIN8"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
