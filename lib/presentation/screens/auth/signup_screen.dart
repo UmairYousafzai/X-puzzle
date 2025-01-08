@@ -10,22 +10,22 @@ import 'package:xpuzzle/presentation/widgets/text_widget.dart';
 import 'package:xpuzzle/utils/constants.dart';
 import 'package:xpuzzle/utils/navigation/navigate.dart';
 
-import '../providers/shared_pref_provider.dart';
-import '../providers/signupProvider.dart';
-import '../widgets/background_image_container.dart';
-import '../widgets/buttons/buttons.dart';
-import 'home_screen/home_screen.dart';
+import '../../providers/shared_pref_provider.dart';
+import '../../providers/signupProvider.dart';
+import '../../widgets/background_image_container.dart';
+import '../../widgets/buttons/buttons.dart';
+import '../home_screen/home_screen.dart';
 
-class UserDetailsScreen extends ConsumerStatefulWidget {
-  const UserDetailsScreen({super.key});
+class SignupScreen extends ConsumerStatefulWidget {
+  const SignupScreen({super.key});
 
   @override
-  ConsumerState<UserDetailsScreen> createState() {
-    return _UserDetailsScreen();
+  ConsumerState<SignupScreen> createState() {
+    return _SignupScreen();
   }
 }
 
-class _UserDetailsScreen extends ConsumerState<UserDetailsScreen> {
+class _SignupScreen extends ConsumerState<SignupScreen> {
   late TextEditingController dobController;
   final firstNameFocusNode = FocusNode();
   final lastNameFocusNode = FocusNode();

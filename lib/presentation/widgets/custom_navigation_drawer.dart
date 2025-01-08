@@ -1,13 +1,14 @@
 import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
-import 'package:xpuzzle/presentation/providers/level_provider.dart';
 import 'package:xpuzzle/presentation/providers/question/question_usecase_provider.dart';
-import 'package:xpuzzle/presentation/screens/user_details_screen.dart';
+import 'package:xpuzzle/presentation/screens/auth/signup_screen.dart';
 import 'package:xpuzzle/presentation/widgets/text_widget.dart';
 import 'package:xpuzzle/utils/navigation/navigate.dart';
+
 import '../providers/shared_pref_provider.dart';
 import '../providers/signupProvider.dart';
 import '../theme/colors.dart';
@@ -65,7 +66,7 @@ class CustomNavigationDrawer extends ConsumerWidget {
                           style: TextStyle(
                               fontFamily: 'BalooDa2',
                               fontSize: screenWidth * 0.045,
-                                  fontWeight: FontWeight.w400),
+                              fontWeight: FontWeight.w400),
                         ),
                       ],
                     ),
@@ -141,7 +142,7 @@ class CustomNavigationDrawer extends ConsumerWidget {
                     // levelProviderNotifier.updateLevel("");
                     sharedPreferencesHelper.clear().then((value) {
                       navigatePushAndRemoveUntil(
-                          context, const UserDetailsScreen(), false);
+                          context, const SignupScreen(), false);
                     });
                   },
                 ),

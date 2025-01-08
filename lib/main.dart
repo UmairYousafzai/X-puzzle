@@ -6,9 +6,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:xpuzzle/presentation/providers/shared_pref_provider.dart';
-import 'package:xpuzzle/presentation/screens/home_screen/home_screen.dart';
-import 'package:xpuzzle/presentation/screens/subscription_screen.dart';
-import 'package:xpuzzle/presentation/screens/user_details_screen.dart';
+import 'package:xpuzzle/presentation/screens/auth/login_screen.dart';
 import 'package:xpuzzle/presentation/theme/app_theme.dart';
 import 'package:xpuzzle/presentation/theme/colors.dart';
 import 'package:xpuzzle/utils/constants.dart';
@@ -50,36 +48,38 @@ class MyApp extends ConsumerWidget {
             statusBarColor: Colors.transparent,
           ));
           return MaterialApp(
-            debugShowCheckedModeBanner: false,
-            title: 'X Puzzler',
-            theme: theme,
-            builder: (context, child) {
-              return MediaQuery(
-                data: MediaQuery.of(context).copyWith(
-                  textScaler: TextScaler.noScaling,
-                ),
-                child: child!,
+              debugShowCheckedModeBanner: false,
+              title: 'X Puzzler',
+              theme: theme,
+              builder: (context, child) {
+                return MediaQuery(
+                  data: MediaQuery.of(context).copyWith(
+                    textScaler: TextScaler.noScaling,
+                  ),
+                  child: child!,
+                );
+              },
+              // home: Container(
+              //   width: 520,
+              //   height: 520,
+              //   child: GridView(
+              //       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+              //         crossAxisCount: 3,
+              //         childAspectRatio: 0.63.h,
+              //       ),
+              //       children: questions.map((item) {
+              //         return gridItemDesign(
+              //             item);
+              //       }).toList()),
+              // )
+              home: const LoginScreen()
+
+              // user == null
+              //     ? const SignupScreen()
+              //     : isSubscribed
+              //         ? const HomeScreen()
+              //         : const SubscriptionScreen(),
               );
-            },
-            // home: Container(
-            //   width: 520,
-            //   height: 520,
-            //   child: GridView(
-            //       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            //         crossAxisCount: 3,
-            //         childAspectRatio: 0.63.h,
-            //       ),
-            //       children: questions.map((item) {
-            //         return gridItemDesign(
-            //             item);
-            //       }).toList()),
-            // )
-            home: user == null
-                ? const UserDetailsScreen()
-                : isSubscribed
-                    ? const HomeScreen()
-                    : const SubscriptionScreen(),
-          );
         },
         loading: () => Container(
             width: context.screenWidth,
