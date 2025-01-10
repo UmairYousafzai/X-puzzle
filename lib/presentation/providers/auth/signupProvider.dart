@@ -1,9 +1,36 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:xpuzzle/domain/use_cases/auth/signup_usecase.dart';
+import 'package:xpuzzle/presentation/providers/auth/auth_usecase_provider.dart';
 
-import '../../domain/entities/states/signup_state.dart';
+import '../../../domain/entities/states/signup_state.dart';
 
 class SignUpNotifier extends StateNotifier<SignUpState> {
-  SignUpNotifier() : super(SignUpState());
+  final SignUpUseCase _signUpUseCase;
+
+  SignUpNotifier(this._signUpUseCase) : super(SignUpState());
+
+  Future<void> signUp() async {
+    try {
+      state = state.copyWith(isLoading: true, error: '');
+
+      await _signUpUseCase.execute(
+        state.email,
+        state.password,
+      );
+
+      state = state.copyWith(
+        isLoading: false,
+        isSignedUp: true,
+        error: '',
+      );
+    } catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        error: e.toString(),
+        isSignedUp: false,
+      );
+    }
+  }
 
 // Method to update and validate the First Name
   void updateFirstName(String value) {
@@ -64,7 +91,7 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
   void updateEmail(String value) {
     value = value.trim();
     if (value.isEmpty) {
-      state = state.copyWith(email: value, emailError: "");
+      state = state.copyWith(email: "", emailError: "Email can't be empty!");
     } else if (!RegExp(r'^[a-zA-Z0-9._%+-]+@[a-zA-Z0-9.-]+\.[a-zA-Z]{2,}$')
         .hasMatch(value)) {
       state = state.copyWith(emailError: 'Enter a valid email address');
@@ -74,12 +101,48 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
     }
   }
 
+  void updatePassword(String value) {
+    value = value.trim();
+    if (value.isEmpty) {
+      state = state.copyWith(
+          password: "", passwordError: 'Password cannot be empty');
+    } else if (value.length < 8) {
+      state = state.copyWith(
+          password: value,
+          passwordError: "Password must be at least 8 characters");
+    } else if (!RegExp(
+            r'^(?=.*[A-Z])(?=.*[a-z])(?=.*\d)(?=.*[@$!%*?&#])[A-Za-z\d@$!%*?&#]{8,}$')
+        .hasMatch(value)) {
+      state = state.copyWith(
+          passwordError:
+              "Password must include upper, lower, number, and special character");
+    } else {
+      state = state.copyWith(password: value, passwordError: "");
+    }
+  }
+
+  void updateConfirmPassword(String value) {
+    value = value.trim();
+    if (value.isEmpty) {
+      state = state.copyWith(
+          confirmPassword: "",
+          confirmPasswordError: "Confirm Password cannot be empty");
+    } else if (value != state.password) {
+      state = state.copyWith(
+          confirmPassword: value,
+          confirmPasswordError: "Passwords do not match");
+    } else {
+      state = state.copyWith(confirmPassword: value, confirmPasswordError: "");
+    }
+  }
+
   void resetState() {
     state = SignUpState();
   }
 }
 
-// Provider to manage the SignUpNotifier
-final signUpProvider = StateNotifierProvider<SignUpNotifier, SignUpState>(
-  (ref) => SignUpNotifier(),
-);
+final signUpProvider =
+    StateNotifierProvider<SignUpNotifier, SignUpState>((ref) {
+  final signoutUseCase = ref.watch(signUpUseCaseProvider);
+  return SignUpNotifier(signoutUseCase);
+});

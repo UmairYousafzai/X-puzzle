@@ -5,12 +5,13 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:gap/gap.dart';
 import 'package:xpuzzle/presentation/providers/question/question_usecase_provider.dart';
-import 'package:xpuzzle/presentation/screens/auth/signup_screen.dart';
+import 'package:xpuzzle/presentation/screens/auth/login_screen.dart';
 import 'package:xpuzzle/presentation/widgets/text_widget.dart';
 import 'package:xpuzzle/utils/navigation/navigate.dart';
 
+import '../providers/auth/loginProvider.dart';
+import '../providers/auth/signupProvider.dart';
 import '../providers/shared_pref_provider.dart';
-import '../providers/signupProvider.dart';
 import '../theme/colors.dart';
 
 class CustomNavigationDrawer extends ConsumerWidget {
@@ -18,6 +19,7 @@ class CustomNavigationDrawer extends ConsumerWidget {
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
+    final loginNotifier = ref.read(loginProvider.notifier);
     final screenHeight = MediaQuery.of(context).size.height;
     final screenWidth = MediaQuery.of(context).size.width;
 
@@ -136,14 +138,20 @@ class CustomNavigationDrawer extends ConsumerWidget {
                     fontWeight: FontWeight.w500,
                   ),
                   onTap: () async {
-                    signUpNotifier.resetState();
-                    await deleteDatabaseUseCase.questionRepository
-                        .deleteDatabase();
-                    // levelProviderNotifier.updateLevel("");
-                    sharedPreferencesHelper.clear().then((value) {
-                      navigatePushAndRemoveUntil(
-                          context, const SignupScreen(), false);
-                    });
+                    try {
+                      await loginNotifier.logout();
+                      signUpNotifier.resetState();
+                      await deleteDatabaseUseCase.questionRepository
+                          .deleteDatabase();
+                      sharedPreferencesHelper.clear().then((value) {
+                        navigatePushAndRemoveUntil(
+                            context, const LoginScreen(), false);
+                      });
+                    } catch (e) {
+                      ScaffoldMessenger.of(context).showSnackBar(
+                        SnackBar(content: Text(e.toString())),
+                      );
+                    }
                   },
                 ),
               ),

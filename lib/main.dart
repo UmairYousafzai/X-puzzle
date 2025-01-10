@@ -1,3 +1,4 @@
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,14 +8,20 @@ import 'package:flutter_screenutil/flutter_screenutil.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:xpuzzle/presentation/providers/shared_pref_provider.dart';
 import 'package:xpuzzle/presentation/screens/auth/login_screen.dart';
+import 'package:xpuzzle/presentation/screens/home_screen/home_screen.dart';
+import 'package:xpuzzle/presentation/screens/subscription_screen.dart';
 import 'package:xpuzzle/presentation/theme/app_theme.dart';
 import 'package:xpuzzle/presentation/theme/colors.dart';
 import 'package:xpuzzle/utils/constants.dart';
 
 import 'domain/entities/question.dart';
+import 'firebase_options.dart';
 
 void main() async {
   WidgetsBinding widgetsBinding = WidgetsFlutterBinding.ensureInitialized();
+  await Firebase.initializeApp(
+    options: DefaultFirebaseOptions.currentPlatform,
+  );
   SystemChrome.setPreferredOrientations([
     DeviceOrientation.portraitUp,
     DeviceOrientation.portraitDown,
@@ -48,38 +55,36 @@ class MyApp extends ConsumerWidget {
             statusBarColor: Colors.transparent,
           ));
           return MaterialApp(
-              debugShowCheckedModeBanner: false,
-              title: 'X Puzzler',
-              theme: theme,
-              builder: (context, child) {
-                return MediaQuery(
-                  data: MediaQuery.of(context).copyWith(
-                    textScaler: TextScaler.noScaling,
-                  ),
-                  child: child!,
-                );
-              },
-              // home: Container(
-              //   width: 520,
-              //   height: 520,
-              //   child: GridView(
-              //       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-              //         crossAxisCount: 3,
-              //         childAspectRatio: 0.63.h,
-              //       ),
-              //       children: questions.map((item) {
-              //         return gridItemDesign(
-              //             item);
-              //       }).toList()),
-              // )
-              home: const LoginScreen()
-
-              // user == null
-              //     ? const SignupScreen()
-              //     : isSubscribed
-              //         ? const HomeScreen()
-              //         : const SubscriptionScreen(),
+            debugShowCheckedModeBanner: false,
+            title: 'X Puzzler',
+            theme: theme,
+            builder: (context, child) {
+              return MediaQuery(
+                data: MediaQuery.of(context).copyWith(
+                  textScaler: TextScaler.noScaling,
+                ),
+                child: child!,
               );
+            },
+            // home: Container(
+            //   width: 520,
+            //   height: 520,
+            //   child: GridView(
+            //       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+            //         crossAxisCount: 3,
+            //         childAspectRatio: 0.63.h,
+            //       ),
+            //       children: questions.map((item) {
+            //         return gridItemDesign(
+            //             item);
+            //       }).toList()),
+            // )
+            home: user == null
+                ? const LoginScreen()
+                : isSubscribed
+                    ? const HomeScreen()
+                    : const SubscriptionScreen(),
+          );
         },
         loading: () => Container(
             width: context.screenWidth,

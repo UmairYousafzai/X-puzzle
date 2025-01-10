@@ -1,6 +1,8 @@
 import 'dart:convert';
+
 import 'package:flutter/foundation.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+
 import '../../../domain/entities/user.dart';
 import '../../models/local/user_model.dart';
 
@@ -39,13 +41,12 @@ class SharedPreferencesHelper {
     await _sharedPreferences.remove(key);
   }
 
-
   Future<void> saveUser(User user) async {
     // Convert User to UserModel to use toJson
     final userModel = UserModel(
       firstName: user.firstName,
       lastName: user.lastName,
-      dob: user.dob,
+      //dob: user.dob,
       email: user.email,
     );
     final userJson = jsonEncode(userModel.toJson());
@@ -61,7 +62,6 @@ class SharedPreferencesHelper {
     }
     return null;
   }
-
 
   Future<void> saveLevel(String level) async {
     if (kDebugMode) {
@@ -164,7 +164,4 @@ class SharedPreferencesHelper {
     }
     return _sharedPreferences.getInt("$keyPrefix-$QUESTION_PROGRESS_KEY");
   }
-
-
-
 }
