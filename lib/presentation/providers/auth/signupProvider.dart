@@ -143,6 +143,6 @@ class SignUpNotifier extends StateNotifier<SignUpState> {
 
 final signUpProvider =
     StateNotifierProvider<SignUpNotifier, SignUpState>((ref) {
-  final signoutUseCase = ref.watch(signUpUseCaseProvider);
-  return SignUpNotifier(signoutUseCase);
+  final signupUseCase = ref.watch(signUpUseCaseProvider);
+  return SignUpNotifier(signupUseCase);
 });
