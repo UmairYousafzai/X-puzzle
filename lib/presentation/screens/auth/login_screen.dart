@@ -109,36 +109,27 @@ class _LoginScreen extends ConsumerState<LoginScreen> {
                       alignment: Alignment.center,
                       child: Image.asset('assets/images/app_name.png')),
                   const Gap(15),
-                  Align(
-                    alignment: Alignment.centerLeft,
-                    child: RichText(
-                      textAlign: TextAlign.left,
-                      text: const TextSpan(
-                        style: TextStyle(
-                          fontFamily: 'BalooDa2',
-                          color: Color(0xFF1E2D7C),
-                          fontWeight: FontWeight.w700,
-                          fontSize: 22,
-                        ),
-                        children: [
-                          TextSpan(text: "Login to\n"),
-                          TextSpan(text: "unlock the world of X Puzzler"),
-                        ],
-                      ),
+                  const Text(
+                    'Sign In',
+                    style: TextStyle(
+                      fontFamily: 'BalooDa2',
+                      color: Color(0xFF1E2D7C),
+                      fontWeight: FontWeight.w700,
+                      fontSize: 22,
                     ),
                   ),
-                  Gap(context.screenHeight * 0.035),
+                  Gap(context.screenHeight * 0.05),
                   const Padding(
                     padding: EdgeInsets.only(left: 12),
                     child: TextWidget(
-                      text: 'Email',
+                      text: 'Username/Email',
                       fontSize: 14,
                       fontWeight: FontWeight.w500,
                     ),
                   ),
                   Gap(context.screenHeight * 0.01),
                   CustomTextField(
-                    hintText: 'Enter your email ',
+                    hintText: 'Enter Username or Email ',
                     errorText: loginState.emailError ?? "",
                     focusNode: emailFocusNode,
                     onChanged: (value) => loginNotifier.updateEmail(value),

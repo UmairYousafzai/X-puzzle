@@ -66,19 +66,6 @@ class MyApp extends ConsumerWidget {
                 child: child!,
               );
             },
-            // home: Container(
-            //   width: 520,
-            //   height: 520,
-            //   child: GridView(
-            //       gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-            //         crossAxisCount: 3,
-            //         childAspectRatio: 0.63.h,
-            //       ),
-            //       children: questions.map((item) {
-            //         return gridItemDesign(
-            //             item);
-            //       }).toList()),
-            // )
             home: user == null
                 ? const LoginScreen()
                 : isSubscribed
