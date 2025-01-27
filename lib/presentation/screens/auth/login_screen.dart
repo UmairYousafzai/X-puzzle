@@ -16,6 +16,7 @@ import '../../widgets/background_image_container.dart';
 import '../../widgets/buttons/buttons.dart';
 import '../home_screen/home_screen.dart';
 import '../subscription_screen.dart';
+import 'forget_password/forget_password_screen.dart';
 
 class LoginScreen extends ConsumerStatefulWidget {
   const LoginScreen({super.key});
@@ -151,7 +152,27 @@ class _LoginScreen extends ConsumerState<LoginScreen> {
                     onChanged: (value) => loginNotifier.updatePassword(value),
                     obscureText: true,
                   ),
-                  Gap(context.screenHeight * 0.04),
+                  Row(
+                    mainAxisAlignment: MainAxisAlignment.end,
+                    children: [
+                      TextButton(onPressed: () {
+                        loginNotifier.resetState();
+                        navigateToScreen(context, const ForgetPasswordScreen());
+                      }, child: Text(
+                        "Forget Password?",
+                        style: TextStyle(
+                          fontFamily: 'Poppins',
+                          color: MColors().brightOrange,
+                          fontWeight: FontWeight.w500,
+                          fontSize: 12,
+                          decoration: TextDecoration.underline,
+                          decorationColor: MColors().brightOrange,
+                        ),
+                        textAlign: TextAlign.center, // Centers the text on each line
+                      ),),
+                    ],
+                  ),
+                  Gap(context.screenHeight * 0.02),
                   primaryButton(
                     handleButtonClick,
                     'Login',

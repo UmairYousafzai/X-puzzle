@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/foundation.dart';
 
 import '../../domain/repositories/firebase_repository.dart';
@@ -22,7 +23,7 @@ class FirebaseAuthRepositoryImpl implements FirebaseRepository {
       if (kDebugMode) {
         print("Error in signUpWithEmailPassword: ${e.message}");
       }
-      throw e; // Re-throw the error to handle it in the notifier
+      rethrow; // Re-throw the error to handle it in the notifier
     }
   }
 
@@ -37,7 +38,7 @@ class FirebaseAuthRepositoryImpl implements FirebaseRepository {
       if (kDebugMode) {
         print("Error in signInWithEmailPassword: ${e.message}");
       }
-      throw e; // Re-throw the error to handle it in the notifier
+      rethrow; // Re-throw the error to handle it in the notifier
     }
   }
 
@@ -49,7 +50,7 @@ class FirebaseAuthRepositoryImpl implements FirebaseRepository {
       if (kDebugMode) {
         print("Error in signOut: ${e.toString()}");
       }
-      throw e; // Re-throw the error to handle it in the notifier
+      rethrow; // Re-throw the error to handle it in the notifier
     }
   }
 
@@ -60,17 +61,29 @@ class FirebaseAuthRepositoryImpl implements FirebaseRepository {
 
   @override
   Future<void> saveUserToBackend(UserModel user) async {
-    final userId = FirebaseAuth.instance.currentUser?.uid;
+    final userId = _firebaseAuth.currentUser?.uid;
     if (userId == null) throw Exception("No authenticated user found");
     await _firestore.collection("users").doc(userId).set(user.toJson());
   }
 
   @override
   Future<UserModel> fetchUserFromBackend() async {
-    final userId = FirebaseAuth.instance.currentUser?.uid;
+    final userId = _firebaseAuth.currentUser?.uid;
     if (userId == null) throw Exception("No authenticated user found");
     final doc = await _firestore.collection("users").doc(userId).get();
     if (!doc.exists) throw Exception("User not found");
     return UserModel.fromJson(doc.data()!);
+  }
+
+  @override
+  Future<void> sendPasswordResetEmail(String email) async {
+    try {
+      await FirebaseAuth.instance.sendPasswordResetEmail(email: email);
+    } on FirebaseAuthException catch (e) {
+      if (kDebugMode) {
+        print("Error in signUpWithEmailPassword: ${e.message}");
+      }
+      rethrow;
+    }
   }
 }

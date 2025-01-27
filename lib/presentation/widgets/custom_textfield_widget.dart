@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 import 'package:flutter_svg/svg.dart';
 import 'package:google_fonts/google_fonts.dart';
 
+import '../theme/colors.dart';
+
 class CustomTextField extends StatefulWidget {
   final String hintText;
   final String errorText;
@@ -56,7 +58,7 @@ class _CustomTextFieldState extends State<CustomTextField> {
       children: [
         Container(
           decoration: BoxDecoration(
-            color: const Color(0xFFFFFBF3),
+            color: MColors().beigeColor,
             borderRadius: BorderRadius.circular(15),
           ),
           padding: const EdgeInsets.symmetric(horizontal: 12),

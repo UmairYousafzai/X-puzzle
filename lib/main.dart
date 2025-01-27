@@ -13,7 +13,6 @@ import 'package:xpuzzle/presentation/screens/subscription_screen.dart';
 import 'package:xpuzzle/presentation/theme/app_theme.dart';
 import 'package:xpuzzle/presentation/theme/colors.dart';
 import 'package:xpuzzle/utils/constants.dart';
-
 import 'domain/entities/question.dart';
 import 'firebase_options.dart';
 

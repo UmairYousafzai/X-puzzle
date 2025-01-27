@@ -1,5 +1,6 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:xpuzzle/domain/entities/states/login_state.dart';
+import 'package:xpuzzle/domain/use_cases/auth/password_reset_usecase.dart';
 
 import '../../../domain/use_cases/auth/get_auth_status_usecase.dart';
 import '../../../domain/use_cases/auth/login_usecase.dart';
@@ -10,9 +11,10 @@ class LoginNotifier extends StateNotifier<LoginState> {
   final LoginUseCase _loginUseCase;
   final LogoutUseCase _logoutUseCase;
   final GetAuthStatusUseCase _getAuthStatusUseCase;
+  final ResetPasswordUseCase _resetPasswordUseCase;
 
   LoginNotifier(
-      this._loginUseCase, this._logoutUseCase, this._getAuthStatusUseCase)
+      this._loginUseCase, this._logoutUseCase, this._getAuthStatusUseCase,this._resetPasswordUseCase)
       : super(LoginState());
 
   Future<void> login() async {
@@ -41,7 +43,7 @@ class LoginNotifier extends StateNotifier<LoginState> {
 
   Future<void> logout() async {
     try {
-      state = state.copyWith(isLoading: true, error: null);
+      state = state.copyWith(isLoading: true, error: '');
 
       await _logoutUseCase.execute();
 
@@ -92,6 +94,24 @@ class LoginNotifier extends StateNotifier<LoginState> {
     }
   }
 
+
+  Future<void> resetPassword() async {
+    try {
+      state = state.copyWith(isLoading: true, error: '');
+      await _resetPasswordUseCase.execute(state.email);
+      print("Code sent to ${state.email}");
+      state = state.copyWith(
+        isLoading: false,
+        error: '',
+      );
+    } catch (e) {
+      state = state.copyWith(
+        isLoading: false,
+        error: e.toString(),
+      );
+    }
+  }
+
   void resetState() {
     state = LoginState();
   }
@@ -101,5 +121,6 @@ final loginProvider = StateNotifierProvider<LoginNotifier, LoginState>((ref) {
   final loginUseCase = ref.watch(loginUseCaseProvider);
   final logoutUseCase = ref.watch(logoutUseCaseProvider);
   final getAuthStatusUseCase = ref.watch(getAuthStatusUseCaseProvider);
-  return LoginNotifier(loginUseCase, logoutUseCase, getAuthStatusUseCase);
+  final resetPasswordUseCase=ref.watch(resetPasswordUseCaseProvider);
+  return LoginNotifier(loginUseCase, logoutUseCase, getAuthStatusUseCase,resetPasswordUseCase);
 });

@@ -281,6 +281,7 @@ class _SignupScreen extends ConsumerState<SignupScreen> {
                     focusNode: confirmPasswordFocusNode,
                     onChanged: (value) =>
                         signUpNotifier.updateConfirmPassword(value),
+                    obscureText: true,
                   ),
                   Gap(context.screenHeight * 0.04),
                   primaryButton(

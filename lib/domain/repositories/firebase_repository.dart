@@ -12,4 +12,6 @@ abstract class FirebaseRepository {
   Future<void> saveUserToBackend(UserModel user);
 
   Future<UserModel> fetchUserFromBackend();
+
+  Future<void> sendPasswordResetEmail(String email);
 }
