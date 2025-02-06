@@ -163,6 +163,7 @@ class SubscriptionContainerWidget extends StatelessWidget {
           ),
           Gap(30.sp),
           subscriptionButton(onPress, context, 'START FREE TRIAL'),
+          20.verticalSpace,
         ],
       ),
     );
