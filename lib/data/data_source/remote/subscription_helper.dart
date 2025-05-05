@@ -22,6 +22,7 @@ class SubscriptionHelper {
   Future<List<ProductDetails>> _loadProducts() async {
     ProductDetailsResponse response = await _inAppPurchase.queryProductDetails(kSubProductIDS);
     print("product response ===>  ${response.productDetails}");
+    print("product response error ===>  ${response.error}");
     if (response.notFoundIDs.isNotEmpty) {
       throw Exception('Some products were not found: ${response.notFoundIDs}');
     }
@@ -44,7 +45,6 @@ class SubscriptionHelper {
     }
   }
 
-  // Restore purchases (optional)
   Future<void> restorePurchases() async {
     await _inAppPurchase.restorePurchases();
   }

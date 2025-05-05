@@ -17,13 +17,8 @@ import 'package:xpuzzle/presentation/screens/dialogs/show_on_question_complete_d
 import 'package:xpuzzle/utils/constants.dart';
 import 'package:xpuzzle/utils/navigation/navigate.dart';
 
-import '../../../data/data_source/local/shared_preference_helper.dart';
 import '../../../domain/entities/question.dart';
-import '../../../domain/use_cases/get_questions.dart';
-import '../../../domain/use_cases/store_questions.dart';
 import '../../providers/game_provider.dart';
-import '../../providers/home_screen_providers.dart';
-import '../../providers/level_provider.dart';
 import '../../providers/question/question_usecase_provider.dart';
 import '../../providers/time/time_use_case_provider.dart';
 import '../../theme/colors.dart';
