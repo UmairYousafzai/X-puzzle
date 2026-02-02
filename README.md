@@ -1,4 +1,4 @@
-<img width="379" height="788" alt="Onboarding (4)" src="https://github.com/user-attachments/assets/9504b20c-0ebc-434a-84ca-e88f5938873f" /># X-Puzzle 🧩
+# X-Puzzle 🧩
 
 A Flutter-based math puzzle game that challenges players to solve multiplication puzzles within a time limit. Test your mathematical skills and improve your mental arithmetic through engaging gameplay.
 
