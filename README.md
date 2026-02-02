@@ -1,4 +1,4 @@
-# X-Puzzle 🧩
+<img width="379" height="788" alt="Onboarding (4)" src="https://github.com/user-attachments/assets/9504b20c-0ebc-434a-84ca-e88f5938873f" /># X-Puzzle 🧩
 
 A Flutter-based math puzzle game that challenges players to solve multiplication puzzles within a time limit. Test your mathematical skills and improve your mental arithmetic through engaging gameplay.
 
@@ -143,10 +143,13 @@ Key dependencies include:
 - `flutter_native_splash: ^2.2.16` - Splash screen
 
 ## 🎨 App Screenshots
+<img width="379" height="788" alt="Onboarding" src="https://github.com/user-attachments/assets/3b706793-25ff-48a6-b6df-96803a67960f" />
+<img width="379" height="788" alt="Onboarding (1)" src="https://github.com/user-attachments/assets/7f1ffcd3-4412-4026-b629-81be961723da" />
+<img width="384" height="788" alt="Onboarding (2)" src="https://github.com/user-attachments/assets/01cc69db-ed34-42a1-bd18-d980576eeabb" />
+<img width="384" height="788" alt="Onboarding (6)" src="https://github.com/user-attachments/assets/5fd2b82d-4a9e-497e-b07f-125a18206634" />
+<img width="379" height="788" alt="Onboarding (3)" src="https://github.com/user-attachments/assets/b4bcb03b-017e-420d-bebd-29122e2af91d" />
+<img width="379" height="788" alt="Onboarding (4)" src="https://github.com/user-attachments/assets/a9195c88-b85a-4f0e-b15e-006c927de929" />
 
-<img width="1725" height="3036" alt="3" src="https://github.com/user-attachments/assets/728b40a6-b0dc-44a7-8a54-f345ce8e97eb" />  <img width="1725" height="3036" alt="4" src="https://github.com/user-attachments/assets/22cf74bd-63e1-41bb-abf8-f0ee26fdb574" />
-<img width="1725" height="3036" alt="5" src="https://github.com/user-attachments/assets/9cf2688d-4dd2-461c-b22a-be0c0e510d18" />  <img width="1725" height="3036" alt="8" src="https://github.com/user-attachments/assets/d9c4714c-1c41-4e72-8fb3-9107902ef6a3" />
-<img width="393" height="852" alt="iPhone 14   15 Pro - 12" src="https://github.com/user-attachments/assets/9279475b-6bc4-4335-a134-6819825a023b" />
 
 ## 🤝 Contributing
 
